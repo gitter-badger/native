@@ -124,6 +124,7 @@ namespace Java {
 
 
         public:
+            Short operator=(const Short &target);
             Short operator+(const Short &target);
             Short operator-(const Short &target);
             Short operator/(const Short &target);
@@ -141,19 +142,23 @@ namespace Java {
             Short &operator-=(const Short &target);
             Short &operator*=(const Short &target);
             Short &operator%=(const Short &target);
+            Short &operator/=(const Short &target);
+
+            static short bitCount(short inputShort);
 
             static short compare(short shortA, short shortB);
             static short compareUnsigned(short shortA, short shortB);
+            static short compareTo(const Short &anotherShort) const override;
             static Short decode(String inputString);
-            static short divideUnsigned(short devidend, short divisor);
-
+            static short divideUnsigned(short dividend, short divisor);
+            static boolean equals(Short object);
             long hashCode() const override;
             static short hashCode(short inputShort);
             static short highestOneBit(short inputShort);
 
             static short lowestOneBit(short inputShort);
-            static short max(short shortA, short shortB);
-            static short min(short shortA, short shortB);
+            static short max(int intA, int intB);
+            static short min(int intA, int intB);
 
             static short numberOfLeadingZeros(short inputShort);
             static short numberOfTrailingZeros(short inputShort);
@@ -161,7 +166,7 @@ namespace Java {
             static short parseShort(String inputString);
             static short parseUnsignedShort(String inputString, int radix);
             static short parseUnsignedShort(String inputString);
-            static short remainderUnsigned(short deividend, short divisor);
+            static short remainderUnsigned(short dividend, short divisor);
             static short reverse(short inputShort);
             static short reverseBytes(short inputShort);
             static short rotateLeft(short inputShort, short distance);
@@ -172,7 +177,7 @@ namespace Java {
             static String toHexString(short inputShort);
             static String toOctalString(short inputShort);
             static String toString(short inputShort);
-            static long toUnsignedLong(short longValue);
+            static long toUnsignedLong(short inputShort);
             static String toUnsignedString(short inputShort, int radix);
             static String toUnsignedString(short inputShort);
             static Short valueOf(String inputString);
