@@ -118,13 +118,11 @@ namespace Java {
             float floatValue() const override;
             double doubleValue() const override;
             byte byteValue();
-
             string stringValue() const;
-            string toString() override const;
-
+            string toString() const override;
 
         public:
-            Short operator=(const Short &target);
+            Short& operator=(const Short &target);
             Short operator+(const Short &target);
             Short operator-(const Short &target);
             Short operator/(const Short &target);
@@ -148,10 +146,10 @@ namespace Java {
 
             static short compare(short shortA, short shortB);
             static short compareUnsigned(short shortA, short shortB);
-            static short compareTo(const Short &anotherShort) const override;
+            short compareTo(Short &anotherShort) const;
             static Short decode(String inputString);
             static short divideUnsigned(short dividend, short divisor);
-            static boolean equals(Short object);
+            boolean equals(Short object);
             long hashCode() const override;
             static short hashCode(short inputShort);
             static short highestOneBit(short inputShort);
@@ -177,6 +175,7 @@ namespace Java {
             static String toHexString(short inputShort);
             static String toOctalString(short inputShort);
             static String toString(short inputShort);
+            static String toString(short inputShort, int radix);
             static long toUnsignedLong(short inputShort);
             static String toUnsignedString(short inputShort, int radix);
             static String toUnsignedString(short inputShort);

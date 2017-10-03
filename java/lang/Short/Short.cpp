@@ -24,7 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-//#include <sstream>
+#include <sstream>
 #include "Short.hpp"
 #include "../Math/Math.hpp"
 #include "../NumberFormatException/NumberFormatException.hpp"
@@ -34,7 +34,7 @@
 using namespace Java::Lang;
 
 Short::Short() {
-    this->original = 0;
+    this->original = (short) 0;
     this->originalString = string_from_short(this->original);
 }
 
@@ -50,7 +50,7 @@ Short::Short(string inputString) {
 
 Short::Short(const Short &short) {
     this->original = short.original;
-    this->originalString = string_from_int(this->original);
+    this->originalString = string_from_short(this->original);
 }
 
 Short::~Short() {
@@ -118,7 +118,7 @@ boolean Short::operator>=(const Short &target) const {
     return this->original >= target.original;
 }
 
-Short &Short::operator=(const Short &target) {
+Short& Short::operator=(const Short &target) {
     this->original = target.original;
     free(this->originalString);
     this->originalString = string_from_short(this->original);
@@ -134,6 +134,13 @@ Short Short::operator-(const Short &target) {
 }
 Short Short::operator*(const Short &target) {
     return this->original * target.original;
+}
+
+Short Short::operator/(const Short &target) {
+    if (target.original == 0) {
+        throw ArithmeticException("Divide by zero");
+    }
+    return this->original / target.original;
 }
 
 Short Short::operator%(const Short &target) {
@@ -212,17 +219,21 @@ short Short::compare(short shortA, short shortB) {
     return 0;
 }
 
-short Short::compareTo(const Short &anotherShort) const {
+short Short::compareTo(Short &anotherShort) const {
     return this->compare(this->original, anotherShort.shortValue());
 }
 
-short Short::decode(String inputString) {
+short Short::compareUnsigned(short shortA, short shortB) {
+    return Short::compare(shortA + MIN_VALUE, shortB + MIN_VALUE);
+}
+
+Short Short::decode(String inputString) {
     if (inputString.length() == 0) {
         throw NumberFormatException("Input string is null");
     }
 
     if (inputString.charAt(0) == '0' && inputString.length() == 1) {
-        return 0;
+        return (short) 0;
     }
 
     boolean isNegative = false;
@@ -247,9 +258,9 @@ short Short::decode(String inputString) {
     }
         short result = parseShort(inputString, base);
         if (isNegative) {
-            return static_cast<Short>(-result);
+            return static_cast<short>(-result);
         }
-    return static_cast<Short>(result);
+    return static_cast<short>(result);
 }
 
 short Short::divideUnsigned(short dividend, short divisor) {
@@ -324,7 +335,7 @@ short Short::numberOfTrailingZeros(short inputShort) {
     return numberOfTrailingZeros;
 }
 
-short Short::parseShort(String inputString, short radix) {
+short Short::parseShort(String inputString, int radix) {
     if (inputString.length() == 0) {
         throw NumberFormatException("Input string is null");
     }
@@ -333,7 +344,7 @@ short Short::parseShort(String inputString, short radix) {
         throw NumberFormatException("Radix out of range");
     }
 
-    if (inputString.charAt(0) == && inputString.length() == 1) {
+    if (inputString.charAt(0) == '0' && inputString.length() == 1) {
         return 0;
     }
 
@@ -481,6 +492,16 @@ long Short::hashCode() const {
     return Short::hashCode(this->original);
 }
 
+short Short::signum(short inputShort) {
+    if (inputShort == 0) {
+        return 0;
+    }
+    if (inputShort > 0) {
+        return 1;
+    }
+    return -1;
+}
+
 short Short::sum(short shortA, short shortB) {
     return shortA + shortB;
 }
@@ -547,7 +568,7 @@ String Short::toString(short inputShort) {
     return Short::toString(inputShort, 10);
 }
 
-String Short::toString(short inputShort, short radix) {
+String Short::toString(short inputShort, int radix) {
     if (inputShort < 0) {
         inputShort = -inputShort;
         return String("-") + Short::toUnsignedString(inputShort, radix);

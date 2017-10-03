@@ -118,12 +118,12 @@ TEST (JavaLang, ShortOperator) {
     ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 
     //Make a division
-    expectedResult = 0;
+    expectedResult =  (short) 0;
     actualResult = validNumberOperator / targetNumberOperator;
     ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 
     try {
-        actualResult = validNumberOperator / 0;
+        actualResult = validNumberOperator / (short) 0;
     }
     catch(ArithmeticException &e) {
         ASSERT_STR("Divide by zero", e.getMessage().toString());
@@ -135,7 +135,7 @@ TEST (JavaLang, ShortOperator) {
     ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 
     try {
-        actualResult /= 0;
+        actualResult /= (short) 0;
     }
     catch(ArithmeticException &e) {
         ASSERT_STR("Divide by zero", e.getMessage().toString());
@@ -147,7 +147,7 @@ TEST (JavaLang, ShortOperator) {
     ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 
     try {
-        actualResult = validNumberOperator % 0;
+        actualResult = validNumberOperator % (short) 0;
     }
     catch(ArithmeticException &e) {
         ASSERT_STR("Divide by zero", e.getMessage().toString());
@@ -159,7 +159,7 @@ TEST (JavaLang, ShortOperator) {
     ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 
     try {
-        actualResult /= 0;
+        actualResult /= (short) 0;
     }
     catch(ArithmeticException &e) {
         ASSERT_STR("Divide by zero", e.getMessage().toString());
@@ -186,7 +186,7 @@ TEST (JavaLang, ShortCompareTo) {
 }
 
 TEST (JavaLang, ShortCharValue) {
-    Short zeroShortCharValue = 0;
+    Short zeroShortCharValue = (short) 0;
     Short oneShortCharValue = 1;
     Short positiveShortCharValue = 15;
     Short maxShortCharValue;
@@ -209,7 +209,7 @@ TEST (JavaLang, ShortCharValue) {
 }
 
 TEST (JavaLang, ShortStringValue) {
-    Short zeroShortStringValue = 0;
+    Short zeroShortStringValue = (short) 0;
     Short oneShortStringValue = 1;
     Short positiveShortStringValue = 15;
     Short maxShortStringValue;
@@ -249,11 +249,11 @@ TEST (JavaLang, ShortShortValue) {
     //Make a comparison between expected result and the real result
     short notExpectedResultShortValue = 1111;
     realResultShortValue = notExpectedShortShortValue.shortValue();
-    ASSERT_NOT_EQUAL(notExpectedResultShortValue, notExpectedShortShortValue);
+    ASSERT_NOT_EQUAL(notExpectedResultShortValue, realResultShortValue);
 }
 
 TEST (JavaLang, ShortIntValue) {
-    Short zeroShortIntValue = 0;
+    Short zeroShortIntValue = (short) 0;
     Short oneShortIntValue = 1;
     Short positiveShortIntValue = 15;
     Short maxShortIntValue;
@@ -278,7 +278,7 @@ TEST (JavaLang, ShortIntValue) {
     //Make a comparison between expected result and the real result
     int notExpectedResult = 9999;
     realResultIntValue = notExpectedShortIntValue.intValue();
-    ASSERT_NOT_EQUAL(notExpectedResult, notExpectedShortIntValue);
+    ASSERT_NOT_EQUAL(notExpectedResult, realResultIntValue);
 }
 
 TEST (JavaLang, ShortLongValue) {
@@ -299,7 +299,7 @@ TEST (JavaLang, ShortLongValue) {
     //Make a comparison between expected result and the real result
     long notExpectedResult = 1111;
     realResultLongValue = notExpectedLongShortValue.longValue();
-    ASSERT_EQUAL(notExpectedLongShortValue, realResultLongValue);
+    ASSERT_FALSE(notExpectedLongShortValue == realResultLongValue);
 }
 
 TEST (JavaLang, ShortFloatValue) {
@@ -355,19 +355,19 @@ TEST (JavaLang, ShortBitCount) {
 
     inputShort = Short::MAX_VALUE;
     expectedResult = 31;
-    actualResult Short::bitCount(inputShort);
+    actualResult = Short::bitCount(inputShort);
     ASSERT_EQUAL(expectedResult, actualResult);
 
     inputShort = Short::MIN_VALUE;
     expectedResult = 1;
-    actualResult = Short::bitCOunt(inputShort);
+    actualResult = Short::bitCount(inputShort);
     ASSERT_EQUAL(expectedResult, actualResult);
 }
 
 TEST (JavaLang, ShortByteValue) {
     Short shortInput;
 
-    shortInput = 0;
+    shortInput = (short) 0;
     ASSERT_EQUAL((byte) 0, shortInput.byteValue());
 
     shortInput = 1;
@@ -395,7 +395,7 @@ TEST (JavaLang, ShortCompare) {
     ASSERT_EQUAL(0, Short::compare(greater, greater));
 
     //Compare 2 different values
-    ASSERT_EQUAL(-1; Short::compare(smaller, greater);
+    ASSERT_EQUAL(-1, Short::compare(smaller, greater));
     ASSERT_EQUAL(1, Short::compare(greater, smaller));
 }
 
@@ -414,7 +414,7 @@ TEST (JavaLang, ShortCompareUnsigned) {
     ASSERT_EQUAL(1, Short::compareUnsigned(greater,smaller));
 
     //Compare negative value
-    ASSERT_EQUAL(-1, Short::compareUnsigned(greater, negative);
+    ASSERT_EQUAL(-1, Short::compareUnsigned(greater, negative));
     ASSERT_EQUAL(1, Short::compareUnsigned(negative, greater));
 }
 
@@ -424,7 +424,7 @@ TEST (JavaLang, ShortDecode) {
     Short actualResult;
     Short exceptionResult;
 
-    stirngInput = "";
+    stringInput = "";
     try {
         exceptionResult = Short::decode(stringInput);
     }
@@ -434,7 +434,7 @@ TEST (JavaLang, ShortDecode) {
 
     //Case all case of input a string of type decimal number
     stringInput = "0";
-    expectedResult = 0;
+    expectedResult = (short) 0;
     actualResult = Short::decode(stringInput);
     ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
 
@@ -480,7 +480,7 @@ TEST (JavaLang, ShortDecode) {
 
     //Case all case of input a string of type octal
     stringInput = "0";
-    expectedResult = 0;
+    expectedResult = (short) 0;
     actualResult = Short::decode(stringInput);
     ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
 
@@ -502,7 +502,7 @@ TEST (JavaLang, ShortDecode) {
     //Test out of range
     stringInput = (String) "020000000002";
     try {
-        exception = Short::decode(stringInput);
+        exceptionResult = Short::decode(stringInput);
     }
     catch (NumberFormatException &e) {
         ASSERT_STR("Short out of range", e.getMessage().toString());
@@ -510,7 +510,7 @@ TEST (JavaLang, ShortDecode) {
 
     stringInput = (String) "-020000000002";
     try {
-        exception = Short::decode(stringInput);
+        exceptionResult = Short::decode(stringInput);
     }
     catch (NumberFormatException &e) {
         ASSERT_STR("Short out of range", e.getMessage().toString());
@@ -518,7 +518,7 @@ TEST (JavaLang, ShortDecode) {
 
     //Cast all case of input a string of type hexadecimal number
     stringInput = "0x0";
-    expectedResult = 0;
+    expectedResult = (short) 0;
     actualResult = Short::decode(stringInput);
     ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
 
@@ -538,7 +538,7 @@ TEST (JavaLang, ShortDecode) {
     ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
 
     //Test out of range
-    stringInput (String) "0x80000002";
+    stringInput = (String) "0x80000002";
     try {
         exceptionResult = Short::decode(stringInput);
     }
@@ -546,7 +546,7 @@ TEST (JavaLang, ShortDecode) {
         ASSERT_STR("Short out of range", e.getMessage().toString());
     }
 
-    stringInput (String) "-0x80000002";
+    stringInput = (String) "-0x80000002";
     try {
         exceptionResult = Short::decode(stringInput);
     }
@@ -578,7 +578,7 @@ TEST (JavaLang, ShortDivideUnsigned) {
     //Negative divide
     ASSERT_EQUAL(0, Short::divideUnsigned(0, negativeDivisor));
     ASSERT_EQUAL(0, Short::divideUnsigned(negativeDividend, negativeDivisor));
-    ASSERT_EQUAL(1, Short::divideUnsigned(negativeDivisor, negativeDividend);
+    ASSERT_EQUAL(1, Short::divideUnsigned(negativeDivisor, negativeDividend));
 
      //Mix divide
     ASSERT_EQUAL(0, Short::divideUnsigned(0, positiveDivisor));
@@ -590,7 +590,7 @@ TEST (JavaLand, ShortEquals) {
     Short thisShort;
 
     thisShort = 13;
-    ASSERT_FALSE(thisShort.equals(0));
+    ASSERT_FALSE(thisShort.equals((short) 0));
     ASSERT_FALSE(thisShort.equals(1));
     ASSERT_FALSE(thisShort.equals(-1));
     ASSERT_TRUE(thisShort.equals(13));
@@ -685,7 +685,7 @@ TEST (JavaLang, ShortParseIntWithRadix) {
     }
 
     try {
-        exceptionResult = Short:parseShort((String) "Kona", 10);
+        exceptionResult = Short::parseShort((String) "Kona", 10);
     }
     catch (NumberFormatException &e) {
         ASSERT_STR("Not a number", e.getMessage().toString());
@@ -701,7 +701,7 @@ TEST (JavaLang, ShortParseIntWithRadix) {
     }
 
     try {
-        exceptionResult = Short::parseSHort((String) "Kona", 1);
+        exceptionResult = Short::parseShort((String) "Kona", 1);
     }
     catch (NumberFormatException &e) {
         ASSERT_STR("radix out of range", e.getMessage().toString());
@@ -721,7 +721,7 @@ TEST (JavaLang, ShortParseShort) {
     short actualResult;
     short exceptionResult;
 
-    stringInput = "":
+    stringInput = "";
 
     try {
         exceptionResult = Short::parseShort(stringInput);
@@ -815,7 +815,7 @@ TEST (JavaLang, ShortParseUnsignedShort) {
         exceptionResult = Short::parseUnsignedShort(stringInput);
     }
     catch (NumberFormatException &e) {
-        ASSERT_STR("Unsigned short out of range")
+        ASSERT_STR("Unsigned short out of range", e.getMessage().toString());
     }
 }
 
@@ -845,8 +845,8 @@ TEST (JavaLang, ShortRemainderUnsigned) {
     ASSERT_EQUAL(4, Short::remainderUnsigned(negativeDivisor, negativeDividend));
 
     //Mix divide
-    ASSERT_EQUAL(0, Short::remainderUnsigned((0, positiveDivisor)));
-    ASSERT_EQUAL(2, Short::remainderUnsigned(negativeDividend, negativeDivisor);
+    ASSERT_EQUAL(0, Short::remainderUnsigned(0, positiveDivisor));
+    ASSERT_EQUAL(2, Short::remainderUnsigned(negativeDividend, negativeDivisor));
     ASSERT_EQUAL(2, Short::remainderUnsigned(negativeDivisor, negativeDividend));
 }
 
@@ -914,7 +914,7 @@ TEST (JavaLang, ShortToOctalString) {
 }
 
 TEST (JavaLang, ShortToString) {
-    Short zeroShortToString = 0;
+    Short zeroShortToString = (short) 0;
     Short oneShortToString = 1;
     Short positiveShortToString = 10;
     Short maxShortToString = 32767;
@@ -956,7 +956,7 @@ TEST (JavaLang, ShortToStringFromShort) {
 TEST (JavaLang, ShortToStringWithRadix) {
     ASSERT_STR("0", Short::toString(0, 10).toString());
     ASSERT_STR("473", Short::toString(473, 10).toString());
-    ASSERT_STR('-ff', Short::toString(-255, 16).toString());
+    ASSERT_STR("-ff",Short::toString(-255, 16).toString());
 
     //Radix out of range
     ASSERT_STR("473", Short::toString(473,100).toString());
@@ -1005,10 +1005,10 @@ TEST (JavaLang, ShortValueOfFromString) {
 
     Short exceptionResult;
     try {
-        exceptionResult = Short::parseShort((String "", 2));
+        exceptionResult = Short::parseShort((String) "", 2);
     }
     catch (NumberFormatException &e) {
-        ASSERT_EQUAL("Input string is null", e.getMessage().toString());
+        ASSERT_STR("Input string is null", e.getMessage().toString());
     }
 
     try {
