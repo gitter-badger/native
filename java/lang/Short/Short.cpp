@@ -48,8 +48,8 @@ Short::Short(string inputString) {
     this->originalString = string_from_short(this->original);
 }
 
-Short::Short(const Short &short) {
-    this->original = short.original;
+Short::Short(const Short &shortNumber) {
+    this->original = shortNumber.original;
     this->originalString = string_from_short(this->original);
 }
 
@@ -219,7 +219,7 @@ short Short::compare(short shortA, short shortB) {
     return 0;
 }
 
-short Short::compareTo(Short &anotherShort) const {
+int Short::compareTo(Short &anotherShort) const {
     return this->compare(this->original, anotherShort.shortValue());
 }
 
@@ -250,7 +250,7 @@ Short Short::decode(String inputString) {
     }
 
     if (inputString.charAt(0) == '0') {
-        if (inputString.charAt(1) == 'x' || inputString.charAt(1) = 'X') {
+        if (inputString.charAt(1) == 'x' || inputString.charAt(1) == 'X') {
             base = 16;
         } else {
             base = 8;

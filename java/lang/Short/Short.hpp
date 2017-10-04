@@ -146,7 +146,7 @@ namespace Java {
 
             static short compare(short shortA, short shortB);
             static short compareUnsigned(short shortA, short shortB);
-            short compareTo(Short &anotherShort) const;
+            int compareTo(Short &anotherShort) const;
             static Short decode(String inputString);
             static short divideUnsigned(short dividend, short divisor);
             boolean equals(Short object);

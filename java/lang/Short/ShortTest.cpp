@@ -42,13 +42,13 @@ TEST (JavaLang, ShortConstructor) {
     ASSERT_STR((string) "0", shortConstructorNoneParameter.toString());
 
     //Test Short::Short(String stringInput)
-    Short shortConstructorStringParameter((String) "69");
+    Short shortConstructorStringParameter("69");
     ASSERT_EQUAL(69, shortConstructorStringParameter.shortValue());
     ASSERT_STR((string) "69", shortConstructorNoneParameter.toString());
 
     //Test Short::Short(const Short &short)
     Short shortConstructorShortParameter = 69;
-    ASSERT_STR(69, shortConstructorShortParameter.shortValue());
+    ASSERT_EQUAL(69, shortConstructorShortParameter.shortValue());
     ASSERT_STR((string) "69", shortConstructorShortParameter.toString());
 }
 
@@ -897,8 +897,8 @@ TEST (JavaLang, IntegerSum) {
 TEST (JavaLang,ShortToBinaryString) {
     ASSERT_STR((string) "0", Short::toBinaryString(0).toString());
     ASSERT_STR((string) "1", Short::toBinaryString(1).toString());
-    ASSERT_STR((string) "1101", Short::toBinaryString(13).toString);
-    ASSERT_STR((string) "110010011101100111", Short::toBinaryString(MAX_VALUE));
+    ASSERT_STR((string) "1101", Short::toBinaryString(13).toString());
+    ASSERT_STR((string) "110010011101100111", Short::toBinaryString(MAX_VALUE).toString());
 }
 
 TEST (JavaLang, ShortToHexString) {
