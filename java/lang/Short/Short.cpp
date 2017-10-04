@@ -219,7 +219,7 @@ short Short::compare(short shortA, short shortB) {
     return 0;
 }
 
-int Short::compareTo(Short &anotherShort) const {
+int Short::compareTo(const Short &anotherShort) const {
     return this->compare(this->original, anotherShort.shortValue());
 }
 
@@ -229,7 +229,7 @@ short Short::compareUnsigned(short shortA, short shortB) {
 
 Short Short::decode(String inputString) {
     if (inputString.length() == 0) {
-        throw NumberFormatException("Input string is null");
+        throw NumberFormatException("input string is null");
     }
 
     if (inputString.charAt(0) == '0' && inputString.length() == 1) {
@@ -337,7 +337,7 @@ short Short::numberOfTrailingZeros(short inputShort) {
 
 short Short::parseShort(String inputString, int radix) {
     if (inputString.length() == 0) {
-        throw NumberFormatException("Input string is null");
+        throw NumberFormatException("input string is null");
     }
 
     if (radix > 32 || radix < 2) {
@@ -385,7 +385,7 @@ short Short::parseShort(String inputString) {
 
 short Short::parseUnsignedShort(String inputString, int radix) {
     if (inputString.length() == 0) {
-        throw NumberFormatException("Input string is null");
+        throw NumberFormatException("iput string is null");
     }
 
     if (radix > 32 || radix < 2) {
@@ -524,7 +524,7 @@ String Short::toUnsignedString(short inputShort, int radix) {
 
     switch (radix) {
         case 2:
-            result = std::bitset<32>((unsigned long long short) Short::toUnsignedLong(inputShort)).to_string();
+            result = std::bitset<32>((unsigned long long int) Short::toUnsignedLong(inputShort)).to_string();
             result = result.getStringFromIndex(result.indexOf('1'));
             return result;
         case 8:
