@@ -34,19 +34,56 @@ using namespace Java::Lang;
 
 namespace Java {
     namespace Io {
-        class File {
+        class File:
+                virtual public Serializable,
+                virtual public Comparable<File> {
 
         public:
             /**
-             * Creates a new <code>File</code> instance by converting the given
+             * Creates a new File instance by converting the given
              * pathname string into an abstract pathname.  If the given string is
              * the empty string, then the result is the empty abstract pathname.
              *
              * @param   pathname  A pathname string
              * @throws  NullPointerException
-             *          If the <code>pathname</code> argument is <code>null</code>
+             *          If the pathname argument is null
              */
             File(String pathname);
+
+        public:
+            /**
+             * Compares two abstract pathnames lexicographically.  The ordering
+             * defined by this method depends upon the underlying system.  On UNIX
+             * systems, alphabetic case is significant in comparing pathnames;
+             * on Microsoft Windows systems it is not.
+             *
+             * @param   pathname  The abstract pathname to be compared to this abstract
+             *                    pathname
+             *
+             * @return  Zero if the argument is equal to this abstract pathname, a
+             *          value less than zero if this abstract pathname is
+             *          lexicographically less than the argument, or a value greater
+             *          than zero if this abstract pathname is lexicographically
+             *          greater than the argument
+             */
+            int compareTo(const File &pathname) const override;
+
+            /**
+             * Returns the pathname string of this abstract pathname.
+             * This is just the string returned by the getPath method.
+             *
+             * @return  The string form of this abstract pathname
+             */
+            String toString();
+
+            /**
+             * Converts this abstract pathname into a pathname string.  The resulting
+             * string uses the separator default name-separator character} to
+             * separate the names in the name sequence.
+             *
+             * @return  The string form of this abstract pathname
+             */
+            String getPath();
 
         private:
             /**
@@ -77,9 +114,7 @@ namespace Java {
              * A normal Unix pathName contains no duplicate
              * slashes and does not end
              * with a slash.  It may be the empty string.
-             */
-
-            /**
+             *
              * Normalize the given pathName, whose length is len,
              * starting at the given offset; everything before
              * this offset is already normal.
