@@ -363,173 +363,168 @@ TEST (JavaLang, ShortCompare) {
     ASSERT_EQUAL(1, Short::compare(greater, smaller));
 }
 
-TEST (JavaLang, ShortDecode) {
-    String stringInput;
-    Short expectedResult;
-    Short actualResult;
-    Short exceptionResult;
-
-    stringInput = "";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("input string is null", e.getMessage().toString());
-    }
-
-    //Case all case of input a string of type decimal number
-    stringInput = "0";
-    expectedResult = (short) 0;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "1";
-    expectedResult = 1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
-
-    stringInput = (String) "-1";
-    expectedResult = 1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
-
-    stringInput = (String) "13";
-    exceptionResult = 13;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
-
-    //Test out of range
-    stringInput = (String) "1628324548";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch(NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-
-    stringInput = (String) "-1628324548";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch(NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-
-    stringInput = (String) "Not a number";
-    try {
-        expectedResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("Not a number", e.getMessage().toString());
-    }
-
-    //Case all case of input a string of type octal
-    stringInput = "0";
-    expectedResult = (short) 0;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = (String) "01";
-    exceptionResult = 1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "-01";
-    exceptionResult = -1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "013";
-    expectedResult = 13;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    //Test out of range
-    stringInput = (String) "020000000002";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-
-    stringInput = (String) "-020000000002";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-
-    //Cast all case of input a string of type hexadecimal number
-    stringInput = "0x0";
-    expectedResult = (short) 0;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "0x1";
-    expectedResult = 1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "0X1";
-    expectedResult = -1;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    stringInput = "0xD";
-    expectedResult = 13;
-    actualResult = Short::decode(stringInput);
-    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
-
-    //Test out of range
-    stringInput = (String) "0x80000002";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-
-    stringInput = (String) "-0x80000002";
-    try {
-        exceptionResult = Short::decode(stringInput);
-    }
-    catch (NumberFormatException &e) {
-        ASSERT_STR("Short out of range", e.getMessage().toString());
-    }
-}
+//TEST (JavaLang, ShortDecode) {
+//    String stringInput;
+//    Short expectedResult;
+//    Short actualResult;
+//    Short exceptionResult;
 //
-//TEST (JavaLang, ShortDivideUnsigned) {
-//    //Given 4 short values
-//    short positiveDividend = 10;
-//    short positiveDivisor = 5;
-//    short negativeDividend = -10;
-//    short negativeDivisor = -5;
-//
-//    //Divide by zero
+//    stringInput = "";
 //    try {
-//        short exceptionResult = Short::divideUnsigned(positiveDividend, 0);
+//        exceptionResult = Short::decode(stringInput);
 //    }
-//    catch (ArithmeticException &e) {
-//        ASSERT_STR("Divide by zero", e.getMessage().toString());
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("input string is null", e.getMessage().toString());
 //    }
 //
-//    //Positive divide
-//    ASSERT_EQUAL(0, Short::divideUnsigned(0, positiveDivisor));
-//    ASSERT_EQUAL(2, Short::divideUnsigned(positiveDividend, positiveDivisor));
-//    ASSERT_EQUAL(0, Short::divideUnsigned(positiveDivisor, positiveDividend));
+//    //Case all case of input a string of type decimal number
+//    stringInput = "0";
+//    expectedResult = (short) 0;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 //
-//    //Negative divide
-//    ASSERT_EQUAL(0, Short::divideUnsigned(0, negativeDivisor));
-//    ASSERT_EQUAL(0, Short::divideUnsigned(negativeDividend, negativeDivisor));
-//    ASSERT_EQUAL(1, Short::divideUnsigned(negativeDivisor, negativeDividend));
+//    stringInput = "1";
+//    expectedResult = 1;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
 //
-//     //Mix divide
-//    ASSERT_EQUAL(0, Short::divideUnsigned(0, positiveDivisor));
-//    ASSERT_EQUAL(858993457, Short::divideUnsigned(negativeDividend, positiveDivisor));
-//    ASSERT_EQUAL(429496729, Short::divideUnsigned(negativeDivisor, positiveDividend));
+//    stringInput = (String) "13";
+//    exceptionResult = 13;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(expectedResult.shortValue(), actualResult.shortValue());
+//
+//    //Test out of range
+//    stringInput = (String) "1628324548";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch(NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
+//
+//    stringInput = (String) "-1628324548";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch(NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
+//
+//    stringInput = (String) "Not a number";
+//    try {
+//        expectedResult = Short::decode(stringInput);
+//    }
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("Not a number", e.getMessage().toString());
+//    }
+//
+//    //Case all case of input a string of type octal
+//    stringInput = "0";
+//    expectedResult = (short) 0;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = (String) "01";
+//    exceptionResult = 1;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = "-01";
+//    exceptionResult = -1;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = "013";
+//    expectedResult = 13;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    //Test out of range
+//    stringInput = (String) "020000000002";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
+//
+//    stringInput = (String) "-020000000002";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
+//
+//    //Cast all case of input a string of type hexadecimal number
+//    stringInput = "0x0";
+//    expectedResult = (short) 0;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = "0x1";
+//    expectedResult = 1;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = "0X1";
+//    expectedResult = -1;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    stringInput = "0xD";
+//    expectedResult = 13;
+//    actualResult = Short::decode(stringInput);
+//    ASSERT_EQUAL(exceptionResult.shortValue(), actualResult.shortValue());
+//
+//    //Test out of range
+//    stringInput = (String) "0x80000002";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
+//
+//    stringInput = (String) "-0x80000002";
+//    try {
+//        exceptionResult = Short::decode(stringInput);
+//    }
+//    catch (NumberFormatException &e) {
+//        ASSERT_STR("Short out of range", e.getMessage().toString());
+//    }
 //}
+////
+////TEST (JavaLang, ShortDivideUnsigned) {
+////    //Given 4 short values
+////    short positiveDividend = 10;
+////    short positiveDivisor = 5;
+////    short negativeDividend = -10;
+////    short negativeDivisor = -5;
+////
+////    //Divide by zero
+////    try {
+////        short exceptionResult = Short::divideUnsigned(positiveDividend, 0);
+////    }
+////    catch (ArithmeticException &e) {
+////        ASSERT_STR("Divide by zero", e.getMessage().toString());
+////    }
+////
+////    //Positive divide
+////    ASSERT_EQUAL(0, Short::divideUnsigned(0, positiveDivisor));
+////    ASSERT_EQUAL(2, Short::divideUnsigned(positiveDividend, positiveDivisor));
+////    ASSERT_EQUAL(0, Short::divideUnsigned(positiveDivisor, positiveDividend));
+////
+////    //Negative divide
+////    ASSERT_EQUAL(0, Short::divideUnsigned(0, negativeDivisor));
+////    ASSERT_EQUAL(0, Short::divideUnsigned(negativeDividend, negativeDivisor));
+////    ASSERT_EQUAL(1, Short::divideUnsigned(negativeDivisor, negativeDividend));
+////
+////     //Mix divide
+////    ASSERT_EQUAL(0, Short::divideUnsigned(0, positiveDivisor));
+////    ASSERT_EQUAL(858993457, Short::divideUnsigned(negativeDividend, positiveDivisor));
+////    ASSERT_EQUAL(429496729, Short::divideUnsigned(negativeDivisor, positiveDividend));
+////}
 
 TEST (JavaLand, ShortEquals) {
     Short thisShort;
