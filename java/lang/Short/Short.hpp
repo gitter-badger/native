@@ -117,7 +117,7 @@ namespace Java {
             long longValue() const override;
             float floatValue() const override;
             double doubleValue() const override;
-            byte byteValue();
+
             string stringValue() const;
             string toString() const override;
 
@@ -142,46 +142,24 @@ namespace Java {
             Short &operator%=(const Short &target);
             Short &operator/=(const Short &target);
 
-            static short bitCount(short inputShort);
-
-            static short compare(short shortA, short shortB);
-            static short compareUnsigned(short shortA, short shortB);
+            byte byteValue();
+            static int compare(short shortA, short shortB);
             int compareTo(const Short &anotherShort) const;
             static Short decode(String inputString);
-            static short divideUnsigned(short dividend, short divisor);
             boolean equals(Short object);
             long hashCode() const override;
             static short hashCode(short inputShort);
-            static short highestOneBit(short inputShort);
-
-            static short lowestOneBit(short inputShort);
-            static short max(int intA, int intB);
-            static short min(int intA, int intB);
-
-            static short numberOfLeadingZeros(short inputShort);
-            static short numberOfTrailingZeros(short inputShort);
             static short parseShort(String inputString, int radix);
             static short parseShort(String inputString);
-            static short parseUnsignedShort(String inputString, int radix);
-            static short parseUnsignedShort(String inputString);
-            static short remainderUnsigned(short dividend, short divisor);
-            static short reverse(short inputShort);
             static short reverseBytes(short inputShort);
-            static short rotateLeft(short inputShort, short distance);
-            static short rotateRight(short inputShort, short distance);
-            static short signum(short inputShort);
-            static short sum(short shortA, short shortB);
-            static String toBinaryString(short inputShort);
-            static String toHexString(short inputShort);
-            static String toOctalString(short inputShort);
             static String toString(short inputShort);
-            static String toString(short inputShort, int radix);
-            static long toUnsignedLong(short inputShort);
-            static String toUnsignedString(short inputShort, int radix);
-            static String toUnsignedString(short inputShort);
             static Short valueOf(String inputString);
             static Short valueOf(short inputShort);
             static Short valueOf(String inputString, int radix);
+
+            static String toString(short inputShort, int radix);
+            static String toUnsignedString(short inputShort, int radix);
+            static long toUnsignedLong(short inputShort);
 
             friend std::ostream &operator<<(std::ostream &os, const Short &target) {
                 std:: cout << target.original;
