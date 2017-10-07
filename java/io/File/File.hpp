@@ -23,3 +23,20 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+#ifndef JAVA_IO_FILE_FILE_HPP_
+#define JAVA_IO_FILE_FILE_HPP_
+
+#include "../../lang/String/String.hpp"
+
+namespace Java {
+    namespace Io {
+        class File {
+
+        };
+    }  // namespace Io
+} // namspace Java
+
+#endif // JAVA_IO_FILE_FILE_HPP_
+
+
