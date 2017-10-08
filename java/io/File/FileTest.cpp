@@ -69,15 +69,10 @@
 //    File fileHidden = File(FileTest::pathNameHidden);
 //    File fileSubFolder = File(FileTest::pathSubFolder);
 //
-////    fileSubFolder.mkdirs();
-////    fileExistent.createNewFile();
-////    fileHidden.createNewFile();
-//
-////    // Delete files after testing
-////    fileTestFolder.deleteOnExit();
-////    fileExistent.deleteOnExit();
-////    fileHidden.deleteOnExit();
-////    fileSubFolder.deleteOnExit();
+//    ASSERT_TRUE(fileTestFolder.mkdir());
+//    ASSERT_TRUE(fileSubFolder.mkdirs());
+//    ASSERT_TRUE(fileExistent.createNewFile());
+//    ASSERT_TRUE(fileHidden.createNewFile());
 //}
 //
 //TEST (JavaIo, FileConstructor) {
@@ -787,4 +782,19 @@
 //        ASSERT_STR("aaa: can not run command", exception.toString());
 //    }
 //}
+//
+//TEST (JavaIo, FileAfterTesting) {
+//    // Variables for testing
+//    File fileTestFolder = File(FileTest::pathTestFolder);
+//    File fileExistent = File(FileTest::pathNameExistent);
+//    File fileHidden = File(FileTest::pathNameHidden);
+//    File fileSubFolder = File(FileTest::pathSubFolder);
+//
+//    // Delete files after testing
+//    fileTestFolder.deletes();
+//    fileExistent.deletes();
+//    fileHidden.deletes();
+//    fileSubFolder.deletes();
+//}
+//
 //#endif

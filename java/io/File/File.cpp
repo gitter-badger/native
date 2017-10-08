@@ -125,6 +125,28 @@
 //        throw RuntimeException(command + message);
 //    }
 //
+//    exitCode = !exitCode;
+//
+//    return result;
+//}
+//
+//String File::executeCommand(String command) {
+//    char buffer[128];
+//    std::string result = "";
+//    FILE *pipe = popen(command.toString(), "r");
+//
+//    while (!feof(pipe)) {
+//        if (fgets(buffer, 128, pipe) != NULL)
+//            result += buffer;
+//    }
+//
+//    int exitCode = WEXITSTATUS(pclose(pipe));
+//
+//    if (exitCode) {
+//        String message = ": can not run command";
+//        throw RuntimeException(command + message);
+//    }
+//
 //    return result;
 //}
 //
@@ -139,33 +161,69 @@
 //            String message = (String) "cannot create directory '"
 //                             + this->path
 //                             + (String) "': File exists";
-//            throw RuntimeException(message);
+//            throw SecurityException(message);
 //        } else {
-//            throw RuntimeException(exception.toString());
+//            throw SecurityException(exception.toString());
 //        }
 //    }
 //
-//    return !exitCode;
+//    return exitCode;
 //}
 //
 //boolean File::mkdirs() {
 //    try {
 //        return File::mkdir();
-//    } catch (RuntimeException &exception) {
-//        throw RuntimeException(exception.toString());
+//    } catch (SecurityException &exception) {
+//        throw SecurityException(exception.toString());
 //    }
 //}
 //
 //boolean File::createNewFile() {
-////    SecurityManager security = System.getSecurityManager();
-////    if (security != null)
-////        security.checkWrite(path);
-////    if (isInvalid()) {
-////        throw new IOException("Invalid file path");
-////    }
-////    return fs.createFileExclusively(path);
+//    int exitCode = true;
+//    String command;
 //
-//    // type NUL > EmptyFile.txt
+//    if (File::isDirectory()) {
+//        command = (String) "mkdir " + this->path;
+//        File::executeCommand(command, exitCode);
+//    }
+//
+//    if (File::isFile()) {
+//        command = (String) "type NUL > " + this->path;
+//        File::executeCommand(command, exitCode);
+//    }
+//
+//    return exitCode;
+//}
+//
+//boolean File::isDirectory() {
+//    String command = (String) "ls -l " + this->path;
+//    String resultExecuteCommand = File::executeCommand(command);
+//
+//    return resultExecuteCommand.charAt(0) != '-';
+//}
+//
+//boolean File::isFile() {
+//    String command = (String) "ls -l " + this->path;
+//    String resultExecuteCommand = File::executeCommand(command);
+//
+//    return resultExecuteCommand.charAt(0) == '-';
+//}
+//
+//boolean File::deletes() {
+//    int exitCode = true;
+//    String command;
+//
+//    if (File::isDirectory()) {
+//        command = (String) "rmdir " + this->path;
+//        File::executeCommand(command, exitCode);
+//    }
+//
+//    if (File::isFile()) {
+//        command = (String) "del " + this->path;
+//        File::executeCommand(command, exitCode);
+//    }
+//
+//    return exitCode;
 //}
 //
 //#endif

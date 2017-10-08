@@ -27,12 +27,14 @@
 #ifndef JAVA_IO_FILE_FILE_HPP_
 #define JAVA_IO_FILE_FILE_HPP_
 
+#include <stdlib.h>
+#include <memory>
+
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
-#include <memory>
 #include "../../../kernel/type.h"
 #include "../../lang/RuntimeException/RuntimeException.hpp"
-#include <stdlib.h>
+#include "../../lang/SecurityException/SecurityException.hpp"
 
 using namespace Java::Lang;
 
@@ -97,6 +99,9 @@ namespace Java {
              */
             static String executeCommand(String command, int &exitCode);
 
+
+            static String executeCommand(String command);
+
             /**
              * Creates the directory named by this abstract pathname.
              *
@@ -151,6 +156,68 @@ namespace Java {
              *          method denies write access to the file
              */
             boolean createNewFile();
+
+            /**
+             * Tests whether the file denoted by this abstract pathname is a
+             * directory.
+             *
+             * Where it is required to distinguish an I/O exception from the case
+             * that the file is not a directory, or where several attributes of the
+             * same file are required at the same time, then the
+             * method may be used.
+             *
+             * @return true if and only if the file denoted by this
+             *          abstract pathname exists and is a directory;
+             *          false otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          method denies read access to the file
+             */
+            boolean isDirectory();
+
+            /**
+             * Tests whether the file denoted by this abstract pathname is a normal
+             * file.  A file is normal if it is not a directory and, in
+             * addition, satisfies other system-dependent criteria.  Any non-directory
+             * file created by a Java application is guaranteed to be a normal file.
+             *
+             * Where it is required to distinguish an I/O exception from the case
+             * that the file is not a normal file, or where several attributes of the
+             * same file are required at the same time, then the 
+             * java.nio.file.Files#readAttributes(Path,Class,LinkOption[])
+             * Files.readAttributes method may be used.
+             *
+             * @return  true if and only if the file denoted by this
+             *          abstract pathname exists and is a normal file;
+             *          false otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its 
+             *          java.lang.SecurityManager#checkRead(java.lang.String)
+             *          method denies read access to the file
+             */
+            boolean isFile();
+
+            /**
+             * Deletes the file or directory denoted by this abstract pathname.  If
+             * this pathname denotes a directory, then the directory must be empty in
+             * order to be deleted.
+             *
+             * Note that the java.nio.file.Files class defines the
+             * java.nio.file.Files#delete(Path) delete method to throw an IOException
+             * when a file cannot be deleted. This is useful for error reporting and to
+             * diagnose why a file cannot be deleted.
+             *
+             * @return  true if and only if the file or directory is
+             *          successfully deleted; false otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          java.lang.SecurityManager#checkDelete method denies
+             *          delete access to the file
+             */
+            boolean deletes();
 
         private:
             /**
