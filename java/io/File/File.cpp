@@ -33,7 +33,7 @@ using namespace Java::Lang;
 
 File::File(String pathName) {
 //    if (pathName == null) {
-//        throw new NullPointerException();
+//        throw NullPointerException();
 //    }
     this->path = File::normalize(pathName);
     this->prefixLength = File::getPrefixLength(this->path);
@@ -106,6 +106,26 @@ String File::getPath() {
 
 int File::compareTo(const File &pathname) const {
 //    return fs.compare(this, pathname);
+}
+
+
+String File::executeCommand(String command) {
+    std::array<char, 128> buffer;
+    String result;
+    std::shared_ptr<FILE> pipe(popen(command.toString(), "r"), pclose);
+
+    while (!feof(pipe.get())) {
+        if (fgets(buffer.data(), 128, pipe.get()) != nullptr)
+            result += buffer.data();
+    }
+
+    if (result == "") {
+        String message = ": command not found";
+        String exception = command + message;
+        throw RuntimeException(exception);
+    }
+
+    return result;
 }
 
 #endif

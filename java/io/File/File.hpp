@@ -29,6 +29,9 @@
 
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
+#include <memory>
+#include "../../../kernel/type.h"
+#include "../../lang/RuntimeException/RuntimeException.hpp"
 
 using namespace Java::Lang;
 
@@ -84,6 +87,14 @@ namespace Java {
              * @return  The string form of this abstract pathname
              */
             String getPath();
+
+            /**
+             * Execute command
+             *
+             * @param command
+             * @return a String contains result of command
+             */
+            static String executeCommand(String command);
 
         private:
             /**

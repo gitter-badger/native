@@ -778,4 +778,17 @@ TEST (JavaIo, FileConstructor) {
 ////    system(actual.toString());
 ////}
 //
+
+TEST (JavaIo, FileExecuteCommand) {
+    String expected = "File.cpp  File.hpp  FileTest.cpp\n";
+    String actual = File::executeCommand("dir java/io/File");
+    ASSERT_STR(expected.toString(), actual.toString());
+
+    try {
+        File::executeCommand("aaa");
+    } catch (RuntimeException exception) {
+        ASSERT_STR("aaa: command not found",
+                   exception.toString());
+    }
+}
 #endif
