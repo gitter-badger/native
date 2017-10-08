@@ -150,80 +150,132 @@
 //    return result;
 //}
 //
-//boolean File::mkdir() {
-//    int exitCode = 0;
-//    String command = "mkdir " + this->path;
-//
-//    try {
-//        File::executeCommand(command, exitCode);
-//    } catch (RuntimeException &exception) {
-//        if (exitCode == 127) {
-//            String message = (String) "cannot create directory '"
-//                             + this->path
-//                             + (String) "': File exists";
-//            throw SecurityException(message);
-//        } else {
-//            throw SecurityException(exception.toString());
-//        }
-//    }
-//
-//    return exitCode;
+//boolean File::mkdirFile() {
+//    return !mkdir(this->path.toString(), S_IRWXU | S_IRWXG);
 //}
 //
 //boolean File::mkdirs() {
-//    try {
-//        return File::mkdir();
-//    } catch (SecurityException &exception) {
-//        throw SecurityException(exception.toString());
-//    }
+//    char holdString[256];
+//    string p = NULL;
+//    size_t len;
+//
+//    snprintf(holdString, sizeof(holdString),"%s", this->path.toString());
+//    len = strlen(holdString);
+//
+//    if(holdString[len - 1] == '/')
+//        holdString[len - 1] = 0;
+//
+//    for(p = holdString + 1; *p; p++)
+//        if(*p == '/') {
+//            *p = 0;
+//            mkdir(holdString, S_IRWXU);
+//            *p = '/';
+//        }
+//
+//    return !mkdir(holdString, S_IRWXU);
+//
+////    if (!dir) {
+////        errno = EINVAL;
+////        return 1;
+////    }
+////
+////    if (strlen(dir) == 1 && dir[0] == '/')
+////        return 0;
+////
+////    mkpath(dirname(strdupa(dir)), mode);
+////
+////    return mkdir(dir, mode);
+//
+////#include <string.h>
+////#include <sys/stat.h>
+////#include <unistd.h>
+////#include <limits.h>
+//
+////    static void mkdirRecursive(const char *path, mode_t mode) {
+////        char opath[PATH_MAX];
+////        char *p;
+////        size_t len;
+////
+////        strncpy(opath, path, sizeof(opath));
+////        opath[sizeof(opath) - 1] = '\0';
+////        len = strlen(opath);
+////        if (len == 0)
+////            return;
+////        else if (opath[len - 1] == '/')
+////            opath[len - 1] = '\0';
+////        for(p = opath; *p; p++)
+////            if (*p == '/') {
+////                *p = '\0';
+////                if (access(opath, F_OK))
+////                    mkdir(opath, mode);
+////                *p = '/';
+////            }
+////        if (access(opath, F_OK))         /* if path is not terminated with / */
+////            mkdir(opath, mode);
+////    }
 //}
 //
 //boolean File::createNewFile() {
-//    int exitCode = true;
-//    String command;
-//
-//    if (File::isDirectory()) {
-//        command = (String) "mkdir " + this->path;
-//        File::executeCommand(command, exitCode);
-//    }
-//
-//    if (File::isFile()) {
-//        command = (String) "type NUL > " + this->path;
-//        File::executeCommand(command, exitCode);
-//    }
-//
-//    return exitCode;
+//    return !mknod(this->path.toString(),
+//                  S_IFREG | S_IRWXU | S_IRWXG,
+//                  0);
 //}
 //
 //boolean File::isDirectory() {
-//    String command = (String) "ls -l " + this->path;
-//    String resultExecuteCommand = File::executeCommand(command);
+////    String command = (String) "ls -l " + this->path;
+////    String resultExecuteCommand = File::executeCommand(command);
+////
+////    return resultExecuteCommand.charAt(0) != '-';
+//    struct stat fileStatus;
 //
-//    return resultExecuteCommand.charAt(0) != '-';
+//    if (stat(this->path.toString(), &fileStatus) != -1) {
+//        if (S_ISDIR(fileStatus.st_mode) != 0) {
+//            printf("%s is a directory", this->path.toString());
+//            return true;
+//        } else {
+//            printf("%s is not a directory", this->path.toString());
+//            return false;
+//        }
+//    }
 //}
 //
 //boolean File::isFile() {
-//    String command = (String) "ls -l " + this->path;
-//    String resultExecuteCommand = File::executeCommand(command);
+////    String command = (String) "ls -l " + this->path;
+////    String resultExecuteCommand = File::executeCommand(command);
+////
+////    return resultExecuteCommand.charAt(0) == '-';
 //
-//    return resultExecuteCommand.charAt(0) == '-';
+//    struct stat fileStatus;
+//
+//    if (stat(this->path.toString(), &fileStatus) != -1) {
+//        if (S_ISREG(fileStatus.st_mode) != 0) {
+//            printf("%s is a file", this->path.toString());
+//        } else {
+//            printf("%s is not a file", this->path.toString());
+//        }
+//    }
 //}
 //
 //boolean File::deletes() {
-//    int exitCode = true;
-//    String command;
-//
-//    if (File::isDirectory()) {
-//        command = (String) "rmdir " + this->path;
-//        File::executeCommand(command, exitCode);
-//    }
-//
-//    if (File::isFile()) {
-//        command = (String) "del " + this->path;
-//        File::executeCommand(command, exitCode);
-//    }
-//
-//    return exitCode;
+////#define _XOPEN_SOURCE 500
+////#include <stdio.h>
+////#include <ftw.h>
+////#include <unistd.h>
+////
+////    int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
+////    {
+////        int rv = remove(fpath);
+////
+////        if (rv)
+////            perror(fpath);
+////
+////        return rv;
+////    }
+////
+////    int rmrf(char *path)
+////    {
+////        return nftw(path, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
+////    }
 //}
 //
 //#endif

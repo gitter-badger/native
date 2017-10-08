@@ -69,10 +69,11 @@
 //    File fileHidden = File(FileTest::pathNameHidden);
 //    File fileSubFolder = File(FileTest::pathSubFolder);
 //
-//    ASSERT_TRUE(fileTestFolder.mkdir());
+////    ASSERT_TRUE(fileTestFolder.mkdirFile());
 //    ASSERT_TRUE(fileSubFolder.mkdirs());
+//    ASSERT_TRUE(fileTestFolder.isDirectory());
 //    ASSERT_TRUE(fileExistent.createNewFile());
-//    ASSERT_TRUE(fileHidden.createNewFile());
+////    ASSERT_TRUE(fileHidden.createNewFile());
 //}
 //
 //TEST (JavaIo, FileConstructor) {
@@ -626,38 +627,38 @@
 //////    }
 //////}
 //////
-//TEST (JavaIo, FileMkdir) {
-//    // Create an existent directory file
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//
-//    // Create a non-existent directory file
-//    File fileNonExistentFolder
-//            = File(FileTest::pathNameNonExistentFolder
-//                   + (String) "NonExistentFile.txt");
-//
-//    // Create a file from a non-existent path
-//    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//
-//    // Create a file from a existent path
-//    File fileExistent = File(FileTest::pathNameExistent);
-//
-//    // return FALSE if a directory file is existent and do nothing
-//    ASSERT_FALSE(fileTestFolder.mkdir());
-//
-//    // return FALSE if file is existent and do nothing
-//    ASSERT_FALSE(fileExistent.mkdir());
-//
-//    // return FALSE if the parent directory is non-existent
-//    ASSERT_FALSE(fileNonExistentFolder.mkdir());
-//
-//    // return TRUE if file is non-existent,
-//    // and creates the directory named by this abstract pathName.
-//    ASSERT_TRUE(fileNonExistent.mkdir());
-////    ASSERT_TRUE(fileNonExistent.exists());
-//
-//    // delete file after testing
-////    fileNonExistent.delete();
-//}
+////TEST (JavaIo, FileMkdir) {
+////    // Create an existent directory file
+////    File fileTestFolder = File(FileTest::pathTestFolder);
+////
+////    // Create a non-existent directory file
+////    File fileNonExistentFolder
+////            = File(FileTest::pathNameNonExistentFolder
+////                   + (String) "NonExistentFile.txt");
+////
+////    // Create a file from a non-existent path
+////    File fileNonExistent = File(FileTest::pathNameNonExistent);
+////
+////    // Create a file from a existent path
+////    File fileExistent = File(FileTest::pathNameExistent);
+////
+////    // return FALSE if a directory file is existent and do nothing
+////    ASSERT_FALSE(fileTestFolder.mkdirFile());
+////
+////    // return FALSE if file is existent and do nothing
+////    ASSERT_FALSE(fileExistent.mkdirFile());
+////
+////    // return FALSE if the parent directory is non-existent
+////    ASSERT_FALSE(fileNonExistentFolder.mkdirFile());
+////
+////    // return TRUE if file is non-existent,
+////    // and creates the directory named by this abstract pathName.
+////    ASSERT_TRUE(fileNonExistent.mkdirFile());
+//////    ASSERT_TRUE(fileNonExistent.exists());
+////
+////    // delete file after testing
+//////    fileNonExistent.delete();
+////}
 //////
 //////TEST (JavaIo, FileMkdirs) {
 //////    // Create an existent directory file
@@ -767,13 +768,12 @@
 //////}
 //////
 //
-//
 //TEST (JavaIo, FileExecuteCommand) {
 //    int exitCode = 0;
-//    String expected = "File.cpp  File.hpp  FileTest.cpp\n";
-//    String actual = File::executeCommand("dir java/io/File", exitCode);
-//    ASSERT_STR(expected.toString(), actual.toString());
-//    ASSERT_EQUAL(0, exitCode);
+////    String expected = "File.cpp  File.hpp  FileTest.cpp  TestFolder\n";
+//    String actual = File::executeCommand("dir java", exitCode);
+////    ASSERT_STR(expected.toString(), actual.toString());
+//    ASSERT_TRUE(exitCode);
 //
 //    try {
 //        File::executeCommand("aaa", exitCode);
@@ -791,10 +791,10 @@
 //    File fileSubFolder = File(FileTest::pathSubFolder);
 //
 //    // Delete files after testing
-//    fileTestFolder.deletes();
-//    fileExistent.deletes();
-//    fileHidden.deletes();
-//    fileSubFolder.deletes();
+////    fileSubFolder.deletes();
+////    fileTestFolder.deletes();
+////    fileExistent.deletes();
+////    fileHidden.deletes();
 //}
 //
 //#endif

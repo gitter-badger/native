@@ -29,6 +29,8 @@
 
 #include <stdlib.h>
 #include <memory>
+#include <sys/types.h>
+#include <sys/stat.h> // mkdir
 
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
@@ -112,7 +114,7 @@ namespace Java {
              *          If a security manager exists and its
              *          method does not permit the named directory to be created
              */
-            boolean mkdir();
+            boolean mkdirFile();
 
             /**
              * Creates the directory named by this abstract pathname, including any
