@@ -32,6 +32,7 @@
 #include <memory>
 #include "../../../kernel/type.h"
 #include "../../lang/RuntimeException/RuntimeException.hpp"
+#include <stdlib.h>
 
 using namespace Java::Lang;
 
@@ -94,7 +95,62 @@ namespace Java {
              * @param command
              * @return a String contains result of command
              */
-            static String executeCommand(String command);
+            static String executeCommand(String command, int &exitCode);
+
+            /**
+             * Creates the directory named by this abstract pathname.
+             *
+             * @return  true if and only if the directory was
+             *          created; false otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          method does not permit the named directory to be created
+             */
+            boolean mkdir();
+
+            /**
+             * Creates the directory named by this abstract pathname, including any
+             * necessary but nonexistent parent directories.  Note that if this
+             * operation fails it may have succeeded in creating some of the necessary
+             * parent directories.
+             *
+             * @return  true if and only if the directory was created,
+             *          along with all necessary parent directories; false
+             *          otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          method does not permit verification of the existence of the
+             *          named directory and all necessary parent directories; or if
+             *          the method does not permit the named directory
+             *          and all necessary parent directories to be created
+             */
+            boolean mkdirs();
+
+            /**
+             * Atomically creates a new, empty file named by this abstract pathname if
+             * and only if a file with this name does not yet exist.  The check for the
+             * existence of the file and the creation of the file if it does not exist
+             * are a single operation that is atomic with respect to all other
+             * filesystem activities that might affect the file.
+             *
+             * Note: this method should not be used for file-locking, as
+             * the resulting protocol cannot be made to work reliably.
+             * The facility should be used instead.
+             *
+             * @return  true if the named file does not exist and was
+             *          successfully created; false if the named file
+             *          already exists
+             *
+             * @throws  IOException
+             *          If an I/O error occurred
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          method denies write access to the file
+             */
+            boolean createNewFile();
 
         private:
             /**
