@@ -42,12 +42,13 @@
 #include "../../../kernel/type.h"
 #include "../../lang/RuntimeException/RuntimeException.hpp"
 #include "../../lang/SecurityException/SecurityException.hpp"
+#include "../../lang/Exception/Exception.hpp"
 
 using namespace Java::Lang;
 
 namespace Java {
     namespace Io {
-        class File:
+        class File :
                 virtual public Serializable,
                 virtual public Comparable<File> {
 
@@ -225,6 +226,19 @@ namespace Java {
              *          delete access to the file
              */
             boolean deletes();
+
+            /**
+             * Tests whether the file or directory denoted by this abstract pathname
+             * exists.
+             *
+             * @return  true if and only if the file or directory denoted
+             *          by this abstract pathname exists; false otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its
+             *          method denies read access to the file or directory
+             */
+            boolean exists();            
 
         private:
             /**

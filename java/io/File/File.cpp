@@ -38,17 +38,17 @@ File::File(String pathName) {
 
 String File::normalize(String pathName) {
     int lengthPathName = pathName.length();
-    char prevChar = 0;
+    char previousChar = 0;
 
     for (int index = 0; index < lengthPathName; index++) {
         char currentChar = pathName.charAt(index);
-        if ((prevChar == '/') && (currentChar == '/'))
-            return normalize(pathName, lengthPathName, index - 1);
-        prevChar = currentChar;
+        if ((previousChar == '/') && (currentChar == '/'))
+            return File::normalize(pathName, lengthPathName, index - 1);
+        previousChar = currentChar;
     }
 
-    if (prevChar == '/')
-        return normalize(pathName, lengthPathName, lengthPathName - 1);
+    if (previousChar == '/')
+        return File::normalize(pathName, lengthPathName, lengthPathName - 1);
 
     return pathName;
 }
@@ -106,147 +106,82 @@ int File::compareTo(const File &pathname) const {
 }
 
 boolean File::mkdir() {
-    return !::mkdir(this->path.toString(), S_IRWXU | S_IRWXG);
+    return (boolean) !::mkdir(this->path.toString(),
+                              S_IRWXU | S_IRWXG);
 }
 
 boolean File::mkdirs() {
     char holdString[PATH_MAX];
-    string p = NULL;
-    size_t len;
+    string pointerChar = NULL;
+    size_t length;
 
-    snprintf(holdString, sizeof(holdString),"%s", this->path.toString());
-    len = strlen(holdString);
+    ::snprintf(holdString,
+               sizeof(holdString),
+               "%s",
+               this->path.toString());
 
-    if(holdString[len - 1] == '/')
-        holdString[len - 1] = 0;
+    length = ::strlen(holdString);
 
-    for(p = holdString + 1; *p; p++)
-        if(*p == '/') {
-            *p = 0;
-            ::mkdir(holdString, S_IRWXU);
-            *p = '/';
+    if (holdString[length - 1] == '/')
+        holdString[length - 1] = 0;
+
+    for (pointerChar = holdString + 1; *pointerChar; pointerChar++)
+        if (*pointerChar == '/') {
+            *pointerChar = 0;
+            ::mkdir(holdString, S_IRWXU | S_IRWXG);
+            *pointerChar = '/';
         }
 
-    return !::mkdir(holdString, S_IRWXU);
-
-//    if (!dir) {
-//        errno = EINVAL;
-//        return 1;
-//    }
-//
-//    if (strlen(dir) == 1 && dir[0] == '/')
-//        return 0;
-//
-//    mkpath(dirname(strdupa(dir)), mode);
-//
-//    return mkdir(dir, mode);
-
-//#include <string.h>
-//#include <sys/stat.h>
-//#include <unistd.h>
-
-//    static void mkdirRecursive(const char *path, mode_t mode) {
-//        char opath[PATH_MAX];
-//        char *p;
-//        size_t len;
-//
-//        strncpy(opath, path, sizeof(opath));
-//        opath[sizeof(opath) - 1] = '\0';
-//        len = strlen(opath);
-//        if (len == 0)
-//            return;
-//        else if (opath[len - 1] == '/')
-//            opath[len - 1] = '\0';
-//        for(p = opath; *p; p++)
-//            if (*p == '/') {
-//                *p = '\0';
-//                if (access(opath, F_OK))
-//                    mkdir(opath, mode);
-//                *p = '/';
-//            }
-//        if (access(opath, F_OK))         /* if path is not terminated with / */
-//            mkdir(opath, mode);
-//    }
+    return !::mkdir(holdString, S_IRWXU | S_IRWXG);
 }
 
 boolean File::createNewFile() {
-    return !mknod(this->path.toString(),
-                  S_IFREG | S_IRWXU | S_IRWXG,
-                  0);
+    return !::mknod(this->path.toString(),
+                    S_IFREG | S_IRWXU | S_IRWXG,
+                    0);
 }
 
 boolean File::isDirectory() {
-//    String command = (String) "ls -l " + this->path;
-//    String resultExecuteCommand = File::executeCommand(command);
-//
-//    return resultExecuteCommand.charAt(0) != '-';
-    struct stat fileStatus;
+    struct stat fileStatitics;
 
-    if (stat(this->path.toString(), &fileStatus) != -1) {
-        if (S_ISDIR(fileStatus.st_mode) != 0) {
-            printf("%s is a directory", this->path.toString());
-            return true;
-        } else {
-            printf("%s is not a directory", this->path.toString());
-            return false;
-        }
-    }
+    if (!File::exists())
+        return false;
+
+    stat(this->path.toString(), &fileStatitics);
+
+    return S_ISDIR(fileStatitics.st_mode);
 }
 
 boolean File::isFile() {
-//    String command = (String) "ls -l " + this->path;
-//    String resultExecuteCommand = File::executeCommand(command);
-//
-//    return resultExecuteCommand.charAt(0) == '-';
+    struct stat fileStatitics;
 
-    struct stat fileStatus;
+    if (!File::exists())
+        return false;
 
-    if (stat(this->path.toString(), &fileStatus) != -1) {
-        if (S_ISREG(fileStatus.st_mode) != 0) {
-            printf("%s is a file", this->path.toString());
-        } else {
-            printf("%s is not a file", this->path.toString());
-        }
-    }
+    stat(this->path.toString(), &fileStatitics);
+
+    return S_ISREG(fileStatitics.st_mode);
+}
+
+int deleteEntry(const_string filePath,
+                const struct stat *fileStatitics,
+                int typeFlag,
+                struct FTW *structFTW) {
+    remove(filePath);
+
+    return 0;           /* To tell nftw() to continue */
 }
 
 boolean File::deletes() {
+    return (boolean) !nftw(this->path.toString(),
+                           deleteEntry,
+                           64,
+                           FTW_DEPTH | FTW_PHYS);
+}
 
-    char holdString[PATH_MAX];
-    string p = NULL;
-    size_t len;
-
-    snprintf(holdString, sizeof(holdString),"%s", this->path.toString());
-    len = strlen(holdString);
-
-    if(holdString[len - 1] == '/')
-        holdString[len - 1] = 0;
-
-    for(p = holdString + 1; *p; p++)
-        if(*p == '/') {
-            *p = 0;
-            ::remove(holdString);
-            *p = '/';
-        }
-
-    return !::remove(holdString);
-
-//    int unlink_cb(const char *fpath, const struct stat *sb, int typeflag, struct FTW *ftwbuf)
-    {
-        int rv = remove(this->path.toString());
-
-        if (rv)
-            perror(this->path.toString());
-
-        return (boolean) !rv;
-    }
-
-
-
-//    int rmrf(char *path)
-//    {
-//        return nftw(path, unlink_cb, 64, FTW_DEPTH | FTW_PHYS);
-//    }
+boolean File::exists() {
+    struct stat fileStatitics;
+    return stat(this->path.toString(), &fileStatitics) == 0;
 }
 
 #endif
