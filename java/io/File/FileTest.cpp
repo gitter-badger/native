@@ -182,21 +182,21 @@ TEST (JavaIo, FileConstructor) {
 //////    assertEquals(-1, file.compareTo(fileNameGreater));
 //////}
 //////
-//////TEST (JavaIo, FileCreateNewFile) {
-//////    /* Return TRUE + Create a file
-//////       if the current file is NOT EXISTENT */
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////    ASSERT_TRUE(fileNonExistent.createNewFile());
-//////    fileNonExistent.delete ();
-//////
-//////    /* Return FALSE + Do nothing
-//////       if the current file is EXISTENT */
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////    ASSERT_FALSE(fileExistent.createNewFile());
-//////
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////    ASSERT_FALSE(fileTestFolder.createNewFile());
-//////}
+TEST (JavaIo, FileCreateNewFile) {
+    /* Return TRUE + Create a file
+       if the current file is NOT EXISTENT */
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+    ASSERT_TRUE(fileNonExistent.createNewFile());
+    fileNonExistent.deletes();
+
+    /* Return FALSE + Do nothing
+       if the current file is EXISTENT */
+    File fileExistent = File(FileTest::pathNameExistent);
+    ASSERT_FALSE(fileExistent.createNewFile());
+
+    File fileTestFolder = File(FileTest::pathTestFolder);
+    ASSERT_FALSE(fileTestFolder.createNewFile());
+}
 //////
 //////TEST (JavaIo, FileCreateTempFileParamStringString) {
 //////    File file = File("");
