@@ -237,23 +237,6 @@ TEST (JavaIo, FileCreateNewFile) {
 //////    ASSERT_TRUE(file.delete ());
 //////}
 //////
-//////TEST (JavaIo, FileDelete) {
-//////    // Create a non-existent file
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////    ASSERT_FALSE(fileNonExistent.exists());
-//////
-//////    // Return FALSE when trying to delete is NOT SUCCESS
-//////    ASSERT_FALSE(fileNonExistent.delete ());
-//////
-//////    // Create a temp file.
-//////    File fileTemp = File.createTempFile("temp", ".txt");
-//////
-//////    // Return TRUE when trying to delete is SUCCESS
-//////    ASSERT_TRUE(fileTemp.delete ());
-//////
-//////    // Make sure the temp file is deleted
-//////    ASSERT_FALSE(fileTemp.exists());
-//////}
 //////
 //////TEST (JavaIo, FileDeleteOnExit) {
 //////    if (isLinux) {
@@ -285,25 +268,25 @@ TEST (JavaIo, FileCreateNewFile) {
 //////    ASSERT_TRUE(file.equals(fileNameEqual));
 //////}
 //////
-//TEST (JavaIo, FileExists) {
-//    // Test an existent directory file
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//    ASSERT_TRUE(fileTestFolder.exists());
-//
-//    // Test a file from a existent path
-//    File fileExistent = File(FileTest::pathNameExistent);
-//    ASSERT_TRUE(fileExistent.exists());
-//
-//    // Test a file from a non-existent path
-//    File fileNonExistent = File(FileTest::pathNameNonExistentFolder
-//                                + (string) "/NonExistentFile.txt");
-//    ASSERT_FALSE(fileNonExistent.exists());
-//
-//    // Test a non-existent directory file
-//    File fileNonExistentFolder
-//            = File(FileTest::pathNameNonExistentFolder);
-//    ASSERT_FALSE(fileNonExistentFolder.exists());
-//}
+TEST (JavaIo, FileExists) {
+    // Test an existent directory file
+    File fileTestFolder = File(FileTest::pathTestFolder);
+    ASSERT_TRUE(fileTestFolder.exists());
+
+    // Test a file from a existent path
+    File fileExistent = File(FileTest::pathNameExistent);
+    ASSERT_TRUE(fileExistent.exists());
+
+    // Test a file from a non-existent path
+    File fileNonExistent = File(FileTest::pathNameNonExistentFolder
+                                + (string) "/NonExistentFile.txt");
+    ASSERT_FALSE(fileNonExistent.exists());
+
+    // Test a non-existent directory file
+    File fileNonExistentFolder
+            = File(FileTest::pathNameNonExistentFolder);
+    ASSERT_FALSE(fileNonExistentFolder.exists());
+}
 //////
 //////TEST (JavaIo, FileGetAbsoluteFile) {
 //////    if (FileTest::isWindows) {
@@ -769,18 +752,30 @@ TEST (JavaIo, FileToString) {
 //////}
 //////
 
-TEST (JavaIo, FileAfterTesting) {
+TEST (JavaIo, FileDeletes) {
     // Variables for testing
     File fileTestFolder = File(FileTest::pathTestFolder);
     File fileExistent = File(FileTest::pathNameExistent);
     File fileHidden = File(FileTest::pathNameHidden);
     File fileSubFolder = File(FileTest::pathSubFolder);
 
-    // Delete files after testing
-//    ASSERT_TRUE(fileSubFolder.deletes());
-//    ASSERT_TRUE(fileExistent.deletes());
-//    ASSERT_TRUE(fileHidden.deletes());
+    // Check these file above is existent
+    ASSERT_TRUE(fileTestFolder.exists());
+    ASSERT_TRUE(fileExistent.exists());
+    ASSERT_TRUE(fileHidden.exists());
+    ASSERT_TRUE(fileSubFolder.exists());
+
+    // Return TRUE and Deletes all file, subFolder in an existent directory
     ASSERT_TRUE(fileTestFolder.deletes());
+
+    // Make sure all files has been deleted
+    ASSERT_FALSE(fileTestFolder.exists());
+    ASSERT_FALSE(fileExistent.exists());
+    ASSERT_FALSE(fileHidden.exists());
+    ASSERT_FALSE(fileSubFolder.exists());
+
+    // Return FALSE and do nothing when trying to delete a non-existent file
+    ASSERT_FALSE(fileTestFolder.deletes());
 }
 
 #endif

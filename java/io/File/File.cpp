@@ -173,10 +173,13 @@ int deleteEntry(const_string filePath,
 }
 
 boolean File::deletes() {
+    if (!File::exists())
+        return false;
+
     return (boolean) !nftw(this->path.toString(),
-                           deleteEntry,
-                           64,
-                           FTW_DEPTH | FTW_PHYS);
+                          deleteEntry,
+                          64,
+                          FTW_DEPTH | FTW_PHYS);
 }
 
 boolean File::exists() {
