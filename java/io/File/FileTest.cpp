@@ -490,46 +490,46 @@ TEST (JavaIo, FileGetPath) {
 //////    ASSERT_TRUE(fileAbsolute.isAbsolute());
 //////}
 //////
-//TEST (JavaIo, FileIsDirectory) {
-//    // Create a file has file name
-//    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//
-//    // Create an existent directory file
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//
-//    // Create a non-existent directory file
-//    File fileNonExistentFolder = File(FileTest::pathNameNonExistentFolder);
-//
-//    // return FALSE if file is not a directory
-//    ASSERT_FALSE(fileNonExistent.isDirectory());
-//
-//    // return TRUE if file is an existent directory
-//    ASSERT_TRUE(fileTestFolder.isDirectory());
-//
-//    // return FALSE if file is a non-existent directory
-//    ASSERT_FALSE(fileNonExistentFolder.isDirectory());
-//}
-//
-//TEST (JavaIo, FileIsFile) {
-//    // Create a directory file
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//
-//    // Create a file from a non-existent path
-//    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//
-//    // Create a file from a existent path
-//    File fileExistent = File(FileTest::pathNameExistent);
-//
-//    // return FALSE if file is a directory
-//    ASSERT_FALSE(fileTestFolder.isFile());
-//
-//    // return FALSE if file is non-existent
-//    ASSERT_FALSE(fileNonExistent.isFile());
-//
-//    // return TRUE if file is existent
-//    ASSERT_TRUE(fileExistent.isFile());
-//}
-//
+TEST (JavaIo, FileIsDirectory) {
+    // Create a file has file name
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+
+    // Create an existent directory file
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    // Create a non-existent directory file
+    File fileNonExistentFolder = File(FileTest::pathNameNonExistentFolder);
+
+    // return FALSE if file is not a directory
+    ASSERT_FALSE(fileNonExistent.isDirectory());
+
+    // return TRUE if file is an existent directory
+    ASSERT_TRUE(fileTestFolder.isDirectory());
+
+    // return FALSE if file is a non-existent directory
+    ASSERT_FALSE(fileNonExistentFolder.isDirectory());
+}
+
+TEST (JavaIo, FileIsFile) {
+    // Create a directory file
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    // Create a file from a non-existent path
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+
+    // Create a file from a existent path
+    File fileExistent = File(FileTest::pathNameExistent);
+
+    // return FALSE if file is a directory
+    ASSERT_FALSE(fileTestFolder.isFile());
+
+    // return FALSE if file is non-existent
+    ASSERT_FALSE(fileNonExistent.isFile());
+
+    // return TRUE if file is existent
+    ASSERT_TRUE(fileExistent.isFile());
+}
+
 //////TEST (JavaIo, FileIsHidden) {
 //////    // Create a directory file
 //////    File fileTestFolder = File(FileTest::pathTestFolder);
