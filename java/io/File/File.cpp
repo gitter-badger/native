@@ -177,14 +177,30 @@ boolean File::deletes() {
         return false;
 
     return (boolean) !nftw(this->path.toString(),
-                          deleteEntry,
-                          64,
-                          FTW_DEPTH | FTW_PHYS);
+                           deleteEntry,
+                           64,
+                           FTW_DEPTH | FTW_PHYS);
 }
 
 boolean File::exists() {
     struct stat fileStatitics;
     return stat(this->path.toString(), &fileStatitics) == 0;
 }
+
+//boolean File::canExecute() {
+//    struct stat fileStatitics;
+//
+//    if (!File::exists())
+//        return false;
+//
+//    stat(this->path.toString(), &fileStatitics);
+//
+//    std::cout << "\n\n==== Can execute ====\n\n"
+//         << (fileStatitics.st_mode & S_IEXEC);
+//
+//    return (fileStatitics.st_mode & S_IEXEC);
+//
+////    return access(this->path.toString(), X_OK) == 0;
+//}
 
 #endif

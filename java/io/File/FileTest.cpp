@@ -120,22 +120,22 @@ TEST (JavaIo, FileConstructor) {
 ////// * is permitted to execute it
 ////// * @throws IOException
 ////// */
-//////TEST (JavaIo, FileCanExecute) {
-//////    // Return FALSE with non-existent file
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////    ASSERT_FALSE(fileNonExistent.canExecute());
-//////
-//////    // Return FASLE when can not execute
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////    fileExistent.createNewFile();
-////////		ASSERT_TRUE(fileExistent.setExecutable(false));  // TODO(thoangminh): research it
-////////		ASSERT_FALSE(fileExistent.canExecute());
-//////
-//////    // Return TRUE when can execute
-//////    ASSERT_TRUE(fileExistent.setExecutable(true));
-//////    ASSERT_TRUE(fileExistent.canExecute());
-//////}
+//TEST (JavaIo, FileCanExecute) {
+//    // Return FALSE with non-existent file
+//    File fileNonExistent = File(FileTest::pathNameNonExistent);
+//    ASSERT_FALSE(fileNonExistent.canExecute());
+//
+//    // Return FASLE when can not execute
+//    File fileTestFolder = File(FileTest::pathTestFolder);
+//    File fileExistent = File(FileTest::pathNameExistent);
+//    fileExistent.createNewFile();
+////		ASSERT_TRUE(fileExistent.setExecutable(false));  // TODO(thoangminh): research it
+////		ASSERT_FALSE(fileExistent.canExecute());
+//
+//    // Return TRUE when can execute
+////    ASSERT_TRUE(fileExistent.setExecutable(true));
+//    ASSERT_TRUE(fileExistent.canExecute());
+//}
 //////
 //////TEST (JavaIo, FileCanRead) {
 //////    // Case FALSE

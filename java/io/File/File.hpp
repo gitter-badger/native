@@ -238,7 +238,26 @@ namespace Java {
              *          If a security manager exists and its
              *          method denies read access to the file or directory
              */
-            boolean exists();            
+            boolean exists();
+
+            /**
+            * Tests whether the application can execute the file denoted by this
+            * abstract pathname. On some platforms it may be possible to start the
+            * Java virtual machine with special privileges that allow it to execute
+            * files that are not marked executable. Consequently this method may return
+            * {@code true} even though the file does not have execute permissions.
+            *
+            * @return  <code>true</code> if and only if the abstract pathname exists
+            *          <em>and</em> the application is allowed to execute the file
+            *
+            * @throws  SecurityException
+            *          If a security manager exists and its <code>{@link
+            *          java.lang.SecurityManager#checkExec(java.lang.String)}</code>
+            *          method denies execute access to the file
+            *
+            * @since 1.6
+            */
+            boolean canExecute();
 
         private:
             /**
