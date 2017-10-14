@@ -669,35 +669,35 @@ TEST (JavaIo, FileMkdir) {
     // delete file after testing
     ASSERT_TRUE(fileNonExistentFolder.deletes());
 }
-//
-//TEST (JavaIo, FileMkdirs) {
-//    // Create an existent directory file
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//
-//    // Create a file from a existent path
-//    File fileExistent = File(FileTest::pathNameExistent);
-//
-//    // Create a file from a non-existent path
-//    File fileNonExistent = File(FileTest::pathNameNonExistentFolder
-//                                + (string) "/NonExistentFile.txt");
-//
-//    // Create a non-existent directory file
-//    File fileNonExistentFolder
-//            = File(FileTest::pathNameNonExistentFolder);
-//
-//    // return FALSE if a directory file is existent and do nothing
-//    ASSERT_FALSE(fileTestFolder.mkdirs());
-//
-//    // return FALSE if file is existent and do nothing
-//    ASSERT_FALSE(fileExistent.mkdirs());
-//
-//    // return TRUE if the parent directory is non-existent
-//    // Creates the directory named by this abstract pathName.
-//    ASSERT_TRUE(fileNonExistent.mkdirs());
-//
-//    // delete file after testing
-//    ASSERT_TRUE(fileNonExistentFolder.deletes());
-//}
+
+TEST (JavaIo, FileMkdirs) {
+    // Create an existent directory file
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    // Create a file from a existent path
+    File fileExistent = File(FileTest::pathNameExistent);
+
+    // Create a file from a non-existent path
+    File fileNonExistent = File(FileTest::pathNameNonExistentFolder
+                                + (string) "/NonExistentFile.txt");
+
+    // Create a non-existent directory file
+    File fileNonExistentFolder
+            = File(FileTest::pathNameNonExistentFolder);
+
+    // return FALSE if a directory file is existent and do nothing
+    ASSERT_FALSE(fileTestFolder.mkdirs());
+
+    // return FALSE if file is existent and do nothing
+    ASSERT_FALSE(fileExistent.mkdirs());
+
+    // return TRUE if the parent directory is non-existent
+    // Creates the directory named by this abstract pathName.
+    ASSERT_TRUE(fileNonExistent.mkdirs());
+
+    // delete file after testing
+    ASSERT_TRUE(fileNonExistentFolder.deletes());
+}
 //////
 //////TEST (JavaIo, FileRenameTo) {
 //////    // Create a file from a non-existent file path
