@@ -297,8 +297,8 @@ short Short::parseShort(String inputString) {
 
 short Short::reverseBytes(short inputShort) {
     inputShort = (((unsigned short) inputShort >> 24))
-            | (( inputShort >> 8) & 0xFF00 )
-            | (( inputShort << 8) & 0xFF000 )
+            | (( inputShort >> 8) & 0xFF )
+            | (( inputShort << 8) & 0xFF00 )
             | (( inputShort << 24 ));
 
     return inputShort;
@@ -307,7 +307,6 @@ short Short::reverseBytes(short inputShort) {
 string Short::toString() const {
     return this->originalString;
 }
-
 
 boolean Short::equals(Short object) {
     return this->original == object.shortValue();

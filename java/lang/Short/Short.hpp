@@ -48,7 +48,7 @@ namespace Java {
             /**
              * Max value of unsigned short
              */
-            static constexpr unsigned short UNSIGNED_SHORT_MAX = 0xffffffff;
+            static constexpr unsigned short UNSIGNED_SHORT_MAX = 0xffff;
 
             /**
              * Min value of unsigned short
