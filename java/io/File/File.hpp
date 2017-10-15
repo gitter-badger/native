@@ -35,7 +35,7 @@
 
 #include <stdio.h>
 #include <ftw.h> // deletes
-#include <unistd.h>
+#include <unistd.h> // access()
 
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
@@ -43,6 +43,7 @@
 #include "../../lang/RuntimeException/RuntimeException.hpp"
 #include "../../lang/SecurityException/SecurityException.hpp"
 #include "../../lang/Exception/Exception.hpp"
+#include "../../lang/IllegalArgumentException/IllegalArgumentException.hpp"
 
 using namespace Java::Lang;
 
@@ -259,6 +260,377 @@ namespace Java {
             */
             boolean canExecute();
 
+            /**
+             * A convenience method to set the owner's execute permission for this
+             * abstract pathname. On some platforms it may be possible to start the Java
+             * virtual machine with special privileges that allow it to execute files
+             * that are not marked executable.
+             *
+             * <p>An invocation of this method of the form <tt>file.setExcutable(arg)</tt>
+             * behaves in exactly the same way as the invocation
+             *
+             * <pre>
+             *     file.setExecutable(arg, true) </pre>
+             *
+             * @param   executable
+             *          If <code>true</code>, sets the access permission to allow execute
+             *          operations; if <code>false</code> to disallow execute operations
+             *
+             * @return   <code>true</code> if and only if the operation succeeded.  The
+             *           operation will fail if the user does not have permission to
+             *           change the access permissions of this abstract pathname.  If
+             *           <code>executable</code> is <code>false</code> and the underlying
+             *           file system does not implement an execute permission, then the
+             *           operation will fail.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             *
+             * @since 1.6
+             */
+            boolean setExecutable(boolean executable);
+
+            /**
+             * Sets the owner's or everybody's execute permission for this abstract
+             * pathname. On some platforms it may be possible to start the Java virtual
+             * machine with special privileges that allow it to execute files that are
+             * not marked executable.
+             *
+             * <p> The {@link java.nio.file.Files} class defines methods that operate on
+             * file attributes including file permissions. This may be used when finer
+             * manipulation of file permissions is required.
+             *
+             * @param   executable
+             *          If <code>true</code>, sets the access permission to allow execute
+             *          operations; if <code>false</code> to disallow execute operations
+             *
+             * @param   ownerOnly
+             *          If <code>true</code>, the execute permission applies only to the
+             *          owner's execute permission; otherwise, it applies to everybody.
+             *          If the underlying file system can not distinguish the owner's
+             *          execute permission from that of others, then the permission will
+             *          apply to everybody, regardless of this value.
+             *
+             * @return  <code>true</code> if and only if the operation succeeded.  The
+             *          operation will fail if the user does not have permission to
+             *          change the access permissions of this abstract pathname.  If
+             *          <code>executable</code> is <code>false</code> and the underlying
+             *          file system does not implement an execute permission, then the
+             *          operation will fail.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             *
+             * @since 1.6
+             */
+            boolean setExecutable(boolean executable, boolean ownerOnly);
+
+            /**
+             * Tests whether the application can read the file denoted by this
+             * abstract pathname. On some platforms it may be possible to start the
+             * Java virtual machine with special privileges that allow it to read
+             * files that are marked as unreadable. Consequently this method may return
+             * {@code true} even though the file does not have read permissions.
+             *
+             * @return  <code>true</code> if and only if the file specified by this
+             *          abstract pathname exists <em>and</em> can be read by the
+             *          application; <code>false</code> otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkRead(java.lang.String)}</code>
+             *          method denies read access to the file
+             */
+              boolean canRead();
+
+            /**
+             * Tests whether the application can modify the file denoted by this
+             * abstract pathname. On some platforms it may be possible to start the
+             * Java virtual machine with special privileges that allow it to modify
+             * files that are marked read-only. Consequently this method may return
+             * {@code true} even though the file is marked read-only.
+             *
+             * @return  <code>true</code> if and only if the file system actually
+             *          contains a file denoted by this abstract pathname <em>and</em>
+             *          the application is allowed to write to the file;
+             *          <code>false</code> otherwise.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             */
+              boolean canWrite();
+
+            /**
+             * Marks the file or directory named by this abstract pathname so that
+             * only read operations are allowed. After invoking this method the file
+             * or directory will not change until it is either deleted or marked
+             * to allow write access. On some platforms it may be possible to start the
+             * Java virtual machine with special privileges that allow it to modify
+             * files that are marked read-only. Whether or not a read-only file or
+             * directory may be deleted depends upon the underlying system.
+             *
+             * @return <code>true</code> if and only if the operation succeeded;
+             *          <code>false</code> otherwise
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the named file
+             *
+             * @since 1.2
+             */
+            boolean setReadOnly();
+
+            /**
+             * Sets the owner's or everybody's read permission for this abstract
+             * pathname. On some platforms it may be possible to start the Java virtual
+             * machine with special privileges that allow it to read files that are
+             * marked as unreadable.
+             *
+             * <p> The {@link java.nio.file.Files} class defines methods that operate on
+             * file attributes including file permissions. This may be used when finer
+             * manipulation of file permissions is required.
+             *
+             * @param   readable
+             *          If <code>true</code>, sets the access permission to allow read
+             *          operations; if <code>false</code> to disallow read operations
+             *
+             * @param   ownerOnly
+             *          If <code>true</code>, the read permission applies only to the
+             *          owner's read permission; otherwise, it applies to everybody.  If
+             *          the underlying file system can not distinguish the owner's read
+             *          permission from that of others, then the permission will apply to
+             *          everybody, regardless of this value.
+             *
+             * @return  <code>true</code> if and only if the operation succeeded.  The
+             *          operation will fail if the user does not have permission to
+             *          change the access permissions of this abstract pathname.  If
+             *          <code>readable</code> is <code>false</code> and the underlying
+             *          file system does not implement a read permission, then the
+             *          operation will fail.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             *
+             * @since 1.6
+             */
+            boolean setReadable(boolean readable, boolean ownerOnly);
+
+            /**
+             * A convenience method to set the owner's read permission for this abstract
+             * pathname. On some platforms it may be possible to start the Java virtual
+             * machine with special privileges that allow it to read files that that are
+             * marked as unreadable.
+             *
+             * <p>An invocation of this method of the form <tt>file.setReadable(arg)</tt>
+             * behaves in exactly the same way as the invocation
+             *
+             * <pre>
+             *     file.setReadable(arg, true) </pre>
+             *
+             * @param  readable
+             *          If <code>true</code>, sets the access permission to allow read
+             *          operations; if <code>false</code> to disallow read operations
+             *
+             * @return  <code>true</code> if and only if the operation succeeded.  The
+             *          operation will fail if the user does not have permission to
+             *          change the access permissions of this abstract pathname.  If
+             *          <code>readable</code> is <code>false</code> and the underlying
+             *          file system does not implement a read permission, then the
+             *          operation will fail.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             *
+             * @since 1.6
+             */
+            boolean setReadable(boolean readable);
+
+            /**
+             * A convenience method to set the owner's write permission for this abstract
+             * pathname. On some platforms it may be possible to start the Java virtual
+             * machine with special privileges that allow it to modify files that
+             * disallow write operations.
+             *
+             * <p> An invocation of this method of the form <tt>file.setWritable(arg)</tt>
+             * behaves in exactly the same way as the invocation
+             *
+             * <pre>
+             *     file.setWritable(arg, true) </pre>
+             *
+             * @param   writable
+             *          If <code>true</code>, sets the access permission to allow write
+             *          operations; if <code>false</code> to disallow write operations
+             *
+             * @return  <code>true</code> if and only if the operation succeeded.  The
+             *          operation will fail if the user does not have permission to
+             *          change the access permissions of this abstract pathname.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method denies write access to the file
+             *
+             * @since 1.6
+             */
+            boolean setWritable(boolean writable);
+
+            /**
+            * Sets the owner's or everybody's write permission for this abstract
+            * pathname. On some platforms it may be possible to start the Java virtual
+            * machine with special privileges that allow it to modify files that
+            * disallow write operations.
+            *
+            * <p> The {@link java.nio.file.Files} class defines methods that operate on
+            * file attributes including file permissions. This may be used when finer
+            * manipulation of file permissions is required.
+            *
+            * @param   writable
+            *          If <code>true</code>, sets the access permission to allow write
+            *          operations; if <code>false</code> to disallow write operations
+            *
+            * @param   ownerOnly
+            *          If <code>true</code>, the write permission applies only to the
+            *          owner's write permission; otherwise, it applies to everybody.  If
+            *          the underlying file system can not distinguish the owner's write
+            *          permission from that of others, then the permission will apply to
+            *          everybody, regardless of this value.
+            *
+            * @return  <code>true</code> if and only if the operation succeeded. The
+            *          operation will fail if the user does not have permission to change
+            *          the access permissions of this abstract pathname.
+            *
+            * @throws  SecurityException
+            *          If a security manager exists and its <code>{@link
+            *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+            *          method denies write access to the named file
+            *
+            * @since 1.6
+            */
+            boolean setWritable(boolean writable, boolean ownerOnly);
+
+            /**
+             * Creates an empty file in the default temporary-file directory, using
+             * the given prefix and suffix to generate its name. Invoking this method
+             * is equivalent to invoking <code>{@link #createTempFile(java.lang.String,
+             * java.lang.String, java.io.File)
+             * createTempFile(prefix,&nbsp;suffix,&nbsp;null)}</code>.
+             *
+             * <p> The {@link
+             * java.nio.file.Files#createTempFile(String,String,java.nio.file.attribute.FileAttribute[])
+             * Files.createTempFile} method provides an alternative method to create an
+             * empty file in the temporary-file directory. Files created by that method
+             * may have more restrictive access permissions to files created by this
+             * method and so may be more suited to security-sensitive applications.
+             *
+             * @param  prefix     The prefix string to be used in generating the file's
+             *                    name; must be at least three characters long
+             *
+             * @param  suffix     The suffix string to be used in generating the file's
+             *                    name; may be <code>null</code>, in which case the
+             *                    suffix <code>".tmp"</code> will be used
+             *
+             * @return  An abstract pathname denoting a newly-created empty file
+             *
+             * @throws  IllegalArgumentException
+             *          If the <code>prefix</code> argument contains fewer than three
+             *          characters
+             *
+             * @throws  IOException  If a file could not be created
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method does not allow a file to be created
+             *
+             * @since 1.2
+             * @see java.nio.file.Files#createTempDirectory(String,FileAttribute[])
+             */
+            static File createTempFile(String prefix, String suffix);
+
+            /**
+             * <p> Creates a new empty file in the specified directory, using the
+             * given prefix and suffix strings to generate its name.  If this method
+             * returns successfully then it is guaranteed that:
+             *
+             * <ol>
+             * <li> The file denoted by the returned abstract pathname did not exist
+             *      before this method was invoked, and
+             * <li> Neither this method nor any of its variants will return the same
+             *      abstract pathname again in the current invocation of the virtual
+             *      machine.
+             * </ol>
+             *
+             * This method provides only part of a temporary-file facility.  To arrange
+             * for a file created by this method to be deleted automatically, use the
+             * <code>{@link #deleteOnExit}</code> method.
+             *
+             * <p> The <code>prefix</code> argument must be at least three characters
+             * long.  It is recommended that the prefix be a short, meaningful string
+             * such as <code>"hjb"</code> or <code>"mail"</code>.  The
+             * <code>suffix</code> argument may be <code>null</code>, in which case the
+             * suffix <code>".tmp"</code> will be used.
+             *
+             * <p> To create the new file, the prefix and the suffix may first be
+             * adjusted to fit the limitations of the underlying platform.  If the
+             * prefix is too long then it will be truncated, but its first three
+             * characters will always be preserved.  If the suffix is too long then it
+             * too will be truncated, but if it begins with a period character
+             * (<code>'.'</code>) then the period and the first three characters
+             * following it will always be preserved.  Once these adjustments have been
+             * made the name of the new file will be generated by concatenating the
+             * prefix, five or more internally-generated characters, and the suffix.
+             *
+             * <p> If the <code>directory</code> argument is <code>null</code> then the
+             * system-dependent default temporary-file directory will be used.  The
+             * default temporary-file directory is specified by the system property
+             * <code>java.io.tmpdir</code>.  On UNIX systems the default value of this
+             * property is typically <code>"/tmp"</code> or <code>"/var/tmp"</code>; on
+             * Microsoft Windows systems it is typically <code>"C:\\WINNT\\TEMP"</code>.  A different
+             * value may be given to this system property when the Java virtual machine
+             * is invoked, but programmatic changes to this property are not guaranteed
+             * to have any effect upon the temporary directory used by this method.
+             *
+             * @param  prefix     The prefix string to be used in generating the file's
+             *                    name; must be at least three characters long
+             *
+             * @param  suffix     The suffix string to be used in generating the file's
+             *                    name; may be <code>null</code>, in which case the
+             *                    suffix <code>".tmp"</code> will be used
+             *
+             * @param  directory  The directory in which the file is to be created, or
+             *                    <code>null</code> if the default temporary-file
+             *                    directory is to be used
+             *
+             * @return  An abstract pathname denoting a newly-created empty file
+             *
+             * @throws  IllegalArgumentException
+             *          If the <code>prefix</code> argument contains fewer than three
+             *          characters
+             *
+             * @throws  IOException  If a file could not be created
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkWrite(java.lang.String)}</code>
+             *          method does not allow a file to be created
+             *
+             * @since 1.2
+             */
+            static File createTempFile(String prefix,
+                                       String suffix,
+                                       File directory);
+
         private:
             /**
              * This abstract pathname's normalized pathname string.
@@ -302,6 +674,22 @@ namespace Java {
              * @return
              */
             int getPrefixLength(String pathName);
+
+            /**
+             * Return file permission in String format
+             *
+             * @param path
+             * @return
+             */
+            StringBuffer permissionStringFormat(String path);
+
+            /**
+             * Return file permission in int format from String format
+             *
+             * @param permissionStringFormat
+             * @return
+             */
+            int stringFormatToPermission(StringBuffer permissionStringFormat);
         };
     }  // namespace Io
 } // namspace Java
