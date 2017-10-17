@@ -229,22 +229,18 @@ Short Short::decode(String inputString) {
     }
 
     if (inputString.charAt(0) == '0') {
-        isNegative = true;
-        inputString = inputString.getStringFromIndex(1);
-    }
-
-    if (inputString.charAt(0) == '0') {
         if (inputString.charAt(1) == 'x' || inputString.charAt(1) == 'X') {
             base = 16;
         } else {
             base = 8;
         }
     }
-        short result = parseShort(inputString, base);
-        if (isNegative) {
-            return static_cast<short>(-result);
+
+    short result = parseShort(inputString, base);
+    if (isNegative) {
+            return static_cast<Short>(-result);
         }
-    return static_cast<short>(result);
+    return static_cast<Short>(result);
 }
 
 short Short::parseShort(String inputString, int radix) {
@@ -347,7 +343,7 @@ String Short::toString(short inputShort, int radix) {
 
 String Short::toUnsignedString(short inputShort, int radix) {
     if (inputShort == 0) {
-        return String("0");
+        return "0";
     }
 
     if (radix > 32 || radix < 2) {
@@ -370,13 +366,17 @@ String Short::toUnsignedString(short inputShort, int radix) {
             stream << std::hex << Short::toUnsignedLong(inputShort);
             result = stream.str();
             return result;
+        case 10:
+            stream << std::dec << Short::toUnsignedLong(inputShort);
+            result = stream.str();
+            return result;
         default:
             throw UnsupportedOperationException("Haven't support this radix yet");
     }
 }
 
 long Short::toUnsignedLong(short inputShort) {
-    return ((long) inputShort) & 0xffffffff;
+    return ((long) inputShort) & 0xffff;
 }
 
 
