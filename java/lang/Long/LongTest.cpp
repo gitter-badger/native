@@ -458,3 +458,62 @@ TEST (JavaLang, LongStaticToString) {
 	string result = Long::toString(longNumber);
 	ASSERT_STR(expect, result);
 }
+
+TEST (JavaLang, LongDoubleValue) {
+    Long longDoubleValue = 123456789;
+    double expectedLongDoubleValue = 123456789.0;
+    double realLongDoubleValue = longDoubleValue.doubleValue();
+    ASSERT_EQUAL(expectedLongDoubleValue, realLongDoubleValue);
+
+    longDoubleValue = -123456789;
+    expectedLongDoubleValue = -123456789.0;
+    realLongDoubleValue = longDoubleValue.doubleValue();
+    ASSERT_EQUAL(expectedLongDoubleValue, realLongDoubleValue);
+}
+
+TEST (JavaLang, LongFloatValue) {
+    Long longFloatValue = 1234;
+    float expectedLongFloatValue = 1234.0;
+    float realLongFloatValue = longFloatValue.doubleValue();
+    ASSERT_EQUAL(expectedLongFloatValue, realLongFloatValue);
+
+    longFloatValue = -1234;
+    expectedLongFloatValue = -1234.0;
+    realLongFloatValue = -1234.0;
+    ASSERT_EQUAL(expectedLongFloatValue, realLongFloatValue);
+}
+
+TEST (JavaLang, LongHashCode) {
+    Long inputLong;
+
+    inputLong = 0;
+    ASSERT_EQUAL(0, inputLong.hashCode());
+
+    inputLong = 154;
+    ASSERT_EQUAL(154, inputLong.hashCode());
+
+    inputLong = -154;
+    ASSERT_EQUAL(153, inputLong.hashCode());
+}
+
+TEST (JavaLang, LongHighestOneBit) {
+    ASSERT_EQUAL(0, Long::highestOneBit(0));
+    ASSERT_EQUAL(1, Long::highestOneBit(1));
+    ASSERT_EQUAL(-9223372036854775808, Long::highestOneBit(-1));
+    ASSERT_EQUAL(128, Long::highestOneBit(154));
+    ASSERT_EQUAL(4611686018427387904, Long::highestOneBit(Long::MAX_VALUE));
+    ASSERT_EQUAL(-9223372036854775808, Long::highestOneBit(Long::MIN_VALUE));
+}
+
+TEST (JavaLang, LongLowestOneBit) {
+    ASSERT_EQUAL(0, Long::lowestOneBit(0));
+    ASSERT_EQUAL(1, Long::lowestOneBit(1));
+    ASSERT_EQUAL(1, Long::lowestOneBit(-1));
+    ASSERT_EQUAL(2, Long::lowestOneBit(154));
+    ASSERT_EQUAL(1, Long::lowestOneBit(Long::MAX_VALUE));
+    ASSERT_EQUAL(-9223372036854775808, Long::lowestOneBit(Long::MIN_VALUE));
+}
+
+TEST (JavaLang, LongReverse) {
+
+}

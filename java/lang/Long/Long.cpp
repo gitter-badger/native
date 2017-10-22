@@ -264,7 +264,7 @@ long Long::highestOneBit(long i) {
 	i |= ( i >> 8 );
 	i |= ( i >> 16 );
 	i |= ( i >> 32 );
-	return ( i - ( i >> 1 ));
+	return ( i - ((unsigned  long) i >> 1 ));
 }
 
 /**
