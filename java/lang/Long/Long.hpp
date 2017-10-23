@@ -29,6 +29,7 @@
 
 #include "../Number/Number.hpp"
 #include "../String/String.hpp"
+#include "../Integer/Integer.hpp"
 
 namespace Java {
 		namespace Lang {

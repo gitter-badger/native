@@ -26,6 +26,7 @@
 
 #include "Long.hpp"
 #include "../Math/Math.hpp"
+#include "../NumberFormatException/NumberFormatException.hpp"
 
 using namespace Java::Lang;
 
@@ -133,25 +134,31 @@ int Long::compareTo(Long anotherLong) {
  * @return Long
  */
 Long Long::decode(String target) {
+    if (target.length() == 0) {
+        throw NumberFormatException("input string is null");
+    }
+
+    if (target.charAt(0) == '0' && target.length() == 1) {
+        return 0;
+    }
+
 	int radix = 10;
 	int index = 0;
 	boolean negative = false;
 	Long result;
-	
-	if (target.length() == 0) {
-		//FIXME: exception
-		return -1;
-	}
-	
+//
+//	if (target.length() == 0) {
+//		//FIXME: exception
+//		return -1;
+//	}
+
 	char firstChar = target.charAt(0);
 	// Handle sign, if present
 	if (firstChar == '-') {
-		negative = true;
-		index++;
-	} else if (firstChar == '+') {
-		index++;
-	}
-	
+        negative = true;
+        target = target.getStringFromIndex(1);
+    }
+
 	// Handle radix specifier, if present
 	if (target.startsWith("0x", index) || target.startsWith("0X", index)) {
 		index += 2;
@@ -163,17 +170,17 @@ Long Long::decode(String target) {
 		index++;
 		radix = 8;
 	}
-	
-	if (target.startsWith("-", index) || target.startsWith("+", index)) {
-		//FIXME: exception
-		return -1;
-	}
-	
+//
+//	if (target.startsWith("-", index) || target.startsWith("+", index)) {
+////		//FIXME: exception
+//		return -1;
+//	}
+
 	result = Long::parseLong(target.getStringFromIndex(index), radix);
 	if (negative) {
 		result = -result.longValue();
 	}
-	
+
 	return result;
 }
 
@@ -483,7 +490,10 @@ short Long::shortValue() const {
  * @return int
  */
 int Long::signum(long i) {
-	return (int) (( i >> 63 ) | ( -i >> 63 ));
+
+    if (i == 0) return 0;
+    if (i > 0) return 1;
+    return -1;
 }
 
 /**

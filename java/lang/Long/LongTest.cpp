@@ -515,5 +515,71 @@ TEST (JavaLang, LongLowestOneBit) {
 }
 
 TEST (JavaLang, LongReverse) {
+    ASSERT_EQUAL(-9223372036854775808, Long::reverse(1));
+    ASSERT_EQUAL(0, Long::reverse(0));
+    ASSERT_EQUAL(-1, Long::reverse(-1));
+    ASSERT_EQUAL(6413125869375586304, Long::reverse(154));
+    ASSERT_EQUAL(-2, Long::reverse(Long::MAX_VALUE));
+    ASSERT_EQUAL(1, Long::reverse(Long::MIN_VALUE));
+}
 
+
+TEST (JavaLang, LongReverseBytes) {
+    ASSERT_EQUAL(72057594037927936, Long::reverseBytes(1));
+    ASSERT_EQUAL(0, Long::reverseBytes(0));
+    ASSERT_EQUAL(-1, Long::reverseBytes(-1));
+    ASSERT_EQUAL(-7349874591868649472, Long::reverseBytes(154));
+    ASSERT_EQUAL(-129, Long::reverseBytes(Long::MAX_VALUE));
+    ASSERT_EQUAL(128, Long::reverseBytes(Long::MIN_VALUE));
+}
+
+TEST (JavaLang, LongRotateLeft) {
+    ASSERT_EQUAL(2, Long::rotateLeft(1, 1));
+    ASSERT_EQUAL(67108864, Long::rotateLeft(1, 154));
+    ASSERT_EQUAL(-9223372036854775808, Long::rotateLeft(1, Integer::MAX_VALUE));
+    ASSERT_EQUAL(1, Long::rotateLeft(1, Integer::MIN_VALUE));
+}
+
+TEST (JavaLang, LongRotateRight) {
+    ASSERT_EQUAL(-9223372036854775808, Long::rotateRight(1, 1));
+    ASSERT_EQUAL(274877906944, Long::rotateRight(1, 154));
+    ASSERT_EQUAL(2, Long::rotateRight(1, Integer::MAX_VALUE));
+    ASSERT_EQUAL(1, Long::rotateRight(1, Integer::MIN_VALUE));
+}
+
+TEST (JavaLang, LongShortValue) {
+    Long longShortValue = 1234;
+    short expectedLongShortValue = 1234;
+    short realLongShortValue = longShortValue.doubleValue();
+    ASSERT_EQUAL(expectedLongShortValue, realLongShortValue);
+
+    longShortValue = -1234;
+    expectedLongShortValue = -1234;
+    realLongShortValue = -1234;
+    ASSERT_EQUAL(expectedLongShortValue, realLongShortValue);
+}
+
+TEST (JavaLang, LongSignum) {
+    ASSERT_EQUAL(1, Long::signum(1));
+    ASSERT_EQUAL(0, Long::signum(0));
+    ASSERT_EQUAL(-1, Long::signum(-1));
+    ASSERT_EQUAL(1, Long::signum(9999));
+}
+
+TEST (JavaLang, LongToBinaryString) {
+    ASSERT_STR((string) "0", Long::toBinaryString(0).toString());
+    ASSERT_STR((string) "1", Long::toBinaryString(1).toString());
+    ASSERT_STR((string) "1111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(-1).toString());
+    ASSERT_STR((string) "1001", Long::toBinaryString(9).toString());
+    ASSERT_STR((string) "111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(Long::MAX_VALUE).toString());
+    ASSERT_STR((string) "1000000000000000000000000000000000000000000000000000000000000000", Long::toBinaryString(Long::MIN_VALUE).toString());
+}
+
+TEST (JavaLang, LongToOString) {
+    ASSERT_STR((string) "0", Long::toOctalString(0).toString());
+    ASSERT_STR((string) "1", Long::toOctalString(1).toString());
+    ASSERT_STR((string) "7777777777777777777777", Long::toOctalString(-1).toString());
+    ASSERT_STR((string) "11", Long::toOctalString(9).toString());
+    ASSERT_STR((string) "777777777777777777777", Long::toOctalString(Long::MAX_VALUE).toString());
+//    ASSERT_STR((string) "1000000000000000000000", Long::toOctalString(Long::MIN_VALUE).toString());
 }
