@@ -29,6 +29,7 @@ extern "C" {
 }
 
 #include "Long.hpp"
+#include "../NumberFormatException/NumberFormatException.hpp"
 
 using namespace Java::Lang;
 
@@ -218,18 +219,46 @@ TEST (JavaLang, LongGetLong) {
 }
 
 TEST (JavaLang, LongDecode) {
-	// Given valid numberString to test decode value
-	String validNumberString = "0x1b";
-	Long result = Long::decode(validNumberString);
-	
-	long expectedResult = 27;
-	ASSERT_EQUAL(expectedResult, result.longValue());
-	
-	String invalidNumberString = "0x23xx";
-	result = Long::decode(invalidNumberString);
-	
-	expectedResult = -1;
-	ASSERT_EQUAL(expectedResult, result.longValue());
+	String stringInput;
+    Long expectedResult;
+    Long actualResult;
+    Long exceptionResult;
+
+    stringInput = "";
+    try {
+        exceptionResult = Long::decode(stringInput);
+    }
+    catch (NumberFormatException &e) {
+        ASSERT_EQUAL("input string is null", e.getMessage().toString());
+    }
+
+    stringInput = "0";
+    expectedResult = 0;
+    actualResult = Long::decode(stringInput);
+    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+
+    stringInput = (String) "1";
+    expectedResult = 1;
+    actualResult = Long::decode(stringInput);
+    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+
+    stringInput = (String) "-1";
+    expectedResult = -1;
+    actualResult = Long::decode(stringInput);
+    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+
+    stringInput = (String) "13";
+    expectedResult = 13;
+    actualResult = Long::decode(stringInput);
+    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+
+    stringInput = "9827498237498273492374";
+    try {
+        exceptionResult = Long::decode(stringInput);
+    }
+    catch (NumberFormatException &e){
+        ASSERT_EQUAL("Long out of range", e.getMessage().toString());
+    }
 }
 
 TEST (JavaLang, LongNumberOfLeadingZeros) {
