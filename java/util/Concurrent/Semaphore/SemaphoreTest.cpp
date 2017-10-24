@@ -24,10 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern "C" {
-#include "../../../../kernel/test.h"
-}
-
+#include "../../../../kernel/Test.hpp"
 #include <thread>
 #include <vector>
 #include "Semaphore.hpp"
@@ -53,13 +50,13 @@ void SemaphoreTestThread2(int sleepTime, int loopCount, Semaphore* semaphore) {
 TEST(JavaUtilConcurrent, SemaphoreConstructor) {
     {
         Semaphore semaphoreObject;
-        ASSERT_EQUAL(0, semaphoreObject.availablePermits());
+        assertEquals(0, semaphoreObject.availablePermits());
     }
 
     {
         const int initPermits = 3;
         Semaphore semaphoreObject(initPermits);
-        ASSERT_EQUAL(initPermits, semaphoreObject.availablePermits());
+        assertEquals(initPermits, semaphoreObject.availablePermits());
     }
 }
 
@@ -69,26 +66,26 @@ TEST(JavaUtilConcurrent, SemaphoreToString) {
     String result;
 
     result = semaphoreObject.toString();
-    ASSERT_STR(expect.toString(), result.toString());
+    assertEquals(expect.toString(), result.toString());
 }
 
 TEST(JavaUtilConcurrent, SemaphoreRelease) {
     const int expectPermits = 2;
     Semaphore semaphoreObject(1);
     semaphoreObject.release();
-    ASSERT_EQUAL(semaphoreObject.availablePermits(), expectPermits);
+    assertEquals(semaphoreObject.availablePermits(), expectPermits);
 }
 
 TEST(JavaUtilConcurrent, SemaphoreAcquireNotPassingPermits) {
     const int expectPermits = 0;
     Semaphore semaphoreObject;
-    std::thread testThread(SemaphoreTestThread, 1000, 1, &semaphoreObject);
+    std::thread testThread(SemaphoreTestThread, 100, 1, &semaphoreObject);
     semaphoreObject.acquire();
     if (testThread.joinable()) {
         testThread.join();
     }
 
-    ASSERT_EQUAL(expectPermits, semaphoreObject.availablePermits());
+    assertEquals(expectPermits, semaphoreObject.availablePermits());
 }
 
 TEST(JavaUtilConcurrent, SemaphoreAcquirePassingPermits) {
@@ -98,7 +95,7 @@ TEST(JavaUtilConcurrent, SemaphoreAcquirePassingPermits) {
     std::vector<std::thread> testThreads(threadCount);
     for (auto& it : testThreads) {
         it = std::move(std::thread(SemaphoreTestThread,
-                                   1000, 1, &semaphoreObject));
+                                   100, 1, &semaphoreObject));
     }
 
     semaphoreObject.acquire(2);
@@ -109,43 +106,43 @@ TEST(JavaUtilConcurrent, SemaphoreAcquirePassingPermits) {
         }
     }
 
-    ASSERT_EQUAL(expectPermits, semaphoreObject.availablePermits());
+    assertEquals(expectPermits, semaphoreObject.availablePermits());
 }
 
 TEST(JavaUtilConcurrent, SemaphoreTryAcquireNotPassingPermits) {
     const int expectPermits = 1;
     Semaphore semaphoreObject;
     std::thread testThread(SemaphoreTestThread,
-                           1000, 1, &semaphoreObject);
+                           100, 1, &semaphoreObject);
     boolean result = semaphoreObject.tryAcquire();
 
     if (testThread.joinable()) {
         testThread.join();
     }
 
-    ASSERT_FALSE(result);
-    ASSERT_EQUAL(expectPermits, semaphoreObject.availablePermits());
+    assertFalse(result);
+    assertEquals(expectPermits, semaphoreObject.availablePermits());
 }
 
 TEST(JavaUtilConcurrent, SemaphoreTryAcquirePassingPermitsWithTimeout) {
     const int expectPermits = 0;
     Semaphore semaphoreObject;
-    std::thread testThread(SemaphoreTestThread2, 1000, 2, &semaphoreObject);
+    std::thread testThread(SemaphoreTestThread2, 100, 2, &semaphoreObject);
 
     semaphoreObject.release();
-    bool result = semaphoreObject.tryAcquire(3, 10000);
+    bool result = semaphoreObject.tryAcquire(3, 1000);
 
     if (testThread.joinable()) {
         testThread.join();
     }
 
-    ASSERT_TRUE(result);
-    ASSERT_EQUAL(expectPermits, semaphoreObject.availablePermits());
+    assertTrue(result);
+    assertEquals(expectPermits, semaphoreObject.availablePermits());
 }
 
 TEST(JavaUtilConcurrent, SemaphoreTryAcquirePassingPermitsWithInitPermits) {
     const int expectPermits = 1;
     Semaphore semaphoreObject(2);
     semaphoreObject.tryAcquire();
-    ASSERT_EQUAL(expectPermits, semaphoreObject.availablePermits());
+    assertEquals(expectPermits, semaphoreObject.availablePermits());
 }

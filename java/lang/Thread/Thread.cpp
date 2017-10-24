@@ -29,23 +29,23 @@
 //using namespace Java::Lang;
 //
 //Thread::Thread() {
-//	this->target = NULL;
-//	this->threadName = strdup("");
+//	this->target = nullptr;
+//	this->threadName = stringCopy("");
 //}
 //
 //Thread::Thread(Runnable &target2) {
 //	this->target = &target2;
-//	this->threadName = strdup("");
+//	this->threadName = stringCopy("");
 //}
 //
 //Thread::Thread(Runnable &target2, String name) {
 //	this->target = &target2;
-//	this->threadName = strdup(name.toString());
+//	this->threadName = stringCopy(name.toString());
 //}
 //
 //Thread::Thread(String name) {
-//	this->target = NULL;
-//	this->threadName = strdup(name.toString());
+//	this->target = nullptr;
+//	this->threadName = stringCopy(name.toString());
 //}
 //
 //Thread::~Thread() {
@@ -68,7 +68,7 @@
 // * Force thread and call Runnable target's run() method
 // */
 //void Thread::start() {
-//	this->isThreadRunning = TRUE;
+//	this->isThreadRunning = true;
 //	pthread_create(&this->original, NULL, &Thread::pthread_helper, (void *) this);
 //}
 //
@@ -81,7 +81,7 @@
 //	}
 //
 //	//pthread_cancel(this->original);
-//	this->isThreadRunning = FALSE;
+//	this->isThreadRunning = false;
 //}
 //
 ///**
@@ -118,7 +118,7 @@
 // * Set this thread's name
 // */
 //void Thread::setName(string target) {
-//	this->threadName = strdup(target);
+//	this->threadName = stringCopy(target);
 //}
 //
 ///**

@@ -34,11 +34,17 @@
 using namespace Java::Lang;
 
 Short::Short() {
+<<<<<<< HEAD
     this->original = (short) 0;
     this->originalString = string_from_short(this->original);
+=======
+	this->original = 0;
+	this->originalString = stringFromShort(this->original);
+>>>>>>> development
 }
 
 Short::Short(short original) {
+<<<<<<< HEAD
     this->original = original;
     this->originalString = string_from_short(this->original);
 }
@@ -46,6 +52,20 @@ Short::Short(short original) {
 Short::Short(string inputString) {
     this->original = Short::parseShort(inputString);
     this->originalString = string_from_short(this->original);
+=======
+	this->original = original;
+	this->originalString = stringFromShort(this->original);
+}
+
+/**
+ * Short initialization
+ *
+ * @param original
+ */
+Short::Short(const Short &shortNumber) {
+	this->original = shortNumber.original;
+	this->originalString = stringFromShort(this->original);
+>>>>>>> development
 }
 
 Short::Short(const Short &shortNumber) {
@@ -53,19 +73,34 @@ Short::Short(const Short &shortNumber) {
     this->originalString = string_from_short(this->original);
 }
 
+<<<<<<< HEAD
 Short::~Short() {
     if (this->originalString != nullptr) {
         free(this->originalString);
     }
+=======
+/**
+ * Parse short
+ *
+ * @param target
+ * @return short
+ */
+Short Short::parseShort(String target) {
+	return Short(stringToShort(target.toString()));
+>>>>>>> development
 }
 
 //
 
 char Short::charValue() const {
+<<<<<<< HEAD
     string convertResult = string_from_short(this->original);
     char result = string_to_char(convertResult);
     free(convertResult);
     return result;
+=======
+	return stringToChar(stringFromShort(this->original));
+>>>>>>> development
 }
 
 short Short::shortValue() const {
@@ -92,6 +127,7 @@ double Short::doubleValue() const {
     return (double) this->original;
 }
 
+<<<<<<< HEAD
 //
 
 boolean Short::operator==(const Short &target) const {
@@ -123,6 +159,19 @@ Short& Short::operator=(const Short &target) {
     free(this->originalString);
     this->originalString = string_from_short(this->original);
     return *this;
+=======
+/**
+ * Assign value of this object same as value of target object
+ *
+ * @param target
+ * @return Short
+ */
+Short Short::operator=(const Short &target) {
+	this->original = target.original;
+	free(this->originalString);
+	this->originalString = stringFromShort(this->original);
+	return *this;
+>>>>>>> development
 }
 
 Short Short::operator+(const Short &target) {

@@ -24,10 +24,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-extern "C" {
-#include "../../../kernel/test.h"
-}
-
+#include "../../../kernel/Test.hpp"
 #include "Short.hpp"
 #include "../NumberFormatException/NumberFormatException.hpp"
 #include "../UnsupportedOperationException/UnsupportedOperationException.hpp"
@@ -36,6 +33,7 @@ extern "C" {
 using namespace Java::Lang;
 
 TEST (JavaLang, ShortConstructor) {
+<<<<<<< HEAD
     //Test Short::Short()
     Short shortConstructorNoneParameter;
     ASSERT_EQUAL(0, shortConstructorNoneParameter.shortValue());
@@ -724,6 +722,89 @@ TEST (JavaLang, ShortValueOfFromString) {
     catch (NumberFormatException &e) {
 
     }
+=======
+	
+	// 	Given empty value for Short constructor and assign value - Return Long
+	Short emptyShort;
+	emptyShort = 3;
+	assertEquals(3, emptyShort.longValue());
+	
+	// Given value for Short constructor and assign value - Return Integer
+	Short validShort = 3;
+	assertEquals(3, validShort.intValue());
+	
+}
+
+TEST (JavaLang, ShortComparision) {
+	// Give a valid number and make a comparision
+	Short validNumber = 30000;
+	Short targetNumber;
+	
+	// Test validNumber is equal targetNumber
+	targetNumber = 30000;
+	assertTrue(validNumber == targetNumber);
+	
+	// Test validNumber is not equal targetNumber
+	targetNumber = 13000;
+	assertTrue(validNumber != targetNumber);
+	
+	// Test validNumber is less than targetNumber
+	targetNumber = 31000;
+	assertTrue(validNumber < targetNumber);
+	
+	// Test validNumber is equal or less then targetNumber
+	targetNumber = 31300;
+	assertTrue(validNumber <= targetNumber);
+	
+	// Test validNumber is more than targetNumber
+	targetNumber = 29000;
+	assertTrue(validNumber > targetNumber);
+	
+	// Test validNumber is equal or more than targetNumber
+	targetNumber = 23777;
+	assertTrue(validNumber >= targetNumber);
+}
+
+TEST (JavaLang, ShortOperator) {
+	// 	Given a valid number
+	Long validNumber = 5;
+	Long targetNumber = 3;
+	
+	// Make a summation with targetNumber
+	Long summationNumber = 8;
+	assertTrue(summationNumber == ( validNumber + targetNumber ));
+	
+	// Make a subtraction with targetNumber
+	Long subtractionNumber = 2;
+	assertTrue(subtractionNumber == ( validNumber - targetNumber ));
+	
+	// Make a multiplication with targetNumber
+	Long multiplicationNumber = 15;
+	assertTrue(multiplicationNumber == ( validNumber * targetNumber ));
+	
+	// Make a division with targetNumber
+	Long divisionNumber = 1;
+	assertTrue(divisionNumber == ( validNumber / targetNumber ));
+	
+	// Make a modulo with targetNumber
+	Long modNumber = 2;
+	assertTrue(modNumber == ( validNumber % targetNumber ));
+}
+
+TEST (JavaLang, ShortParseShort) {
+	// Given value for Long constructor and assign value - Return long
+	Short validShortPointer = Short::parseShort("6");
+	assertEquals(6, validShortPointer.shortValue());
+}
+
+TEST (JavaLang, ShortToString) {
+	// Give a valid Short object then compare result of method toString - Should be equals
+	Short validShort = 12344;
+	
+	string expect = (string) "12344";
+	string result = validShort.toString();
+	assertEquals(expect, result);
+>>>>>>> development
 }
 
 TEST (JavaLang, ShortValueOfFromInt) {

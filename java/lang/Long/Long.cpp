@@ -38,7 +38,7 @@ using namespace Java::Lang;
  */
 Long::Long() {
 	this->original = 0;
-	this->originalString = string_from_long(this->original);
+	this->originalString = stringFromLong(this->original);
 }
 
 /**
@@ -49,7 +49,7 @@ Long::Long() {
  */
 Long::Long(long value) {
 	this->original = value;
-	this->originalString = string_from_long(this->original);
+	this->originalString = stringFromLong(this->original);
 }
 
 /**
@@ -60,7 +60,7 @@ Long::Long(long value) {
  */
 Long::Long(const Long &target) {
 	this->original = target.original;
-	this->originalString = string_from_long(this->original);
+	this->originalString = stringFromLong(this->original);
 }
 
 /**
@@ -653,7 +653,7 @@ Long Long::operator=(const Long &target) {
 	if (this->originalString != NULL) {
 		free(this->originalString);
 	}
-	this->originalString = string_from_long(this->original);
+	this->originalString = stringFromLong(this->original);
 	return *this;
 }
 

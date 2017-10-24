@@ -24,9 +24,10 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_LANG_SHORT_SHORT_HPP_
-#define JAVA_LANG_SHORT_SHORT_HPP_
+#ifndef JAVA_LANG_SHORT_SHORT_HPP
+#define JAVA_LANG_SHORT_SHORT_HPP
 
+#include "../../../kernel/String.hpp"
 #include "../Number/Number.hpp"
 #include "../String/String.hpp"
 #include "../Comparable/Comparable.hpp"
@@ -91,6 +92,7 @@ namespace Java {
              */
             Short(short original);
 
+<<<<<<< HEAD
             /**
              * Short initialization with specifix original value from string
              *
@@ -168,4 +170,6 @@ namespace Java {
         };
     }
 }
+=======
+>>>>>>> development
 #endif  // JAVA_LANG_SHORT_SHORT_HPP

@@ -32,138 +32,86 @@
 
 using namespace Java::Lang;
 
-#define DEFAULT_BUFFER_LENGTH 128
-
 String::String() {
-	this->original = strdup("\0");
-	this->size = 0;
+    this->original = (string) allocateMemory(DEFAULT_CAPACITY * sizeof(char));
+    this->original[0] = '\0';
+    this->size = 0;
+    this->capacity = DEFAULT_CAPACITY;
 }
 
-String::String(const_string target) {
-	this->original = strdup(target);
-	this->size = length_pointer_char((string) target);
-}
-
-String::String(string target) {
-	this->original = strdup(target);
-	this->size = length_pointer_char(target);
+String::String(string original, int length) {
+    this->original = strndup(original, (size_t) length);
+    this->size = length;
+    this->capacity = this->size == 0 ? -1 : this->size;
 }
 
 String::String(Array<char> &charArray) {
-	string charArrayString = charArray.toString();
-	this->original = strdup(charArrayString);// String::fromCharArray(charArray).toString();
-	this->size = charArray.length;
-	free(charArrayString);
+    this->original = charArray.toString();
+    this->size = charArray.length;
+    this->capacity = this->size == 0 ? -1 : this->size;
 }
-
-String::String(char*original, int length) {
-    this->original = strndup(original, length);
-    this->size = length;
-}
-
 
 String::String(Array<byte> &byteArray) {
-	Array<char> chars;
-	for (byte byte : byteArray) {
-		chars.push((char) byte);
-	}
-	this->original = strdup(String::fromCharArray(chars).toString());
-	this->size = chars.length;
+    Array<char> chars;
+    for (byte byte : byteArray) {
+        chars.push((char) byte);
+    }
+    this->original = stringCopy(String::fromCharArray(chars).toString());
+    this->size = chars.length;
+    this->capacity = this->size == 0 ? -1 : this->size;
 }
 
 String::String(const String &target) {
-	this->original = strdup(target.original);
-	this->size = target.size;
+    this->original = stringCopy(target.original);
+    this->size = target.size;
+    this->capacity = this->size == 0 ? -1 : this->size;
     this->hash = target.hash;
 }
 
-String::String(const std::string &target) {
-	this->original = (string) strdup(target.c_str());
-	this->size = (int) target.size();
-}
-
 String::String(const StringBuilder &stringBuilder) {
-    this->original = strdup(stringBuilder.toString());
+    this->original = stringCopy(stringBuilder.toString());
     this->size = stringBuilder.length();
+    this->capacity = this->size == 0 ? -1 : this->size;
 }
 
 String::String(const StringBuffer &stringBuffer) {
-    this->original = strdup(stringBuffer.getValue());
+    this->original = stringCopy(stringBuffer.getValue());
     this->size = stringBuffer.length();
+    this->capacity = this->size == 0 ? -1 : this->size;
 }
 
-String::String(Array<char> &charArray, int offset, int count) {
-    if (offset < 0) {
-        throw StringIndexOutOfBoundsException(offset);
-    }
-
-    if (count < 0) {
-        throw StringIndexOutOfBoundsException(count);
-    }
-
-    if (offset > charArray.length - count) {
-        throw StringIndexOutOfBoundsException(offset + count);
-    }
-
-    string charArrayString = static_cast<string>(calloc((size_t) count + 1, sizeof(char)));
-    int index;
-    for (index = 0; index < count; offset++, index++) {
-        charArrayString[index] = charArray.get(offset);
-    }
-    this->original = strdup(charArrayString);
-    this->size = count;
-    free(charArrayString);
+String::String(Array<char> &array, int offset, int length) {
+    STRING_CONSTRUCTOR_ARRAY
 }
 
-
-String::String(Array<byte> &byteArray, int offset, int length) {
-    if (offset < 0) {
-        throw StringIndexOutOfBoundsException(offset);
-    }
-
-    if (length < 0) {
-        throw StringIndexOutOfBoundsException(length);
-    }
-
-    if (offset > byteArray.length - length) {
-        throw StringIndexOutOfBoundsException(offset + length);
-    }
-
-    string charArrayString = static_cast<string>(calloc((size_t) length + 1, sizeof(char)));
-    int index;
-    for (index = 0; index < length; offset++, index++) {
-        charArrayString[index] = byteArray.get(offset);
-    }
-    this->original = strdup(charArrayString);
-    this->size = length;
-
-    free(charArrayString);
+String::String(Array<byte> &array, int offset, int length) {
+    STRING_CONSTRUCTOR_ARRAY
 }
 
 String::~String() {
-	free(original);
+    free(original);
 }
 
 int String::getSize() const {
-	return this->size;
+    return this->size;
 }
 
 String String::clone() {
-	string pointerHolder = strdup(this->original);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringCopy(this->original);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 char String::charAt(int index) const {
-	if (index < 0 || index > this->size - 1) {
-		throw StringIndexOutOfBoundsException("String index out of range");
-	}
-	return (this->original[ index ]);
+    if (index < 0 || index > this->size - 1) {
+        throw StringIndexOutOfBoundsException("String index out of range");
+    }
+    return (this->original[index]);
 }
 
 int String::compareTo(const String &anotherString) const {
-	return strcmp(this->original, anotherString.original);
+    return strcmp(this->original, anotherString.original);
 }
 
 int String::compareToIgnoreCase(const String &anotherString) const {
@@ -171,82 +119,82 @@ int String::compareToIgnoreCase(const String &anotherString) const {
 }
 
 String String::concat(String target) {
-	string stringConcat = string_concat(this->original, target.original);
-	String result(stringConcat);
-	free(stringConcat);
-	return result;
+    string targetValue = target.original;
+    long targetLength = target.size;
+    long newLength = this->size + target.size;
+    STRING_OPERATOR_PLUS
+    return *this;
 }
 
 boolean String::contains(const CharSequence &charSequence) {
-	return (string_index(this->original, charSequence.toString(), 1) != NOT_FOUND);
+    return (stringIndex(this->original, charSequence.toString(), 1) != NOT_FOUND);
 }
 
 Array<byte> String::getBytes() const {
-	Array<byte> bytes;
-	String originalString = this->original;
-	for (char character : originalString.toCharArray()) {
-		bytes.push((byte) character);
-	}
-	return bytes;
+    Array<byte> bytes;
+    String originalString = this->original;
+    for (char character : originalString.toCharArray()) {
+        bytes.push((byte) character);
+    }
+    return bytes;
 }
 
 String String::getStringFromIndex(int index) const {
-	if (index < 0 || index > this->size - 1) {
-		throw StringIndexOutOfBoundsException(index);
-	}
-	return &(this->original[ index ]);
+    if (index < 0 || index > this->size - 1) {
+        throw StringIndexOutOfBoundsException(index);
+    }
+    return &(this->original[index]);
 }
 
 boolean String::endsWith(const String &suffixString) const {
-	return (bool) string_endswith(this->original, suffixString.original);
+    return (bool) stringEndswith(this->original, suffixString.original);
 }
 
 String String::fromCharArray(Array<char> &charArray) {
-	string str = (string) calloc((size_t) charArray.length + 1, sizeof(char));
-#ifdef __linux__
-	register
+    string str = (string) allocateMemory((charArray.length + 1) * sizeof(char));
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-
-	for (char character : charArray) {
-		str[ index++ ] = character;
-	}
-	str[ index ] = '\0';
-	String result = str;
-	free(str);
-	return result;
+    int index = 0;
+    for (char character : charArray) {
+        str[index++] = character;
+    }
+    str[index] = '\0';
+    String result = str;
+    free(str);
+    return result;
 }
 
 int String::indexOf(int character) const {
-	string pointerHolder = string_from_char((char) character);
-	int result = string_index(this->original, pointerHolder, 1);
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromChar((char) character);
+    int result = stringIndex(this->original, pointerHolder, 1);
+    free(pointerHolder);
+    return result;
 }
 
 int String::indexOf(int character, int fromIndex) const {
-	if (fromIndex > this->size) {
-		return -1;
-	}
+    if (fromIndex > this->size) {
+        return -1;
+    }
     if (fromIndex < 0) {
         return this->indexOf(character);
     }
 
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-	
-	for (index = fromIndex; index < this->size; index++) {
-		if (this->original[ index ] == (char) character) {
-			return index;
-		}
-	}
-	return -1;
+    int index = 0;
+
+    for (index = fromIndex; index < this->size; index++) {
+        if (this->original[index] == (char) character) {
+            return index;
+        }
+    }
+    return -1;
 }
 
 int String::indexOf(String subString) const {
-	return string_index(this->original, subString.original, 1);
+    return stringIndex(this->original, subString.original, 1);
 }
 
 int String::indexOf(String subString, int fromIndex) const {
@@ -256,32 +204,32 @@ int String::indexOf(String subString, int fromIndex) const {
     if (fromIndex > this->size - 1) {
         return -1;
     }
-    string stringFromIndex = string_from(this->original, fromIndex);
-    int result = string_index(stringFromIndex, subString.original, 1);
+    string stringFromIndex = stringFrom(this->original, fromIndex);
+    int result = stringIndex(stringFromIndex, subString.original, 1);
     free(stringFromIndex);
     if (result == -1) {
         return result;
     }
     result = fromIndex + result;
-	return result;
+    return result;
 }
 
 boolean String::isEmpty() const {
-	return (boolean) is_empty(this->original);
+    return (boolean) isEmptyString(this->original);
 }
 
 int String::lastIndexOf(int character) {
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-	
-	for (index = this->size - 1; index >= 0; index--) {
-		if (this->charAt(index) == (char) character) {
-			return index;
-		}
-	}
-	return -1;
+    int index = 0;
+
+    for (index = this->size - 1; index >= 0; index--) {
+        if (this->charAt(index) == (char) character) {
+            return index;
+        }
+    }
+    return -1;
 }
 
 int String::lastIndexOf(int character, int fromIndex) {
@@ -291,31 +239,31 @@ int String::lastIndexOf(int character, int fromIndex) {
     if (fromIndex > this->size - 1) {
         return this->lastIndexOf(character);
     }
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-	
-	for (index = fromIndex - 1; index >= 0; index--) {
-		if (this->charAt(index) == (char) character) {
-			return index;
-		}
-	}
-	return -1;
+    int index = 0;
+
+    for (index = fromIndex - 1; index >= 0; index--) {
+        if (this->charAt(index) == (char) character) {
+            return index;
+        }
+    }
+    return -1;
 }
 
 int String::lastIndexOf(String subString) const {
-	string reversedString = string_reverse(subString.toString());
-	string currentReversedString = string_reverse(this->toString());
-	int result = string_index(currentReversedString, reversedString, 1);
-	free(reversedString);
-	free(currentReversedString);
-	if (result == NOT_FOUND) {
-		return result;
-	}
-	// Re-calculate first character of subString
-	result = this->size - (result + subString.size);
-	return result;
+    string reversedString = stringReverse(subString.toString());
+    string currentReversedString = stringReverse(this->toString());
+    int result = stringIndex(currentReversedString, reversedString, 1);
+    free(reversedString);
+    free(currentReversedString);
+    if (result == NOT_FOUND) {
+        return result;
+    }
+    // Re-calculate first character of subString
+    result = this->size - (result + subString.size);
+    return result;
 }
 
 int String::lastIndexOf(String subString, int fromIndex) const {
@@ -325,269 +273,199 @@ int String::lastIndexOf(String subString, int fromIndex) const {
     if (fromIndex > this->size - 1) {
         return this->lastIndexOf(subString);
     }
-    string thisStringReversed = string_reverse(this->original);
-	string subStringFromIndex = &(thisStringReversed)[ this->size - fromIndex - subString.size];
-	string reversedString = string_reverse(subString.toString());
-	// string currentReversedString = string_reverse(subStringFromIndex);
-	int result = string_index(subStringFromIndex, reversedString, 1);
-	free(reversedString);
-	free(thisStringReversed);
-	if (result == NOT_FOUND) {
-		return result;
-	}
-	// Re-calculate first character of str
-	result = fromIndex - result;
-	return result;
+    string thisStringReversed = stringReverse(this->original);
+    string subStringFromIndex = &(thisStringReversed)[this->size - fromIndex - subString.size];
+    string reversedString = stringReverse(subString.toString());
+    // string currentReversedString = stringReverse(subStringFromIndex);
+    int result = stringIndex(subStringFromIndex, reversedString, 1);
+    free(reversedString);
+    free(thisStringReversed);
+    if (result == NOT_FOUND) {
+        return result;
+    }
+    // Re-calculate first character of str
+    result = fromIndex - result;
+    return result;
 }
 
-int String::length() const {
-	return this->size;
-}
 
 // boolean String::matches(String regex) const {
-// 	int result = string_matches(this->original, regex.toString());
-// 	return result == TRUE;
+// 	int result = stringMatches(this->original, regex.toString());
+// 	return result == true;
 // }
 
 String String::replace(char oldChar, char newChar) const {
-	string oldString = string_from_char(oldChar);
-	string newString = string_from_char(newChar);
-	string pointerHolder = string_replace(this->original, oldString, newString);
-	String result = pointerHolder;
-	free(pointerHolder);
-	free(oldString);
-	free(newString);
-	return result;
+    string oldString = stringFromChar(oldChar);
+    string newString = stringFromChar(newChar);
+    string pointerHolder = stringReplace(this->original, oldString, newString);
+    String result = pointerHolder;
+    free(pointerHolder);
+    free(oldString);
+    free(newString);
+    return result;
 }
 
 String String::replaceAll(String regex, String replacement) const {
-	// TODO (anhnt) fix this later, temporary use replace, need Pattern
-	return replace(regex, replacement);
+    // TODO (anhnt) fix this later, temporary use replace, need Pattern
+    return replace(regex, replacement);
 }
 
 Array<String> String::split(String regex) const {
     // TODO (anhnt) fix this later, temporary use replace, need Pattern
-	string *splitStrings = string_split(this->original, regex.toString());
-	Array<String> strings;
+    string *splitStrings = stringSplit(this->original, regex.toString());
+    Array<String> strings;
 
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-	
-	int splitStringsLength = length_pointer_pointer_char(splitStrings);
-	for (index = 0; index < splitStringsLength; index++) {
-		strings.push(splitStrings[ index ]);
-	}
-	
-	free_pointer_pointer_char(splitStrings);
-	return strings;
+    int index = 0;
+
+    int splitStringsLength = lengthPointerPointerChar(splitStrings);
+    for (index = 0; index < splitStringsLength; index++) {
+        strings.push(splitStrings[index]);
+    }
+
+    freePointerPointerChar(splitStrings);
+    return strings;
 }
 
 boolean String::startsWith(String prefix) const {
-	return (bool) string_startswith(this->original, prefix.original);
+    return (bool) stringStartswith(this->original, prefix.original);
 }
 
 boolean String::startsWith(String prefix, int thisOffset) const {
-	if (this->original == nullptr ||
-            prefix.original == nullptr || thisOffset < 0) {
-		return false;
-	}
-	int originalLength = length_pointer_char(this->original);
-	int prefixLength = length_pointer_char(prefix.original);
-	if (originalLength < prefixLength ||
-            thisOffset > (originalLength - prefixLength)) {
-		return false;
-	}
-#ifdef __linux__
-	register
+    if (this->original == nullptr ||
+        prefix.original == nullptr || thisOffset < 0) {
+        return false;
+    }
+    int originalLength = lengthPointerChar(this->original);
+    int prefixLength = lengthPointerChar(prefix.original);
+    if (originalLength < prefixLength ||
+        thisOffset > (originalLength - prefixLength)) {
+        return false;
+    }
+#ifdef LINUX
+    register
 #endif
-	int firstIndex = 0;
+    int firstIndex = 0;
 
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int secondIndex = thisOffset;
-	for (; firstIndex < prefixLength; firstIndex++) {
-		if (prefix.original[ firstIndex ] != this->original[ secondIndex ]) {
-			return false;
-		}
-		secondIndex++;
-	}
-	return true;
+    int secondIndex = thisOffset;
+    for (; firstIndex < prefixLength; firstIndex++) {
+        if (prefix.original[firstIndex] != this->original[secondIndex]) {
+            return false;
+        }
+        secondIndex++;
+    }
+    return true;
 }
 
 Array<char> String::toCharArray() const {
-	Array<char> chars;
+    Array<char> chars;
 
-#ifdef __linux__
-	register
+#ifdef LINUX
+    register
 #endif
-	int index = 0;
-	
-	while (this->original[ index ] != '\0') {
-		chars.push(this->original[ index++ ]);
-	}
-	return chars;
+    int index = 0;
+
+    while (this->original[index] != '\0') {
+        chars.push(this->original[index++]);
+    }
+    return chars;
 }
 
 string String::toString() const {
-	return this->original;
+    return this->original;
 }
 
 String String::toLowerCase() const {
-	string holdPointer = string_lower(this->original);
-	String result = holdPointer;
-	free(holdPointer);
-	return result;
+    string holdPointer = stringLower(this->original);
+    String result = holdPointer;
+    free(holdPointer);
+    return result;
 }
 
 String String::toUpperCase() {
-	string holdPointer = string_upper(this->original);
-	String result = holdPointer;
-	free(holdPointer);
-	return result;
+    string holdPointer = stringUpper(this->original);
+    String result = holdPointer;
+    free(holdPointer);
+    return result;
 }
 
 String String::trim() {
-	string holdPointer = string_trim(this->original);
-	String result = holdPointer;
-	free(holdPointer);
-	return result;
+    string holdPointer = stringTrim(this->original);
+    String result = holdPointer;
+    free(holdPointer);
+    return result;
 }
 
 String String::valueOf(boolean target) {
-	if (target) {
-		return (string) "true";
-	}
-	return (string) "false";
+    if (target) {
+        return (string) "true";
+    }
+    return (string) "false";
 }
 
 String String::valueOf(char charValue) {
-	string pointerHolder = string_from_char(charValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromChar(charValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::valueOf(string stringValue) {
-	if (is_empty(stringValue) != 0) {
-		return (string) "";
-	}
-	return stringValue;
+    if (isEmptyString(stringValue) != 0) {
+        return (string) "";
+    }
+    return stringValue;
 }
 
 String String::valueOf(short shortValue) {
-	string pointerHolder = string_from_short(shortValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromShort(shortValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::valueOf(int intValue) {
-	string pointerHolder = string_from_int(intValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromInt(intValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::valueOf(long longValue) {
-	string pointerHolder = string_from_long(longValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromLong(longValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::valueOf(float floatValue) {
-	string pointerHolder = string_from_float(floatValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromFloat(floatValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::valueOf(double doubleValue) {
-	string pointerHolder = string_from_double(doubleValue);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
+    string pointerHolder = stringFromDouble(doubleValue);
+    String result = pointerHolder;
+    free(pointerHolder);
+    return result;
 }
 
 String String::subString(int beginIndex) const {
-   return this->subString(beginIndex, this->size);
+    return this->subString(beginIndex, this->size);
 }
 
 String String::subString(int beginIndex, int endIndex) const {
-	string holder = string_from_to(this->original, beginIndex, endIndex - 1);
-	String result = holder;
-	free(holder);
-	return result;
-}
-
-String String::operator+(const string &target) {
-	string pointerHolder = string_concat(this->original, target);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
-}
-
-String String::operator+(const String &target) {
-	string pointerHolder = string_concat(this->original, target.original);
-	String result = pointerHolder;
-	free(pointerHolder);
-	return result;
-}
-
-String &String::operator+=(const String &target) {
-	string result = string_concat(this->original, target.original);
-	*this = result;
-	free(result);
-	return *this;
-}
-
-String &String::operator+=(const char &target) {
-	string pointerHolder = this->original;
-	string_append(&this->original, target);
-	free(pointerHolder);
-	return *this;
-}
-
-String &String::operator+=(const_string target) {
-	String appendString = target;
-	*this += appendString;
-	return *this;
-}
-
-boolean String::operator==(const String &target) const {
-    return string_equals(this->original, target.toString()) != 0;
-}
-
-String &String::operator=(const String &target) {
-	if (this->original != nullptr) {
-		free(this->original);
-	}
-	this->original = strdup(target.original);
-	this->size = target.size;
-	return *this;
-}
-
-boolean String::operator!=(const String &target) const {
-	return !this->operator==(target);
-}
-
-boolean String::operator<(const String &target) const {
-    return strcmp(this->original, target.toString()) < 0;
-}
-
-boolean String::operator>(const String &target) const {
-    return strcmp(this->original, target.toString()) > 0;
-}
-
-boolean String::operator<=(const String &target) const {
-    return strcmp(this->original, target.toString()) <= 0;
-}
-
-boolean String::operator>=(const String &target) const {
-    return strcmp(this->original, target.toString()) >= 0;
+    string holder = stringFromTo(this->original, beginIndex, endIndex - 1);
+    String result = holder;
+    free(holder);
+    return result;
 }
 
 boolean String::contentEquals(const CharSequence &charSequence) {
@@ -626,59 +504,59 @@ long String::hashCode() const {
 boolean String::regionMatches(int thisOffset,
                               String otherString, int otherOffset, int len) {
 
-	return this->regionMatches(false, thisOffset, otherString, otherOffset, len);
+    return this->regionMatches(false, thisOffset, otherString, otherOffset, len);
 }
 
 boolean String::regionMatches(boolean ignoreCase, int thisOffset,
                               String otherString, int otherOffset, int len) {
 
-	String thisString = this->subString(thisOffset, thisOffset + len);
-	otherString = otherString.subString(otherOffset, otherOffset + len);
-	if (ignoreCase) {
-		return thisString.compareToIgnoreCase(otherString) == 0;
-	}
-	return thisString.compareTo(otherString) == 0;
+    String thisString = this->subString(thisOffset, thisOffset + len);
+    otherString = otherString.subString(otherOffset, otherOffset + len);
+    if (ignoreCase) {
+        return thisString.compareToIgnoreCase(otherString) == 0;
+    }
+    return thisString.compareTo(otherString) == 0;
 }
 
 void String::getChars(int sourceBegin, int sourceEnd,
                       Array<char> &destination, int destinationBegin) {
-	if (sourceBegin < 0) {
-		throw StringIndexOutOfBoundsException(sourceBegin);
-	}
+    if (sourceBegin < 0) {
+        throw StringIndexOutOfBoundsException(sourceBegin);
+    }
 
-	if (sourceBegin > sourceEnd) {
-		throw StringIndexOutOfBoundsException(sourceEnd - sourceBegin);
-	}
+    if (sourceBegin > sourceEnd) {
+        throw StringIndexOutOfBoundsException(sourceEnd - sourceBegin);
+    }
 
-	if (sourceEnd > this->size) {
-		throw StringIndexOutOfBoundsException(sourceEnd);
-	}
+    if (sourceEnd > this->size) {
+        throw StringIndexOutOfBoundsException(sourceEnd);
+    }
 
-	if (destinationBegin < 0) {
-		throw StringIndexOutOfBoundsException(destinationBegin);
-	}
+    if (destinationBegin < 0) {
+        throw StringIndexOutOfBoundsException(destinationBegin);
+    }
 
-	if (destinationBegin + (sourceEnd - sourceBegin) > destination.length) {
-		throw StringIndexOutOfBoundsException(destinationBegin
+    if (destinationBegin + (sourceEnd - sourceBegin) > destination.length) {
+        throw StringIndexOutOfBoundsException(destinationBegin
                                               + (sourceEnd - sourceBegin));
-	}
+    }
 
     int index;
     int len = sourceEnd - sourceBegin;
-	for (index = 0; index < destinationBegin + len; index++) {
+    for (index = 0; index < destinationBegin + len; index++) {
         if (index >= destinationBegin && index < destinationBegin + len) {
             destination[index] = this->charAt(sourceBegin);
             sourceBegin++;
         } else {
             destination[index] = destination[index];
         }
-	}
+    }
 }
 
 String String::replace(CharSequence &target, CharSequence &replacement) const {
     string oldString = target.toString();
     string newString = replacement.toString();
-    string pointerHolder = string_replace(this->original, oldString, newString);
+    string pointerHolder = stringReplace(this->original, oldString, newString);
     String result = pointerHolder;
     free(pointerHolder);
     return result;
@@ -702,10 +580,13 @@ Array<String> String::split(String regex, int limit) const {
     if (limit > stringArrayNoLimit.length || limit <= 0) {
         return stringArrayNoLimit;
     }
-    int indexOfRegexBelowLimit = string_index(this->original, regex.toString(), limit - 1);
+    int indexOfRegexBelowLimit = stringIndex(this->original, regex.toString(), limit - 1);
     int remainStringLength = indexOfRegexBelowLimit + regex.length();
     String remainString = this->getStringFromIndex(remainStringLength);
     Array<String> stringArrayLimit;
+#ifdef LINUX
+    register
+#endif
     int index;
     for (index = 0; index < limit - 1; index++) {
         stringArrayLimit.push(stringArrayNoLimit[index]);
@@ -796,13 +677,13 @@ String String::print(const String &format, float value) {
 
 String String::print(const String &format, string value) {
     String result;
-    char* buffer = (char*)calloc(DEFAULT_BUFFER_LENGTH, sizeof(char));
+    char *buffer = (char *) calloc(DEFAULT_BUFFER_LENGTH, sizeof(char));
     int length = snprintf(buffer, DEFAULT_BUFFER_LENGTH, format.toString(), value);
 
     if (length > DEFAULT_BUFFER_LENGTH) {
         free(buffer);
-        buffer = (char*)calloc(++length, sizeof(char));
-        length = snprintf(buffer, (size_t)length, format.toString(), value);
+        buffer = (char *) calloc(++length, sizeof(char));
+        length = snprintf(buffer, (size_t) length, format.toString(), value);
     }
 
     if (length > 0) {
@@ -841,15 +722,14 @@ String String::format(const String &format) {
     const String pattern = "%([[:digit:]]+)?([-#+0 ]*)?([[:digit:]]+)?(\\" \
             ".[[:digit:]]+)?(l){0,2}([diuoxXfFeEgGaAcspn%])";
     String result;
-    String inputString(format);
-    string inputStringPtr = inputString.toString();
-    int inputStringLength = inputString.getSize();
+    string inputStringPtr = format.toString();
+    int inputStringLength = format.getSize();
     int inputStringOffset = 0;
     int errorCode = 0;
     regex_t regex;
 
     errorCode = regcomp(&regex, pattern.toString(), REG_EXTENDED);
-    while (errorCode == 0 && inputStringOffset < inputString.getSize()) {
+    while (errorCode == 0 && inputStringOffset < format.getSize()) {
         regmatch_t matchedResult[16] = {0}; // max 16 groups
         errorCode = regexec(&regex, inputStringPtr, 16, matchedResult, 0);
         if (errorCode != 0) {
@@ -882,3 +762,15 @@ String String::format(const String &format) {
     regfree(&regex);
     return result;
 }
+
+String String::valueOf(const_string constStringValue) {
+    if (isEmptyString(constStringValue) != 0) {
+        return (string) "";
+    }
+    return constStringValue;
+}
+
+String String::valueOf(String stringValue) {
+    return stringValue;
+}
+

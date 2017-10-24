@@ -24,8 +24,8 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_UTIL_LINKED_LIST_HPP_
-#define JAVA_UTIL_LINKED_LIST_HPP_
+#ifndef JAVA_UTIL_LINKED_LIST_HPP
+#define JAVA_UTIL_LINKED_LIST_HPP
 
 #include "../../Lang.hpp"
 #include "../AbstractSequentialList/AbstractSequentialList.hpp"
@@ -46,8 +46,8 @@ namespace Java {
 				class Node {
 				public:
 						E element;
-						Node<E> *previous = NULL;
-						Node<E> *next = NULL;
+						Node<E> *previous = nullptr;
+						Node<E> *next = nullptr;
 						
 						Node(Node<E> *previous2, const E &element, Node<E> *next2) {
 							this->element = element;
@@ -71,8 +71,8 @@ namespace Java {
 //						, public virtual Serializable
 				{
 				private:
-						Node<E> *first = NULL;
-						Node<E> *last = NULL;
+						Node<E> *first = nullptr;
+						Node<E> *last = nullptr;
 						int nodeSize = 0;
 				
 				public:
@@ -637,4 +637,4 @@ namespace Java {
 		}
 }
 
-#endif //JAVA_UTIL_LINKED_LIST_HPP_
+#endif //JAVA_UTIL_LINKED_LIST_HPP

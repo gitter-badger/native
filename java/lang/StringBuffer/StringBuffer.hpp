@@ -26,6 +26,7 @@
 #ifndef NATIVE_STRINGBUFFER_H
 #define NATIVE_STRINGBUFFER_H
 
+#include "../../../kernel/String.hpp"
 #include <mutex>
 #include "../StringBuilder/StringBuilder.hpp"
 
@@ -34,12 +35,6 @@ namespace Java {
         class StringBufferUnSafe :
                 public Object,
                 public virtual CharSequence {
-
-        private:
-            /**
-             * Default capacity
-             */
-            static const int DEFAULT_CAPACITY = 16;
         protected:
             string original = nullptr;
             int currentLength = 0;

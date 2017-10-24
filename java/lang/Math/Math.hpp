@@ -24,15 +24,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVA_LANG_MATH_HPP_
-#define JAVA_LANG_MATH_HPP_
+#ifndef JAVA_LANG_MATH_HPP
+#define JAVA_LANG_MATH_HPP
 
 #include "../../util/Random/Random.hpp"
 #include "../Object/Object.hpp"
 #include "../Double/Double.hpp"
 #include "../Float/Float.hpp"
-
-using namespace Java::Util;
 
 namespace Java {
 		namespace Lang {
@@ -892,4 +890,4 @@ namespace Java {
 		}
 }
 
-#endif  // JAVA_LANG_MATH_HPP_
+#endif  // JAVA_LANG_MATH_HPP
