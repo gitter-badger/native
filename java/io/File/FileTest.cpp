@@ -516,10 +516,14 @@ TEST (JavaIo, FileGetPath) {
 TEST (JavaIo, FileGetCanonicalPath) {
     File fileRoot("java/io/File");
     String pathRoot = fileRoot.getCanonicalPath();
-
     File fileTest = File(FileTest::pathNameNotCanonical);
+
     String expected = pathRoot
                       + (string) "/TestFolder";
+#ifdef WINDOWS
+   expected = expected.replace('/', '\\');
+#endif
+
     String actual = fileTest.getCanonicalPath();
     ASSERT_STR(expected.toString(), actual.toString());
 }
@@ -529,8 +533,13 @@ TEST (JavaIo, FileGetCanonicalFile) {
     String pathRoot = fileRoot.getCanonicalPath();
 
     File fileTest = File(FileTest::pathNameNotCanonical);
+
     String expected = pathRoot
                       + (string) "/TestFolder";
+#ifdef WINDOWS
+    expected = expected.replace('/', '\\');
+#endif
+
     String actual = fileTest.getCanonicalFile().toString();
     ASSERT_STR(expected.toString(), actual.toString());
 }

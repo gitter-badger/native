@@ -453,8 +453,12 @@ boolean File::equals(File inputFile) {
 String File::getCanonicalPath() {
     string holdResult = realpath(this->path.toString(), NULL);
     String result = holdResult;
-    free(holdResult);
 
+#ifdef WINDOWS
+    result = result.replace('/', '\\');
+#endif
+
+    free(holdResult);
     return result;
 }
 
@@ -479,19 +483,19 @@ long File::length() {
 
     using namespace std;
 
-    streampos begin;
+    streampos start;
     streampos end;
 
     ifstream myFile(this->path.toString(), ios::binary);
 
-    begin = myFile.tellg();
+    start = myFile.tellg();
     myFile.seekg(0, ios::end);
     end = myFile.tellg();
 
     myFile.close();
 
-    cout << "size is: " << (end - begin) << " bytes.\n";
-    return (long) (end - begin);
+    cout << "size is: " << (end - start) << " bytes.\n";
+    return (long) (end - start);
 }
 
 //ArrayList<String> File::list() {
