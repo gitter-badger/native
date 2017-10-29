@@ -675,4 +675,18 @@ File File::getParentFile() {
     return File(path);
 }
 
+long File::getTotalSpace() {
+//    if (isInvalid()) {
+//        return 0L;
+//    }
+
+    struct statvfs systemStatitics;
+    boolean canGetSystemStatitics
+            = (statvfs(this->path.toString(), &systemStatitics) == 0);
+    if (!File::exists() || !canGetSystemStatitics)
+        return 0L;
+
+    return systemStatitics.f_bsize * systemStatitics.f_blocks;
+}
+
 #endif

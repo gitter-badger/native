@@ -351,20 +351,6 @@ TEST (JavaIo, FileGetPath) {
     ASSERT_STR(expected.toString(), actual.toString());
 }
 
-//////TEST (JavaIo, FileGetTotalSpace) {
-//////    // Create a non-existent file
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////    // Create an existent file
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////    // Return 0 if the file is non existent
-//////    ASSERT_TRUE(0 == fileNonExistent.getTotalSpace());
-//////
-//////    // Return != 0 if the file is existent
-//////    ASSERT_TRUE(0 != fileExistent.getTotalSpace());
-//////}
-//////
 //////TEST (JavaIo, FileGetUsableSpace) {
 //////    // Create a non-existent file
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
@@ -802,6 +788,22 @@ TEST (JavaIo, FileGetParentFile) {
     // Return null if this pathName does not name a parent directory
     actual = File("Test").getParentFile().getPath();
     ASSERT_STR("", actual.toString());
+}
+
+TEST (JavaIo, FileGetTotalSpace) {
+    // Check a non-existent file
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+    long expected = 0;
+    long actual = fileNonExistent.getTotalSpace();
+    ASSERT_EQUAL(expected, actual);
+
+    // Check an existent file
+    File fileExistent = File(FileTest::pathNameExistent);
+    struct statvfs systemStatitics;
+    statvfs(fileExistent.getPath().toString(), &systemStatitics);
+    expected = systemStatitics.f_bsize * systemStatitics.f_blocks;
+    actual = fileExistent.getTotalSpace();
+    ASSERT_EQUAL(expected, actual);
 }
 
 TEST (JavaIo, FileDeletes) {
