@@ -651,10 +651,21 @@ long File::getFreeSpace() {
 }
 
 String File::getName() {
-    int index = this->path.lastIndexOf(separatorChar);
-    if (index < prefixLength)
-        return path.subString(prefixLength);
-    return path.subString(index + 1);
+    int index = this->path.lastIndexOf(this->separatorChar);
+    if (index < this->prefixLength)
+        return this->path.subString(this->prefixLength);
+    return this->path.subString(index + 1);
+}
+
+String File::getParent() {
+    int index = this->path.lastIndexOf(this->separatorChar);
+    if (index < this->prefixLength) {
+        if ((this->prefixLength > 0)
+            && (this->path.length() > this->prefixLength))
+            return this->path.subString(0, this->prefixLength);
+        return "";
+    }
+    return this->path.subString(0, index);
 }
 
 #endif

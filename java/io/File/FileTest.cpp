@@ -332,23 +332,6 @@ TEST (JavaIo, FileExists) {
             = File(FileTest::pathNameNonExistentFolder);
     ASSERT_FALSE(fileNonExistentFolder.exists());
 }
-//////TEST (JavaIo, FileGetParent) {
-//////    // Create a  file has the file name
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////    // Create a file doesn't has a file name
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////
-//////    // Returns the pathName string of this abstract pathName's parent
-//////    String expected = FileTest::stringPathTestFolder;
-//////    String actual = fileNonExistent.getParent();
-//////    assertEquals(expected.toString(), actual.toString());
-//////
-//////    // Return null if this pathName does not name a parent directory
-//////    actual = fileTestFolder.getParent();
-//////    assertNull(actual);
-//////}
-//////
 //////TEST (JavaIo, FileGetParentFile) {
 //////    // Create a  file has the file name
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
@@ -827,6 +810,23 @@ TEST (JavaIo, FileDeletes) {
 
     // Return FALSE and do nothing when trying to delete a non-existent file
     ASSERT_FALSE(fileTestFolder.deletes());
+}
+
+TEST (JavaIo, FileGetParent) {
+    // Create a  file has the file name
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+
+    // Create a file doesn't has a file name
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    // Returns the pathName string of this abstract pathName's parent
+    String expected = FileTest::stringPathTestFolder;
+    String actual = fileNonExistent.getParent();
+    ASSERT_STR(expected.toString(), actual.toString());
+
+    // Return null if this pathName does not name a parent directory
+    actual = File("Test").getParent();
+    ASSERT_STR("", actual.toString());
 }
 
 #endif
