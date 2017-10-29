@@ -45,6 +45,12 @@
 #include <dirent.h>
 #include<fstream>
 
+// Get owner
+#include <pwd.h>
+
+// Get group
+#include <grp.h>
+
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
 #include "../../../kernel/type.h"
@@ -941,6 +947,18 @@ namespace Java {
              * Update the statitics of this file
              */
             void updateFileStatitics();
+
+            /**
+             * Get owner of this file
+             * @return String
+             */
+            String getOwner();
+
+            /**
+             * Get group of this file
+             * @return String
+             */
+            String getGroup();
         };
     }  // namespace Io
 } // namspace Java

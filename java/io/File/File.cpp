@@ -36,11 +36,6 @@ File::File(String pathName) {
     File::updateFileStatitics();
 }
 
-void File::updateFileStatitics() {
-    this->canGetStatitics
-            = (stat(this->path.toString(), &this->fileStatitics) == 0);
-}
-
 String File::normalize(String pathName) {
     int lengthPathName = pathName.length();
     char previousChar = 0;
@@ -183,16 +178,6 @@ boolean File::exists() {
     return stat(this->path.toString(), &this->fileStatitics) == 0;
 }
 
-boolean File::canExecute() {
-    if (!File::exists())
-        return false;
-
-    std::cout << "\n\n==== Can execute ====\n\n"
-              << (access(this->path.toString(), X_OK) == 0);
-
-    return (access(this->path.toString(), X_OK) == 0);
-}
-
 boolean File::setExecutable(boolean executable) {
     return setExecutable(executable, true);
 }
@@ -265,26 +250,6 @@ int File::stringFormatToPermission(StringBuffer permissionStringFormat) {
     permission |= (permissionStringFormat.charAt(8) == 'x') ? S_IXOTH : 0;
 
     return permission;
-}
-
-boolean File::canRead() {
-    if (!File::exists())
-        return false;
-
-    std::cout << "\n\n==== Can read ====\n\n"
-              << (access(this->path.toString(), R_OK) == 0);
-
-    return (access(this->path.toString(), R_OK) == 0);
-}
-
-boolean File::canWrite() {
-    if (!File::exists())
-        return false;
-
-    std::cout << "\n\n==== Can write ====\n\n"
-              << (access(this->path.toString(), W_OK) == 0);
-
-    return (access(this->path.toString(), W_OK) == 0);
 }
 
 boolean File::setReadOnly() {
@@ -513,6 +478,57 @@ boolean File::renameTo(File destinationFile) {
 
     return (rename("java/io/File/a.txt",
                   "java/io/File/bbbb.txt") == 0);
+}
+
+void File::updateFileStatitics() {
+    this->canGetStatitics
+            = (stat(this->path.toString(), &this->fileStatitics) == 0);
+}
+
+boolean File::canRead() {
+    if (!File::exists())
+        return false;
+
+    std::cout << "\n\n==== Can read ====\n\n"
+              << (access(this->path.toString(), R_OK) == 0);
+
+    return (access(this->path.toString(), R_OK) == 0);
+}
+
+boolean File::canWrite() {
+    if (!File::exists())
+        return false;
+
+    std::cout << "\n\n==== Can write ====\n\n"
+              << (access(this->path.toString(), W_OK) == 0);
+
+    return (access(this->path.toString(), W_OK) == 0);
+}
+
+boolean File::canExecute() {
+    if (!File::exists())
+        return false;
+
+    std::cout << "\n\n==== Can execute ====\n\n"
+              << (access(this->path.toString(), X_OK) == 0);
+
+    std::cout << "\n\n==== Get owner ====\n\n"
+              << File::getOwner().toString();
+
+    std::cout << "\n\n==== Get group ====\n\n"
+              << File::getGroup().toString();
+
+    return (access(this->path.toString(), X_OK) == 0);
+}
+
+String File::getOwner() {
+    struct passwd *userLoginInfo = getpwuid(this->fileStatitics.st_uid);
+    return userLoginInfo->pw_name;
+}
+
+String File::getGroup() {
+    struct group  *groupInfo = getgrgid(this->fileStatitics.st_gid);
+    return groupInfo->gr_name;
 }
 
 #endif

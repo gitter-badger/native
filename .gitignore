@@ -33,3 +33,4 @@ main.o
 /example/HelloWorld/HelloWorld
 /example/HelloWorld/Makefile
 /example/HelloWorld/CMakeCache.txt
+native_test.exe
