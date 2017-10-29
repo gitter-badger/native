@@ -216,7 +216,6 @@ TEST (JavaLang, LongGetLong) {
 }
 
 TEST (JavaLang, LongDecode) {
-<<<<<<< HEAD
 	String stringInput;
     Long expectedResult;
     Long actualResult;
@@ -227,42 +226,41 @@ TEST (JavaLang, LongDecode) {
         exceptionResult = Long::decode(stringInput);
     }
     catch (NumberFormatException &e) {
-        ASSERT_EQUAL("input string is null", e.getMessage().toString());
+        assertEquals("input string is null", e.getMessage().toString());
     }
 
     stringInput = "0";
     expectedResult = 0;
     actualResult = Long::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+    assertEquals(expectedResult.longValue(), actualResult.longValue());
 
     stringInput = (String) "1";
     expectedResult = 1;
     actualResult = Long::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+    assertEquals(expectedResult.longValue(), actualResult.longValue());
 
     stringInput = (String) "-1";
     expectedResult = -1;
     actualResult = Long::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+    assertEquals(expectedResult.longValue(), actualResult.longValue());
 
     stringInput = (String) "13";
     expectedResult = 13;
     actualResult = Long::decode(stringInput);
-    ASSERT_EQUAL(expectedResult.longValue(), actualResult.longValue());
+    assertEquals(expectedResult.longValue(), actualResult.longValue());
 
     stringInput = "9827498237498273492374";
     try {
         exceptionResult = Long::decode(stringInput);
     }
     catch (NumberFormatException &e){
-        ASSERT_EQUAL("Long out of range", e.getMessage().toString());
+       assertEquals("Long out of range", e.getMessage().toString());
     }
-=======
 	// Given valid numberString to test decode value
 	String validNumberString = "0x1b";
 	Long result = Long::decode(validNumberString);
 	
-	long expectedResult = 27;
+    expectedResult = 27;
 	assertEquals(expectedResult, result.longValue());
 	
 	String invalidNumberString = "0x23xx";
@@ -270,7 +268,6 @@ TEST (JavaLang, LongDecode) {
 	
 	expectedResult = -1;
 	assertEquals(expectedResult, result.longValue());
->>>>>>> development
 }
 
 TEST (JavaLang, LongNumberOfLeadingZeros) {
@@ -347,7 +344,6 @@ TEST (JavaLang, LongNumberOfLeadingZeros) {
 TEST(JavaLang, LongNumberOfTrailingZeros) {
     assertEquals(0, Long::numberOfTrailingZeros(-1L));
     assertEquals(2, Long::numberOfTrailingZeros(100L));
-
     assertEquals(64, Long::numberOfTrailingZeros(0L));
     assertEquals(0, Long::numberOfTrailingZeros(1L));
     assertEquals(1, Long::numberOfTrailingZeros(2L));
@@ -497,134 +493,148 @@ TEST (JavaLang, LongStaticToString) {
 	long longNumber = 999738373833883736;
 	string expect = (string) "999738373833883736";
 	string result = Long::toString(longNumber);
-<<<<<<< HEAD
-	ASSERT_STR(expect, result);
+	assertEquals(expect, result);
 }
 
 TEST (JavaLang, LongDoubleValue) {
     Long longDoubleValue = 123456789;
     double expectedLongDoubleValue = 123456789.0;
     double realLongDoubleValue = longDoubleValue.doubleValue();
-    ASSERT_EQUAL(expectedLongDoubleValue, realLongDoubleValue);
+    assertEquals(expectedLongDoubleValue, realLongDoubleValue);
 
     longDoubleValue = -123456789;
     expectedLongDoubleValue = -123456789.0;
     realLongDoubleValue = longDoubleValue.doubleValue();
-    ASSERT_EQUAL(expectedLongDoubleValue, realLongDoubleValue);
+    assertEquals(expectedLongDoubleValue, realLongDoubleValue);
 }
 
 TEST (JavaLang, LongFloatValue) {
     Long longFloatValue = 1234;
     float expectedLongFloatValue = 1234.0;
     float realLongFloatValue = longFloatValue.doubleValue();
-    ASSERT_EQUAL(expectedLongFloatValue, realLongFloatValue);
+    assertEquals(expectedLongFloatValue, realLongFloatValue);
 
     longFloatValue = -1234;
     expectedLongFloatValue = -1234.0;
     realLongFloatValue = -1234.0;
-    ASSERT_EQUAL(expectedLongFloatValue, realLongFloatValue);
+    assertEquals(expectedLongFloatValue, realLongFloatValue);
 }
 
 TEST (JavaLang, LongHashCode) {
     Long inputLong;
 
     inputLong = 0;
-    ASSERT_EQUAL(0, inputLong.hashCode());
+    assertEquals(0, inputLong.hashCode());
 
     inputLong = 154;
-    ASSERT_EQUAL(154, inputLong.hashCode());
+    assertEquals(154, inputLong.hashCode());
 
     inputLong = -154;
-    ASSERT_EQUAL(153, inputLong.hashCode());
+    assertEquals(153, inputLong.hashCode());
 }
 
 TEST (JavaLang, LongHighestOneBit) {
-    ASSERT_EQUAL(0, Long::highestOneBit(0));
-    ASSERT_EQUAL(1, Long::highestOneBit(1));
-    ASSERT_EQUAL(-9223372036854775808, Long::highestOneBit(-1));
-    ASSERT_EQUAL(128, Long::highestOneBit(154));
-    ASSERT_EQUAL(4611686018427387904, Long::highestOneBit(Long::MAX_VALUE));
-    ASSERT_EQUAL(-9223372036854775808, Long::highestOneBit(Long::MIN_VALUE));
+    assertEquals(0, Long::highestOneBit(0));
+    assertEquals(1, Long::highestOneBit(1));
+    assertEquals(-9223372036854775808, Long::highestOneBit(-1));
+    assertEquals(128, Long::highestOneBit(154));
+    assertEquals(4611686018427387904, Long::highestOneBit(Long::MAX_VALUE));
+    assertEquals(-9223372036854775808, Long::highestOneBit(Long::MIN_VALUE));
 }
 
 TEST (JavaLang, LongLowestOneBit) {
-    ASSERT_EQUAL(0, Long::lowestOneBit(0));
-    ASSERT_EQUAL(1, Long::lowestOneBit(1));
-    ASSERT_EQUAL(1, Long::lowestOneBit(-1));
-    ASSERT_EQUAL(2, Long::lowestOneBit(154));
-    ASSERT_EQUAL(1, Long::lowestOneBit(Long::MAX_VALUE));
-    ASSERT_EQUAL(-9223372036854775808, Long::lowestOneBit(Long::MIN_VALUE));
+    assertEquals(0, Long::lowestOneBit(0));
+    assertEquals(1, Long::lowestOneBit(1));
+    assertEquals(1, Long::lowestOneBit(-1));
+    assertEquals(2, Long::lowestOneBit(154));
+    assertEquals(1, Long::lowestOneBit(Long::MAX_VALUE));
+    assertEquals(-9223372036854775808, Long::lowestOneBit(Long::MIN_VALUE));
 }
 
 TEST (JavaLang, LongReverse) {
-    ASSERT_EQUAL(-9223372036854775808, Long::reverse(1));
-    ASSERT_EQUAL(0, Long::reverse(0));
-    ASSERT_EQUAL(-1, Long::reverse(-1));
-    ASSERT_EQUAL(6413125869375586304, Long::reverse(154));
-    ASSERT_EQUAL(-2, Long::reverse(Long::MAX_VALUE));
-    ASSERT_EQUAL(1, Long::reverse(Long::MIN_VALUE));
+    assertEquals(-9223372036854775808, Long::reverse(1));
+    assertEquals(0, Long::reverse(0));
+    assertEquals(-1, Long::reverse(-1));
+    assertEquals(6413125869375586304, Long::reverse(154));
+    assertEquals(-2, Long::reverse(Long::MAX_VALUE));
+    assertEquals(1, Long::reverse(Long::MIN_VALUE));
 }
 
 
 TEST (JavaLang, LongReverseBytes) {
-    ASSERT_EQUAL(72057594037927936, Long::reverseBytes(1));
-    ASSERT_EQUAL(0, Long::reverseBytes(0));
-    ASSERT_EQUAL(-1, Long::reverseBytes(-1));
-    ASSERT_EQUAL(-7349874591868649472, Long::reverseBytes(154));
-    ASSERT_EQUAL(-129, Long::reverseBytes(Long::MAX_VALUE));
-    ASSERT_EQUAL(128, Long::reverseBytes(Long::MIN_VALUE));
+    assertEquals(72057594037927936, Long::reverseBytes(1));
+    assertEquals(0, Long::reverseBytes(0));
+    assertEquals(-1, Long::reverseBytes(-1));
+    assertEquals(-7349874591868649472, Long::reverseBytes(154));
+    assertEquals(-129, Long::reverseBytes(Long::MAX_VALUE));
+    assertEquals(128, Long::reverseBytes(Long::MIN_VALUE));
 }
 
 TEST (JavaLang, LongRotateLeft) {
-    ASSERT_EQUAL(2, Long::rotateLeft(1, 1));
-    ASSERT_EQUAL(67108864, Long::rotateLeft(1, 154));
-    ASSERT_EQUAL(-9223372036854775808, Long::rotateLeft(1, Integer::MAX_VALUE));
-    ASSERT_EQUAL(1, Long::rotateLeft(1, Integer::MIN_VALUE));
+    assertEquals(2, Long::rotateLeft(1, 1));
+    assertEquals(67108864, Long::rotateLeft(1, 154));
+    assertEquals(-9223372036854775808, Long::rotateLeft(1, Integer::MAX_VALUE));
+    assertEquals(1, Long::rotateLeft(1, Integer::MIN_VALUE));
 }
 
 TEST (JavaLang, LongRotateRight) {
-    ASSERT_EQUAL(-9223372036854775808, Long::rotateRight(1, 1));
-    ASSERT_EQUAL(274877906944, Long::rotateRight(1, 154));
-    ASSERT_EQUAL(2, Long::rotateRight(1, Integer::MAX_VALUE));
-    ASSERT_EQUAL(1, Long::rotateRight(1, Integer::MIN_VALUE));
+    assertEquals(-9223372036854775808, Long::rotateRight(1, 1));
+    assertEquals(274877906944, Long::rotateRight(1, 154));
+    assertEquals(2, Long::rotateRight(1, Integer::MAX_VALUE));
+    assertEquals(1, Long::rotateRight(1, Integer::MIN_VALUE));
 }
-
+// TODO
 TEST (JavaLang, LongShortValue) {
     Long longShortValue = 1234;
     short expectedLongShortValue = 1234;
     short realLongShortValue = longShortValue.doubleValue();
-    ASSERT_EQUAL(expectedLongShortValue, realLongShortValue);
+    assertEquals(expectedLongShortValue, realLongShortValue);
 
     longShortValue = -1234;
     expectedLongShortValue = -1234;
     realLongShortValue = -1234;
-    ASSERT_EQUAL(expectedLongShortValue, realLongShortValue);
+    assertEquals(expectedLongShortValue, realLongShortValue);
 }
 
 TEST (JavaLang, LongSignum) {
-    ASSERT_EQUAL(1, Long::signum(1));
-    ASSERT_EQUAL(0, Long::signum(0));
-    ASSERT_EQUAL(-1, Long::signum(-1));
-    ASSERT_EQUAL(1, Long::signum(9999));
+    assertEquals(1, Long::signum(1));
+    assertEquals(0, Long::signum(0));
+    assertEquals(-1, Long::signum(-1));
+    assertEquals(1, Long::signum(9999));
 }
 
 TEST (JavaLang, LongToBinaryString) {
-    ASSERT_STR((string) "0", Long::toBinaryString(0).toString());
-    ASSERT_STR((string) "1", Long::toBinaryString(1).toString());
-    ASSERT_STR((string) "1111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(-1).toString());
-    ASSERT_STR((string) "1001", Long::toBinaryString(9).toString());
-    ASSERT_STR((string) "111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(Long::MAX_VALUE).toString());
-    ASSERT_STR((string) "1000000000000000000000000000000000000000000000000000000000000000", Long::toBinaryString(Long::MIN_VALUE).toString());
+    assertEquals((string) "0", Long::toBinaryString(0).toString());
+    assertEquals((string) "1", Long::toBinaryString(1).toString());
+    assertEquals((string) "1111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(-1).toString());
+    assertEquals((string) "1001", Long::toBinaryString(9).toString());
+    assertEquals((string) "111111111111111111111111111111111111111111111111111111111111111", Long::toBinaryString(Long::MAX_VALUE).toString());
+    assertEquals((string) "1000000000000000000000000000000000000000000000000000000000000000", Long::toBinaryString(Long::MIN_VALUE).toString());
 }
 
-TEST (JavaLang, LongToOString) {
-    ASSERT_STR((string) "0", Long::toOctalString(0).toString());
-    ASSERT_STR((string) "1", Long::toOctalString(1).toString());
-    ASSERT_STR((string) "7777777777777777777777", Long::toOctalString(-1).toString());
-    ASSERT_STR((string) "11", Long::toOctalString(9).toString());
-    ASSERT_STR((string) "777777777777777777777", Long::toOctalString(Long::MAX_VALUE).toString());
+TEST (JavaLang, LongToOcString) {
+    assertEquals((string) "0", Long::toOctalString(0).toString());
+    assertEquals((string) "1", Long::toOctalString(1).toString());
+    assertEquals((string) "7777777777777777777777", Long::toOctalString(-1).toString());
+    assertEquals((string) "11", Long::toOctalString(9).toString());
+    assertEquals((string) "777777777777777777777", Long::toOctalString(Long::MAX_VALUE).toString());
 //    ASSERT_STR((string) "1000000000000000000000", Long::toOctalString(Long::MIN_VALUE).toString());
-=======
-	assertEquals(expect, result);
->>>>>>> development
+}
+
+TEST (JavaLang, LongValueOfFromLong) {
+    assertEquals(166, Long::valueOf(1).longValue());
+    assertEquals(0, Long::valueOf(0).longValue());
+    assertEquals(-1, Long::valueOf(-1).longValue());
+    assertEquals(154, Long::valueOf(154).longValue());
+    assertEquals(9223372036854775807, Long::valueOf(Long::MAX_VALUE).longValue());
+    assertEquals(-9223372036854775808, Long::valueOf(Long::MIN_VALUE).longValue());
+}
+
+TEST (JavaLang, LongValueOfRadix) {
+    assertEquals(666, Long::valueOf((String) "0", 10).longValue());
+    assertEquals(1, Long::valueOf((String) "1", 10).longValue());
+    assertEquals(-1, Long::valueOf((String) "-1", 10).longValue());
+    assertEquals(9223372036854775807, Long::valueOf((String) "9223372036854775807", 10).longValue());
+    assertEquals(-9223372036854775808, Long::valueOf((String) "-9223372036854775808", 10).longValue());
+    assertEquals(-1, Long::valueOf("-FF", 16).longValue());
 }

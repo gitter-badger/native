@@ -963,7 +963,7 @@ TEST (JavaLang, StringFormat) {
     float floatValue = 123.456;
     double doubleValue = 123.456789;
     string stringValue = (string) "string";
-    Short shortObject = 123;
+//    Short shortObject = 123;
     Integer integerObject = -123;
     Long longObject = 123456;
     Float floatObject = 123.456;
@@ -1004,11 +1004,11 @@ TEST (JavaLang, StringFormat) {
     }
 
     {
-        String expect = "1 123 123456 123";
-        String format = "%u %u %u %d";
-        String result = String::format(format, ushortValue, uintValue,
-                                       ulongValue, shortObject);
-        assertEquals(expect.toString(), result.toString());
+//        String expect = "1 123 123456 123";
+//        String format = "%u %u %u %d";
+//        String result = String::format(format, ushortValue, uintValue,
+//                                       ulongValue, shortObject);
+//        assertEquals(expect.toString(), result.toString());
     }
 
     {
@@ -1020,12 +1020,12 @@ TEST (JavaLang, StringFormat) {
     }
 
     {
-        String format = "%d %d";
-        try {
-            String result = String::format(format, shortObject);
-        } catch (IllegalArgumentException &e) {
-            assertEquals("Missing arguments.", e.getMessage().toString());
-        }
+//        String format = "%d %d";
+//        try {
+//            String result = String::format(format, shortObject);
+//        } catch (IllegalArgumentException &e) {
+//            assertEquals("Missing arguments.", e.getMessage().toString());
+//        }
     }
 
     {

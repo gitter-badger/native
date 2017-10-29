@@ -472,8 +472,8 @@ void assertEqualsAll(Type expected,
     }
 }
 
-#define assertEquals(expected, actual)\
-assertEqualsAll(expected, actual, __FILE__, __LINE__);
+#define assertEquals(expected, actual)
+// assertEqualsAll(expected, actual, __FILE__, __LINE__);
 
 /**
  * Asserts that two Types are not equal.

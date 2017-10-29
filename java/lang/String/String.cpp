@@ -694,9 +694,9 @@ String String::print(const String &format, string value) {
     return result;
 }
 
-String String::print(const String &format, Short value) {
-    return String::print(format, value.shortValue());
-}
+//String String::print(const String &format, Short value) {
+//    return String::print(format, value.shortValue());
+//}
 
 String String::print(const String &format, Integer value) {
     return String::print(format, value.intValue());

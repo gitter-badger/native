@@ -556,8 +556,7 @@ string Long::toString(long i) {
  * @return Long
  */
 Long Long::valueOf(long l) {
-	Long result = l;
-	return result;
+	return Long(l);
 }
 
 /**
@@ -567,7 +566,7 @@ Long Long::valueOf(long l) {
  * @return Long
  */
 Long Long::valueOf(String s) {
-	Long result = decode(s);
+	Long result = Long::valueOf(Long::parseLong(s));
 	return result;
 }
 
