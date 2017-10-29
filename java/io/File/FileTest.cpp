@@ -30,6 +30,7 @@ extern "C" {
 
 #include "File.hpp"
 #include "../../../kernel/platform.h"
+#include "../../util/Date/Date.hpp"
 
 #include <stdlib.h>     /* system */
 
@@ -370,30 +371,6 @@ TEST (JavaIo, FileExists) {
 //////    }
 //////}
 //////
-//////TEST (JavaIo, FileGetCanonicalFile) {
-//////    if (FileTest::isWindows) {
-//////        // Create an existent file
-//////        File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////        // Get Canonical File
-//////        String expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\ExistentFile.txt";
-//////        String actual = fileExistent.getCanonicalFile().toString();
-//////        assertEquals(expected.toString(), actual.toString());
-//////    }
-//////}
-//////
-//////TEST (JavaIo, FileGetCanonicalPath) {
-//////    if (isWindows) {
-//////        // Create an existent file
-//////        File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////        // Get Canonical File
-//////        String expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\ExistentFile.txt";
-//////        String actual = fileExistent.getCanonicalPath();
-//////        assertEquals(expected.toString(), actual.toString());
-//////    }
-//////}
-//////
 //////TEST (JavaIo, FileGetFreeSpace) {
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
 //////
@@ -613,16 +590,21 @@ TEST (JavaIo, FileIsFile) {
 TEST (JavaIo, FileLastModified) {
     // Create a directory file
     File fileTestFolder = File(FileTest::pathTestFolder);
+    Date expected = Date();
+    Date actual = Date(fileTestFolder.lastModified());
+    ASSERT_STR(expected.toString().toString(),
+               actual.toString().toString());
 
     // Create a file from a non-existent path
     File fileNonExistent = File(FileTest::pathNameNonExistent);
+    ASSERT_EQUAL(0, fileNonExistent.lastModified());
 
     // Create a file from an existent path
     File fileExistent = File(FileTest::pathNameExistent);
-
-    ASSERT_TRUE(0 != fileTestFolder.lastModified());
-    ASSERT_TRUE(0 == fileNonExistent.lastModified());
-    ASSERT_TRUE(0 != fileExistent.lastModified());
+    expected = Date();
+    actual = Date(fileExistent.lastModified());
+    ASSERT_STR(expected.toString().toString(),
+               actual.toString().toString());
 }
 
 TEST (JavaIo, FileLength) {
