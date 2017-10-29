@@ -969,6 +969,24 @@ namespace Java {
              */
              String getParent();
 
+            /**
+             * Returns the abstract pathname of this abstract pathname's parent,
+             * or <code>null</code> if this pathname does not name a parent
+             * directory.
+             *
+             * <p> The <em>parent</em> of an abstract pathname consists of the
+             * pathname's prefix, if any, and each name in the pathname's name
+             * sequence except for the last.  If the name sequence is empty then
+             * the pathname does not name a parent directory.
+             *
+             * @return  The abstract pathname of the parent directory named by this
+             *          abstract pathname, or <code>null</code> if this pathname
+             *          does not name a parent
+             *
+             * @since 1.2
+             */
+             File getParentFile();
+
         private:
             /**
              * This abstract pathname's normalized pathname string.

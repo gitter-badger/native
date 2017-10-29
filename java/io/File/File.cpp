@@ -668,4 +668,11 @@ String File::getParent() {
     return this->path.subString(0, index);
 }
 
+File File::getParentFile() {
+    String path = File::getParent();
+    if (path == "")
+        return File("");
+    return File(path);
+}
+
 #endif
