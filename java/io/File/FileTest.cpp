@@ -149,7 +149,6 @@ TEST (JavaIo, FileCanRead) {
 
     ASSERT_TRUE(fileExistent.setReadable(false));
     ASSERT_FALSE(fileExistent.canRead());
-
     ASSERT_TRUE(fileExistent.setReadable(true, false));
     ASSERT_TRUE(fileExistent.canRead());
 
@@ -170,7 +169,6 @@ TEST (JavaIo, FileCanWrite) {
 
     ASSERT_TRUE(fileExistent.setWritable(false));
     ASSERT_FALSE(fileExistent.canWrite());
-
     ASSERT_TRUE(fileExistent.setWritable(true, false));
     ASSERT_TRUE(fileExistent.canWrite());
 
@@ -188,8 +186,13 @@ TEST (JavaIo, FileSetReadOnly) {
 
     // Make sure the file can read, can write and can execute before testing
     ASSERT_TRUE(fileExistent.setReadable(true, false));
+    ASSERT_TRUE(fileExistent.canRead());
+
     ASSERT_TRUE(fileExistent.setWritable(true, false));
+    ASSERT_TRUE(fileExistent.canWrite());
+
     ASSERT_TRUE(fileExistent.setExecutable(true, false));
+    ASSERT_TRUE(fileExistent.canExecute());
 
     // Make sure the file is read only after setReadOnly
     ASSERT_TRUE(fileExistent.setReadOnly());
@@ -580,12 +583,12 @@ TEST (JavaIo, FileLength) {
     FILE *myFile;
 
     myFile = fopen("java\\io\\File\\TestFolder\\ExistentFile.txt", "a");
-    fputs("abc", myFile);
+    fputs("abcd", myFile);
     fclose(myFile);
 
     ASSERT_EQUAL(0, fileTestFolder.length());
     ASSERT_EQUAL(0, fileNonExistent.length());
-    ASSERT_EQUAL(3, fileExistent.length());
+    ASSERT_EQUAL(4, fileExistent.length());
 }
 
 //////TEST (JavaIo, FileListFiles) {
@@ -684,55 +687,6 @@ TEST (JavaIo, FileMkdirs) {
     ASSERT_TRUE(fileNonExistentFolder.deletes());
 }
 
-//TEST (JavaIo, FileRenameTo) {
-//    // Create a file from a non-existent file path
-//    File fileNonExistentFile = File(FileTest::pathNameNonExistent);
-//
-//    // Create a file form a non-existent folder path
-//    File fileNonExistentFoler = File(FileTest::pathNameNonExistentFolder);
-//
-//    // Create a file from an existent path
-//    File fileExistent = File(FileTest::pathNameExistent);
-//
-//    // Create a file from an existent folder path
-//    File fileExistentFolder = File(FileTest::pathTestFolder);
-//
-//    // Create a file to test
-//    File fileTest = File("Test/");
-//
-//    // return FALSE if fileTest is non-existent
-//    ASSERT_FALSE(fileTest.renameTo(fileExistent));
-//    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
-//    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
-//
-//    /* Create a File object for fileTest variable */
-//    // After that: renameTo() will return TRUE with the non-existent destination
-//    ASSERT_TRUE(fileTest.createNewFile());
-////    ASSERT_TRUE(fileTest.exists());
-////    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
-////
-////    // Return FALSE with fileNonExistentFoler,
-////    // and create a file for fileNonExistentFoler
-////    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
-////    ASSERT_STR("Test", fileTest.toString().toString());
-////
-////    // Create a destination fileNewTest
-////    File fileNewTest = File("NewTest");
-////
-////    // Make sure the fileTest is Existent, fileNewTest is non-existent
-////    ASSERT_TRUE(fileTest.exists());
-////    ASSERT_FALSE(fileNewTest.exists());
-////
-////    // Return TRUE. The fileTest was moved into fileNewTest
-////    ASSERT_TRUE(fileTest.renameTo(fileNewTest));
-////    ASSERT_FALSE(fileTest.exists());
-////    ASSERT_TRUE(fileNewTest.exists());
-////
-////    // Delete file after testing
-////    fileNewTest.deletes();
-//    fileNonExistentFoler.deletes();
-//}
-
 TEST (JavaIo, FileToString) {
     File fileTestFolder = File(FileTest::pathTestFolder);
     ASSERT_STR(FileTest::stringPathTestFolder.toString(),
@@ -792,6 +746,55 @@ TEST (JavaIo, FileList) {
     ASSERT_TRUE(fileSubFolder.exists());
     actual = fileSubFolder.list();
     ASSERT_EQUAL(0, actual.length);
+}
+
+TEST (JavaIo, FileRenameTo) {
+    // Create a file from a non-existent file path
+    File fileNonExistentFile = File(FileTest::pathNameNonExistent);
+
+    // Create a file form a non-existent folder path
+    File fileNonExistentFoler = File(FileTest::pathNameNonExistentFolder);
+
+    // Create a file from an existent path
+    File fileExistent = File(FileTest::pathNameExistent);
+
+    // Create a file from an existent folder path
+    File fileExistentFolder = File(FileTest::pathTestFolder);
+
+    // Create a file to test
+    File fileTest = File("Test/");
+
+    // return FALSE if fileTest is non-existent
+    ASSERT_FALSE(fileTest.renameTo(fileExistent));
+//    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
+//    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
+
+//    /* Create a File object for fileTest variable */
+//    // After that: renameTo() will return TRUE with the non-existent destination
+//    ASSERT_TRUE(fileTest.createNewFile());
+//    ASSERT_TRUE(fileTest.exists());
+//    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
+//
+//    // Return FALSE with fileNonExistentFoler,
+//    // and create a file for fileNonExistentFoler
+//    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
+//    ASSERT_STR("Test", fileTest.toString().toString());
+//
+//    // Create a destination fileNewTest
+//    File fileNewTest = File("NewTest");
+//
+//    // Make sure the fileTest is Existent, fileNewTest is non-existent
+//    ASSERT_TRUE(fileTest.exists());
+//    ASSERT_FALSE(fileNewTest.exists());
+//
+//    // Return TRUE. The fileTest was moved into fileNewTest
+//    ASSERT_TRUE(fileTest.renameTo(fileNewTest));
+//    ASSERT_FALSE(fileTest.exists());
+//    ASSERT_TRUE(fileNewTest.exists());
+//
+//    // Delete file after testing
+//    fileNewTest.deletes();
+    fileNonExistentFoler.deletes();
 }
 
 TEST (JavaIo, FileDeletes) {

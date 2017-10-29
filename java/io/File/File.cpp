@@ -287,7 +287,7 @@ boolean File::canRead() {
 
     stat(this->path.toString(), &fileStatitics);
 
-    std::cout << "\n\n==== Can execute ====\n\n"
+    std::cout << "\n\n==== Can read ====\n\n"
               << (access(this->path.toString(), R_OK) == 0);
 
     return (access(this->path.toString(), R_OK) == 0);
@@ -533,19 +533,18 @@ Array<String> File::list() {
     return result;
 }
 
-
-//boolean File::renameTo(File destinationFile) {
-//    if (!destinationFile.canWrite()
-//        || destinationFile.path.isEmpty()
-//        || destinationFile.exists()
-//        || !File::exists())
-//        return false;
+boolean File::renameTo(File destinationFile) {
+    if (!destinationFile.canWrite()
+        || destinationFile.path.isEmpty()
+        || destinationFile.exists()
+        || !File::exists())
+        return false;
 
 //    return rename(this->getCanonicalPath().toString(),
 //                  destinationFile.getCanonicalPath().toString()) == 0;
 
-//    return rename("java\\io\\\\File\\TestFolder\\HiddenFile.txt",
-//                  "java\\io\\\\File\\TestFolder\\a.txt") == 0;
-//}
+    return (rename("java/io/File/a.txt",
+                  "java/io/File/bbbb.txt") == 0);
+}
 
 #endif
