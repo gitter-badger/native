@@ -949,16 +949,28 @@ namespace Java {
             void updateFileStatitics();
 
             /**
-             * Get owner of this file
+             * Get owner of file
              * @return String
              */
-            String getOwner();
+            String getUser();
 
             /**
-             * Get group of this file
+             * Get group of file
              * @return String
              */
             String getGroup();
+
+            /**
+             * Get current owner
+             * @return String
+             */
+            static String getCurrentUser();
+
+            /**
+             * Get group of file
+             * @return String
+             */
+            static String getCurrentGroup();
         };
     }  // namespace Io
 } // namspace Java

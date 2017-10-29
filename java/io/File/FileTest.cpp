@@ -792,9 +792,6 @@ TEST (JavaIo, FileRenameTo) {
 //    // Delete file after testing
 //    fileNewTest.deletes();
     fileNonExistentFoler.deletes();
-
-    fileExistent.canExecute();
-    ASSERT_FAIL();
 }
 
 TEST (JavaIo, FileDeletes) {

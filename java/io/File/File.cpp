@@ -489,45 +489,137 @@ boolean File::canRead() {
     if (!File::exists())
         return false;
 
-    std::cout << "\n\n==== Can read ====\n\n"
-              << (access(this->path.toString(), R_OK) == 0);
+    StringBuffer permissionString = File::permissionStringFormat(this->path);
 
-    return (access(this->path.toString(), R_OK) == 0);
+    String currentUser = File::getCurrentUser();
+    String currentGroup = File::getCurrentGroup();
+
+    std::cout << "\n\n==== permissionString ====\n\n"
+              << permissionString.toString();
+
+    std::cout << "\n\n==== Get owner ====\n\n"
+              << currentUser.toString()
+              << "  "
+              << File::getUser().toString();
+
+    std::cout << "\n\n==== Get group ====\n\n"
+              << currentGroup.toString()
+              << "  "
+              << File::getGroup().toString();
+
+    // Owner permission
+    if (File::getUser() == currentUser
+        && permissionString.charAt(0) == 'r')
+        return true;
+
+    // Group permission
+    if (File::getGroup() == currentGroup
+        && permissionString.charAt(3) == 'r')
+        return true;
+
+    // Other permission
+    if (permissionString.charAt(6) == 'r')
+        return true;
+
+    return false;
 }
 
 boolean File::canWrite() {
     if (!File::exists())
         return false;
 
-    std::cout << "\n\n==== Can write ====\n\n"
-              << (access(this->path.toString(), W_OK) == 0);
+    StringBuffer permissionString = File::permissionStringFormat(this->path);
 
-    return (access(this->path.toString(), W_OK) == 0);
+    String currentUser = File::getCurrentUser();
+    String currentGroup = File::getCurrentGroup();
+
+    std::cout << "\n\n==== permissionString ====\n\n"
+              << permissionString.toString();
+
+    std::cout << "\n\n==== Get owner ====\n\n"
+              << currentUser.toString()
+              << "  "
+              << File::getUser().toString();
+
+    std::cout << "\n\n==== Get group ====\n\n"
+              << currentGroup.toString()
+              << "  "
+              << File::getGroup().toString();
+
+    // Owner permission
+    if (File::getUser() == currentUser
+        && permissionString.charAt(1) == 'w')
+        return true;
+
+    // Group permission
+    if (File::getGroup() == currentGroup
+        && permissionString.charAt(4) == 'w')
+        return true;
+
+    // Other permission
+    if (permissionString.charAt(7) == 'w')
+        return true;
+
+    return false;
 }
 
 boolean File::canExecute() {
     if (!File::exists())
         return false;
 
-    std::cout << "\n\n==== Can execute ====\n\n"
-              << (access(this->path.toString(), X_OK) == 0);
+    StringBuffer permissionString = File::permissionStringFormat(this->path);
+
+    String currentUser = File::getCurrentUser();
+    String currentGroup = File::getCurrentGroup();
+
+    std::cout << "\n\n==== permissionString ====\n\n"
+              << permissionString.toString();
 
     std::cout << "\n\n==== Get owner ====\n\n"
-              << File::getOwner().toString();
+              << currentUser.toString()
+              << "  "
+              << File::getUser().toString();
 
     std::cout << "\n\n==== Get group ====\n\n"
+              << currentGroup.toString()
+              << "  "
               << File::getGroup().toString();
 
-    return (access(this->path.toString(), X_OK) == 0);
+    // Owner permission
+    if (File::getUser() == currentUser
+            && permissionString.charAt(2) == 'x')
+        return true;
+
+    // Group permission
+    if (File::getGroup() == currentGroup
+        && permissionString.charAt(5) == 'x')
+        return true;
+
+    // Other permission
+    if (permissionString.charAt(8) == 'x')
+        return true;
+
+    return false;
 }
 
-String File::getOwner() {
+String File::getUser() {
     struct passwd *userLoginInfo = getpwuid(this->fileStatitics.st_uid);
     return userLoginInfo->pw_name;
 }
 
 String File::getGroup() {
     struct group  *groupInfo = getgrgid(this->fileStatitics.st_gid);
+    return groupInfo->gr_name;
+}
+
+String File::getCurrentUser() {
+    struct passwd *userInfo = getpwuid(getuid());
+    return userInfo->pw_name;
+}
+
+String File::getCurrentGroup() {
+    struct passwd *userInfo = getpwuid(getuid());
+    struct group  *groupInfo = getgrgid(userInfo->pw_gid);
     return groupInfo->gr_name;
 }
 
