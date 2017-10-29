@@ -1035,6 +1035,18 @@ namespace Java {
              */
              long getUsableSpace();
 
+            /**
+             * Tests whether this abstract pathname is absolute.  The definition of
+             * absolute pathname is system dependent.  On UNIX systems, a pathname is
+             * absolute if its prefix is <code>"/"</code>.  On Microsoft Windows systems, a
+             * pathname is absolute if its prefix is a drive specifier followed by
+             * <code>"\\"</code>, or if its prefix is <code>"\\\\"</code>.
+             *
+             * @return  <code>true</code> if this abstract pathname is absolute,
+             *          <code>false</code> otherwise
+             */
+            boolean isAbsolute();
+
         private:
             /**
              * This abstract pathname's normalized pathname string.

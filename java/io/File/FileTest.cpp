@@ -350,13 +350,6 @@ TEST (JavaIo, FileGetPath) {
     actual = fileTestFolder.getPath();
     ASSERT_STR(expected.toString(), actual.toString());
 }
-//TEST (JavaIo, FileIsAbsolute) {
-//    File fileNotAbsolute = File(FileTest::pathNameNotAbsolute);
-//    File fileAbsolute = File(FileTest::pathNameAbsolute);
-//
-//    ASSERT_FALSE(fileNotAbsolute.isAbsolute());
-//    ASSERT_TRUE(fileAbsolute.isAbsolute());
-//}
 
 TEST (JavaIo, FileGetCanonicalPath) {
     File fileRoot("java/io/File");
@@ -806,6 +799,18 @@ TEST (JavaIo, FileGetUsableSpace) {
     actual = fileExistent.getUsableSpace();
     ASSERT_EQUAL(expected, actual);
     ASSERT_EQUAL(fileExistent.getFreeSpace(), actual);
+}
+
+TEST (JavaIo, FileIsAbsolute) {
+    ASSERT_FALSE(File("TestFolder").isAbsolute());
+#ifdef WINDOWS
+    ASSERT_TRUE(File("\\TestFolder").isAbsolute());
+    ASSERT_TRUE(File("\\\\TestFolder").isAbsolute());
+    ASSERT_TRUE(File("C:").isAbsolute());
+    ASSERT_TRUE(File("C:\\TestFolder").isAbsolute());
+#else
+    ASSERT_TRUE(File("/TestFolder").isAbsolute());
+#endif
 }
 
 TEST (JavaIo, FileDeletes) {

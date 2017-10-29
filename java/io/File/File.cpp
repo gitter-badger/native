@@ -703,4 +703,25 @@ long File::getUsableSpace() {
     return systemStatitics.f_bsize * systemStatitics.f_bavail;
 }
 
+boolean File::isAbsolute() {
+    String path = this->path;
+    int length = path.length();
+
+#ifdef WINDOWS
+    char charAt0 = (length > 0) ? path.charAt(0) : '-';
+    char charAt1 = (length > 1) ? path.charAt(1) : '-';
+    char charAt2 = (length > 2) ? path.charAt(2) : '-';
+
+    if (charAt0 == '\\\\'       // case \\ ;
+        || charAt0 == '\\'      // case \  ;
+        || charAt1 == ':'       // case c:
+        || charAt2 == '\\')     // case c:\ ;
+        return true;
+#else
+    if (path.charAt(0) == '/')  // case /home
+        return true;
+#endif
+    return false;
+}
+
 #endif
