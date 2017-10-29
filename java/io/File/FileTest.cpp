@@ -422,32 +422,6 @@ TEST (JavaIo, FileIsFile) {
     ASSERT_TRUE(fileExistent.isFile());
 }
 
-//////TEST (JavaIo, FileIsHidden) {
-//////    // Create a directory file
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////
-//////    // Create a file from a non-existent path
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////    // Create a file from an existent path
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////    // Create a file from an existent hidden path
-//////    File fileHidden = File(FileTest::pathNameHidden);
-//////
-//////    // return FALSE if file is a directory
-//////    ASSERT_FALSE(fileTestFolder.isHidden());
-//////
-//////    // return FALSE if file is non-existent
-//////    ASSERT_FALSE(fileNonExistent.isHidden());
-//////
-//////    // return FALSE if file is existent
-//////    ASSERT_FALSE(fileExistent.isHidden());
-//////
-//////    // return TRUE if file is hidden
-////////		ASSERT_TRUE(fileHidden.isHidden());
-//////}
-//////
 TEST (JavaIo, FileLastModified) {
     // Create a directory file
     File fileTestFolder = File(FileTest::pathTestFolder);
@@ -811,6 +785,32 @@ TEST (JavaIo, FileIsAbsolute) {
 #else
     ASSERT_TRUE(File("/TestFolder").isAbsolute());
 #endif
+}
+
+TEST (JavaIo, FileIsHidden) {
+//    File testFile = File("java/io/File/TestFile.txt");
+//    ASSERT_TRUE(testFile.createNewFile());
+//    ASSERT_FALSE(testFile.isHidden());
+//
+//    // Set hidden
+//#ifdef WINDOWS
+//    String command = "attrib +H " + testFile.getCanonicalPath();
+//    string buffer;
+//    StringBuffer result;
+//
+//    FILE* pipe = popen(command.toString(), "r");
+//
+//    if (!pipe)
+//        throw Exception("popen() failed!");
+//
+//    while (!feof(pipe)) {
+//        if (fgets(buffer, 128, pipe) != NULL)
+//            result.append(buffer);
+//    }
+//    ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
+//#endif
+//    ASSERT_TRUE(testFile.isHidden());
+//    testFile.deletes();
 }
 
 TEST (JavaIo, FileDeletes) {

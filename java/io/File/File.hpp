@@ -54,6 +54,15 @@
 // Get free space
 #include <sys/statvfs.h>
 
+// strmode: convert numeric file mode to string representation
+#include <string.h>
+
+// GetFileAttributes
+//#include <windows.h>
+
+// WEXITSTATUS
+#include <sys/wait.h>
+
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
 #include "../../../kernel/type.h"
@@ -1046,6 +1055,27 @@ namespace Java {
              *          <code>false</code> otherwise
              */
             boolean isAbsolute();
+
+            /**
+             * Tests whether the file named by this abstract pathname is a hidden
+             * file.  The exact definition of <em>hidden</em> is system-dependent.  On
+             * UNIX systems, a file is considered to be hidden if its name begins with
+             * a period character (<code>'.'</code>).  On Microsoft Windows systems, a file is
+             * considered to be hidden if it has been marked as such in the filesystem.
+             *
+             * @return  <code>true</code> if and only if the file denoted by this
+             *          abstract pathname is hidden according to the conventions of the
+             *          underlying platform
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its <code>{@link
+             *          java.lang.SecurityManager#checkRead(java.lang.String)}</code>
+             *          method denies read access to the file
+             *
+             * @since 1.2
+             */
+             boolean isHidden();
+
 
         private:
             /**

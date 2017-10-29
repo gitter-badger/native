@@ -706,7 +706,6 @@ long File::getUsableSpace() {
 boolean File::isAbsolute() {
     String path = this->path;
     int length = path.length();
-
 #ifdef WINDOWS
     char charAt0 = (length > 0) ? path.charAt(0) : '-';
     char charAt1 = (length > 1) ? path.charAt(1) : '-';
@@ -722,6 +721,17 @@ boolean File::isAbsolute() {
         return true;
 #endif
     return false;
+}
+
+boolean File::isHidden() {
+//    if (isInvalid()) {
+//        return false;
+//    }
+//
+//    DWORD attributes = GetFileAttributes(this->path.toString());
+//    if (attributes & FILE_ATTRIBUTE_HIDDEN)
+//        return (boolean) true;
+//    return (boolean) false;
 }
 
 #endif
