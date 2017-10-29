@@ -498,6 +498,17 @@ long File::length() {
     return (long) (end - start);
 }
 
+String File::getAbsolutePath() {
+    string holdResult = realpath(this->path.toString(), NULL);
+    String result = holdResult;
+    free(holdResult);
+    return result;
+}
+
+File File::getAbsoluteFile() {
+    return File(File::getAbsolutePath());
+}
+
 //ArrayList<String> File::list() {
 //    glob_t glob_result;
 //

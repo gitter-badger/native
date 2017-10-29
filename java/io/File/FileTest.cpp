@@ -329,48 +329,6 @@ TEST (JavaIo, FileExists) {
     ASSERT_FALSE(fileNonExistentFolder.exists());
 }
 //////
-//////TEST (JavaIo, FileGetAbsoluteFile) {
-//////    if (FileTest::isWindows) {
-//////
-//////        // Create a non-existent file
-//////        File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////        // Create an existent file
-//////        File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////        // getAbsoluteFile() when the file is NOT EXISTENT
-//////        String expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\NonExistentFile.txt";
-//////        String actual = fileNonExistent.getAbsoluteFile().toString();
-//////        assertEquals(expected.toString(), actual.toString());
-//////
-//////        // getAbsoluteFile() when the file is EXISTENT
-//////        expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\ExistentFile.txt";
-//////        actual = fileExistent.getAbsoluteFile().toString();
-//////        assertEquals(expected.toString(), actual.toString());
-//////    }
-//////}
-//////
-//////TEST (JavaIo, FileGetAbsolutePath) {
-//////    if (FileTest::isWindows) {
-//////
-//////        // Create a non-existent file
-//////        File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////        // Create an existent file
-//////        File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////        // getAbsoluteFile() when the file is NOT EXISTENT
-//////        String expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\NonExistentFile.txt";
-//////        String actual = fileNonExistent.getAbsolutePath().toString();
-//////        assertEquals(expected.toString(), actual.toString());
-//////
-//////        // getAbsoluteFile() when the file is EXISTENT
-//////        expected = "E:\\JavaWorkspace\\TestJavaLibrary\\java\\io\\File\\TestFolder\\ExistentFile.txt";
-//////        actual = fileExistent.getAbsolutePath().toString();
-//////        assertEquals(expected.toString(), actual.toString());
-//////    }
-//////}
-//////
 //////TEST (JavaIo, FileGetFreeSpace) {
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
 //////
@@ -498,7 +456,7 @@ TEST (JavaIo, FileGetCanonicalPath) {
     String expected = pathRoot
                       + (string) "/TestFolder";
 #ifdef WINDOWS
-   expected = expected.replace('/', '\\');
+    expected = expected.replace('/', '\\');
 #endif
 
     String actual = fileTest.getCanonicalPath();
@@ -619,11 +577,11 @@ TEST (JavaIo, FileLength) {
     ASSERT_TRUE(fileExistent.setWritable(true));
 
     // Write string "abc" to fileExistent
-    FILE * myFile;
+    FILE *myFile;
 
-    myFile = fopen ("java\\io\\File\\TestFolder\\ExistentFile.txt","a");
-    fputs ("abc",myFile);
-    fclose (myFile);
+    myFile = fopen("java\\io\\File\\TestFolder\\ExistentFile.txt", "a");
+    fputs("abc", myFile);
+    fclose(myFile);
 
     ASSERT_EQUAL(0, fileTestFolder.length());
     ASSERT_EQUAL(0, fileNonExistent.length());
@@ -812,6 +770,29 @@ TEST (JavaIo, FileToString) {
 //////    assertEquals("file:/E:/Users/admin/test.txt", fileUri.toURL().toString());
 //////}
 //////
+
+TEST (JavaIo, FileGetAbsolutePath) {
+    File fileRoot("java/io/File");
+    String pathRoot = fileRoot.getAbsolutePath();
+    File fileTest = File(FileTest::pathNameNotCanonical);
+
+    String expected = pathRoot
+                      + (string) "/TestFolder";
+    String actual = fileTest.getAbsolutePath();
+    ASSERT_STR(expected.toString(), actual.toString());
+}
+
+TEST (JavaIo, FileGetAbsoluteFile) {
+    File fileRoot("java/io/File");
+    String pathRoot = fileRoot.getAbsolutePath();
+
+    File fileTest = File(FileTest::pathNameNotCanonical);
+
+    String expected = pathRoot
+                      + (string) "/TestFolder";
+    String actual = fileTest.getAbsoluteFile().toString();
+    ASSERT_STR(expected.toString(), actual.toString());
+}
 
 TEST (JavaIo, FileDeletes) {
     // Variables for testing
