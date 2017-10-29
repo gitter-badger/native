@@ -689,4 +689,18 @@ long File::getTotalSpace() {
     return systemStatitics.f_bsize * systemStatitics.f_blocks;
 }
 
+long File::getUsableSpace() {
+//    if (isInvalid()) {
+//        return 0L;
+//    }
+
+    struct statvfs systemStatitics;
+    boolean canGetSystemStatitics
+            = (statvfs(this->path.toString(), &systemStatitics) == 0);
+    if (!File::exists() || !canGetSystemStatitics)
+        return 0L;
+
+    return systemStatitics.f_bsize * systemStatitics.f_bavail;
+}
+
 #endif
