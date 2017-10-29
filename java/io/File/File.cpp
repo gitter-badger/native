@@ -406,8 +406,7 @@ File File::getCanonicalFile() {
 long File::lastModified() {
     if (!File::exists())
         return 0;
-
-    return this->fileStatitics.st_mtim.tv_sec;
+    return this->lastModifiedTime;
 }
 
 long File::length() {
@@ -473,16 +472,17 @@ boolean File::renameTo(File destinationFile) {
         || !File::exists())
         return false;
 
-//    return rename(this->getCanonicalPath().toString(),
-//                  destinationFile.getCanonicalPath().toString()) == 0;
+    return rename(this->getCanonicalPath().toString(),
+                  destinationFile.getCanonicalPath().toString()) == 0;
 
-    return (rename("java/io/File/a.txt",
-                  "java/io/File/bbbb.txt") == 0);
+//    return (rename("java/io/File/a.txt",
+//                  "java/io/File/bbbb.txt") == 0);
 }
 
 void File::updateFileStatitics() {
     this->canGetStatitics
             = (stat(this->path.toString(), &this->fileStatitics) == 0);
+    this->lastModifiedTime = this->fileStatitics.st_mtim.tv_sec;
 }
 
 boolean File::canRead() {
@@ -621,6 +621,19 @@ String File::getCurrentGroup() {
     struct passwd *userInfo = getpwuid(getuid());
     struct group  *groupInfo = getgrgid(userInfo->pw_gid);
     return groupInfo->gr_name;
+}
+
+boolean File::setLastModified(long time) {
+    if (time < 0)
+        throw IllegalArgumentException("Negative time");
+
+//    if (isInvalid()) {
+//        return false;
+//    }
+
+    this->lastModifiedTime = time;
+
+    return (this->lastModifiedTime == time);
 }
 
 #endif

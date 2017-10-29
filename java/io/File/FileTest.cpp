@@ -242,23 +242,23 @@ TEST (JavaIo, FileCreateNewFile) {
     ASSERT_FALSE(fileTestFolder.createNewFile());
 }
 
-TEST (JavaIo, FileCreateTempFileParamStringString) {
-    File tempFile("");
-    File fileTestFolder = File(FileTest::pathTestFolder);
-
-    // Make sure the file is existent after creating a temp file.
-    tempFile = File::createTempFile("temp", ".txt");
-    ASSERT_TRUE(tempFile.exists());
-
-    // Delete file after testing
-    ASSERT_TRUE(tempFile.deletes());
-
-    tempFile = File::createTempFile("temp", ".txt", fileTestFolder);
-    ASSERT_TRUE(tempFile.exists());
-
-    // Delete file after testing
-    ASSERT_TRUE(tempFile.deletes());
-}
+//TEST (JavaIo, FileCreateTempFileParamStringString) {
+//    File tempFile("");
+//    File fileTestFolder = File(FileTest::pathTestFolder);
+//
+//    // Make sure the file is existent after creating a temp file.
+//    tempFile = File::createTempFile("temp", ".txt");
+//    ASSERT_TRUE(tempFile.exists());
+//
+//    // Delete file after testing
+//    ASSERT_TRUE(tempFile.deletes());
+//
+//    tempFile = File::createTempFile("temp", ".txt", fileTestFolder);
+//    ASSERT_TRUE(tempFile.exists());
+//
+//    // Delete file after testing
+//    ASSERT_TRUE(tempFile.deletes());
+//}
 //////
 //////TEST (JavaIo, FileCreateTempFileParamStringStringFile) {
 //////    File file = File("");
@@ -552,21 +552,28 @@ TEST (JavaIo, FileIsFile) {
 TEST (JavaIo, FileLastModified) {
     // Create a directory file
     File fileTestFolder = File(FileTest::pathTestFolder);
-    Date expected = Date();
-    Date actual = Date(fileTestFolder.lastModified());
-    ASSERT_STR(expected.toString().toString(),
-               actual.toString().toString());
+    fileTestFolder.setLastModified(1302l);
+    long expected = 1302l;
+    long actual = fileTestFolder.lastModified();
+    ASSERT_EQUAL(expected, actual);
+
+    // Time < 0
+    try {
+        fileTestFolder.setLastModified(-1);
+    } catch(IllegalArgumentException exception) {
+        ASSERT_STR("Negative time", exception.toString());
+    }
+
+    // Create a file from an existent path
+    File fileExistent = File(FileTest::pathNameExistent);
+    fileExistent.setLastModified(1302l);
+    expected = 1302l;
+    actual = fileTestFolder.lastModified();
+    ASSERT_EQUAL(expected, actual);
 
     // Create a file from a non-existent path
     File fileNonExistent = File(FileTest::pathNameNonExistent);
     ASSERT_EQUAL(0, fileNonExistent.lastModified());
-
-    // Create a file from an existent path
-    File fileExistent = File(FileTest::pathNameExistent);
-    expected = Date();
-    actual = Date(fileExistent.lastModified());
-    ASSERT_STR(expected.toString().toString(),
-               actual.toString().toString());
 }
 
 TEST (JavaIo, FileLength) {
