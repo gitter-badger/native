@@ -101,6 +101,7 @@ public:
 		
 		Array(char **charPointerArray) {
 			int size = length_pointer_pointer_char(charPointerArray);
+
 #ifdef LINUX
 			register
 #endif
@@ -110,7 +111,7 @@ public:
 			}
 			this->length = original.size();
 		}
-		
+
 		/**
 		 *  Array constructor with contain size
 		 *
@@ -120,21 +121,21 @@ public:
 			this->original.resize(containerSize);
 			this->length = containerSize;
 		}
-		
+
 		/**
 		 * Array destructor
 		 */
 		~Array() {
-		
+
 		}
-		
+
 		/**
 		 * Property length of Array
 		 *
 		 * Don't set this property when you coding
 		 */
 		int length;
-		
+
 		/**
 		 * Get the first element in Array
 		 *
@@ -143,7 +144,7 @@ public:
 		ArrayIterator<E> begin() const {
 			return ArrayIterator<E>(this, 0);
 		}
-		
+
 		/**
 		 * Get the final element in Array
 		 *
@@ -154,7 +155,7 @@ public:
 		}
 
 public:
-		
+
 		/**
 		 * Push new element to end of Array
 		 *
@@ -164,7 +165,7 @@ public:
 			original.push_back(e);
 			this->length = original.size();
 		}
-		
+
 		/**
 		 * Returns the element at the specified position in this Array
 		 *
@@ -174,7 +175,7 @@ public:
 		E get(const int index) const {
 			return (E) original.at(index);
 		}
-		
+
 		/**
 		 * Convert Array to string
 		 *
@@ -191,6 +192,13 @@ public:
 				return result;
 			}
 			return (string) "This type is not available for serialize";
+		}
+
+		/**
+		 * Return length of this array
+		 */
+		int getLength() {
+			return this->length;
 		}
 
 public:

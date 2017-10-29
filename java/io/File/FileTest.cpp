@@ -588,23 +588,6 @@ TEST (JavaIo, FileLength) {
     ASSERT_EQUAL(3, fileExistent.length());
 }
 
-//////TEST (JavaIo, FileList) {
-//////    // Test a not empty directory
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////    String[] expected = {"ExistentFile.txt", "HiddenFile.txt", "SubFolder"};
-//////    String[] actual = fileTestFolder.list();
-//////    assertEquals(expected[0].toString(), actual[0].toString());
-//////    assertEquals(expected[1].toString(), actual[1].toString());
-//////    assertEquals(expected[2].toString(), actual[2].toString());
-//////    assertEquals(3, actual.length);
-//////
-//////    // Test an empty directory
-//////    File fileSubFolder = File(FileTest::pathTestFolder + "SubFolder");
-//////    ASSERT_TRUE(fileSubFolder.exists());
-//////    actual = fileSubFolder.list();
-//////    assertEquals(0, actual.length);
-//////}
-//////
 //////TEST (JavaIo, FileListFiles) {
 //////    // Test a not empty directory
 //////    File fileTestFolder = File(FileTest::pathTestFolder);
@@ -792,6 +775,23 @@ TEST (JavaIo, FileGetAbsoluteFile) {
                       + (string) "/TestFolder";
     String actual = fileTest.getAbsoluteFile().toString();
     ASSERT_STR(expected.toString(), actual.toString());
+}
+
+TEST (JavaIo, FileList) {
+    // Test a not empty directory
+    File fileTestFolder = File(FileTest::pathTestFolder);
+    Array<String> expected = {"ExistentFile.txt", "HiddenFile.txt", "SubFolder"};
+    Array<String> actual = fileTestFolder.list();
+    ASSERT_STR(expected[0].toString(), actual[0].toString());
+    ASSERT_STR(expected[1].toString(), actual[1].toString());
+    ASSERT_STR(expected[2].toString(), actual[2].toString());
+    ASSERT_EQUAL(3, actual.getLength());
+
+    // Test an empty directory
+    File fileSubFolder = File(FileTest::pathTestFolder + (string) "SubFolder");
+    ASSERT_TRUE(fileSubFolder.exists());
+    actual = fileSubFolder.list();
+    ASSERT_EQUAL(0, actual.length);
 }
 
 TEST (JavaIo, FileDeletes) {

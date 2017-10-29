@@ -39,10 +39,11 @@
 
 // obtaining file size
 #include <iostream>
-#include <fstream>
 
 // Get file list
 #include <glob.h>
+#include <dirent.h>
+#include<fstream>
 
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
@@ -52,6 +53,7 @@
 #include "../../lang/Exception/Exception.hpp"
 #include "../../lang/IllegalArgumentException/IllegalArgumentException.hpp"
 #include "../../util/ArrayList/ArrayList.hpp"
+#include "../../util/Arrays/Arrays.hpp"
 
 using namespace Java::Lang;
 
@@ -201,7 +203,7 @@ namespace Java {
              *
              * Where it is required to distinguish an I/O exception from the case
              * that the file is not a normal file, or where several attributes of the
-             * same file are required at the same time, then the 
+             * same file are required at the same time, then the
              * java.nio.file.Files#readAttributes(Path,Class,LinkOption[])
              * Files.readAttributes method may be used.
              *
@@ -210,7 +212,7 @@ namespace Java {
              *          false otherwise
              *
              * @throws  SecurityException
-             *          If a security manager exists and its 
+             *          If a security manager exists and its
              *          java.lang.SecurityManager#checkRead(java.lang.String)
              *          method denies read access to the file
              */
@@ -863,7 +865,7 @@ namespace Java {
              *          SecurityManager#checkRead(String)} method denies read access to
              *          the directory
              */
-            ArrayList<String> list();
+            Array<String> list();
 
         private:
             /**

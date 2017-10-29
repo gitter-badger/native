@@ -509,15 +509,29 @@ File File::getAbsoluteFile() {
     return File(File::getAbsolutePath());
 }
 
-//ArrayList<String> File::list() {
-//    glob_t glob_result;
-//
-//    glob(this->path.toString(), GLOB_TILDE, NULL, &glob_result);
-//
-//    for (unsigned int i = 0; i < glob_result.gl_pathc; ++i) {
-//        std::cout << "aaaa" << glob_result.gl_pathv[i] << "\n\n";
-//    }
-//}
+Array<String> File::list() {
+    Array<String> result;
+    String holdString;
+
+    DIR *directory;
+    struct dirent *directoryEntity;
+
+    if ((directory = opendir (File::getAbsolutePath().toString())) != NULL) {
+        /* Skip . and .. directory */
+        readdir (directory);
+        readdir (directory);
+
+        /* Get the files and directories name */
+        while ((directoryEntity = readdir (directory)) != NULL) {
+            result.push(directoryEntity->d_name);
+        }
+        closedir (directory);
+    } else {
+        throw Exception("could not open directory");
+    }
+
+    return result;
+}
 
 
 //boolean File::renameTo(File destinationFile) {
