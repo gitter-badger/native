@@ -84,6 +84,16 @@ namespace Java {
              */
             File(String pathname);
 
+            /**
+             * The system-dependent default name-separator character.  This field is
+             * initialized to contain the first character of the value of the system
+             * property <code>file.separator</code>.  On UNIX systems the value of this
+             * field is <code>'/'</code>; on Microsoft Windows systems it is <code>'\\'</code>.
+             *
+             * @see     java.lang.System#getProperty(java.lang.String)
+             */
+            static const char separatorChar = '/';
+
         public:
             /**
              * Compares two abstract pathnames lexicographically.  The ordering
@@ -931,6 +941,18 @@ namespace Java {
              * @since  1.6
              */
              long getFreeSpace();
+
+            /**
+             * Returns the name of the file or directory denoted by this abstract
+             * pathname.  This is just the last name in the pathname's name
+             * sequence.  If the pathname's name sequence is empty, then the empty
+             * string is returned.
+             *
+             * @return  The name of the file or directory denoted by this abstract
+             *          pathname, or the empty string if this pathname's name sequence
+             *          is empty
+             */
+             String getName();
 
         private:
             /**

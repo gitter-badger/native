@@ -644,10 +644,17 @@ long File::getFreeSpace() {
     struct statvfs systemStatitics;
     boolean canGetSystemStatitics
             = (statvfs(this->path.toString(), &systemStatitics) == 0);
-    if (!canGetSystemStatitics)
+    if (!File::exists() || !canGetSystemStatitics)
         return 0L;
 
     return systemStatitics.f_bsize * systemStatitics.f_bfree;
+}
+
+String File::getName() {
+    int index = this->path.lastIndexOf(separatorChar);
+    if (index < prefixLength)
+        return path.subString(prefixLength);
+    return path.subString(index + 1);
 }
 
 #endif

@@ -332,24 +332,6 @@ TEST (JavaIo, FileExists) {
             = File(FileTest::pathNameNonExistentFolder);
     ASSERT_FALSE(fileNonExistentFolder.exists());
 }
-//////TEST (JavaIo, FileGetName) {
-//////    // Create a file has file name
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////    // Create a directory file
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////
-//////    // getName() return the name of the file
-//////    String expected = "NonExistentFile.txt";
-//////    String actual = fileNonExistent.getName();
-//////    assertEquals(expected.toString(), actual.toString());
-//////
-//////    // getName() return the name of the directory
-//////    expected = FileTest::stringPathTestFolder;
-//////    actual = fileTestFolder.getName();
-//////    assertEquals(expected.toString(), actual.toString());
-//////}
-//////
 //////TEST (JavaIo, FileGetParent) {
 //////    // Create a  file has the file name
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
@@ -790,18 +772,35 @@ TEST (JavaIo, FileRenameTo) {
 TEST (JavaIo, FileGetFreeSpace) {
     // Check a non-existent file
     File fileNonExistent = File(FileTest::pathNameNonExistent);
-    struct statvfs systemStatitics;
-    statvfs(fileNonExistent.getPath().toString(), &systemStatitics);
-    long expected = systemStatitics.f_bsize * systemStatitics.f_bfree;
+    long expected = 0;
     long actual = fileNonExistent.getFreeSpace();
     ASSERT_EQUAL(expected, actual);
 
     // Check an existent file
     File fileExistent = File(FileTest::pathNameExistent);
+    struct statvfs systemStatitics;
     statvfs(fileExistent.getPath().toString(), &systemStatitics);
     expected = systemStatitics.f_bsize * systemStatitics.f_bfree;
     actual = fileExistent.getFreeSpace();
     ASSERT_EQUAL(expected, actual);
+}
+
+TEST (JavaIo, FileGetName) {
+    // Create a file has file name
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+
+    // Create a directory file
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    // getName() return the name of the file
+    String expected = "NonExistentFile.txt";
+    String actual = fileNonExistent.getName();
+    ASSERT_STR(expected.toString(), actual.toString());
+
+    // getName() return the name of the directory
+    expected = "TestFolder";
+    actual = fileTestFolder.getName();
+    ASSERT_STR(expected.toString(), actual.toString());
 }
 
 TEST (JavaIo, FileDeletes) {
