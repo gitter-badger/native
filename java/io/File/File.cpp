@@ -33,6 +33,12 @@ using namespace Java::Io;
 File::File(String pathName) {
     this->path = File::normalize(pathName);
     this->prefixLength = File::getPrefixLength(this->path);
+    File::updateFileStatitics();
+}
+
+void File::updateFileStatitics() {
+    this->canGetStatitics
+            = (stat(this->path.toString(), &this->fileStatitics) == 0);
 }
 
 String File::normalize(String pathName) {
@@ -101,8 +107,8 @@ String File::getPath() {
 }
 
 boolean File::mkdir() {
-    return (boolean) !::mkdir(this->path.toString(),
-                              S_IRWXU | S_IRWXG);
+    return (::mkdir(this->path.toString(),
+                              S_IRWXU | S_IRWXG) == 0);
 }
 
 boolean File::mkdirs() {
@@ -141,25 +147,17 @@ boolean File::createNewFile() {
 }
 
 boolean File::isDirectory() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
 
-    stat(this->path.toString(), &fileStatitics);
-
-    return S_ISDIR(fileStatitics.st_mode);
+    return S_ISDIR(this->fileStatitics.st_mode);
 }
 
 boolean File::isFile() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
 
-    stat(this->path.toString(), &fileStatitics);
-
-    return S_ISREG(fileStatitics.st_mode);
+    return S_ISREG(this->fileStatitics.st_mode);
 }
 
 int deleteEntry(const_string filePath,
@@ -175,24 +173,19 @@ boolean File::deletes() {
     if (!File::exists())
         return false;
 
-    return (boolean) !nftw(this->path.toString(),
+    return (nftw(this->path.toString(),
                            deleteEntry,
                            64,
-                           FTW_DEPTH | FTW_PHYS);
+                           FTW_DEPTH | FTW_PHYS) == 0);
 }
 
 boolean File::exists() {
-    struct stat fileStatitics;
-    return stat(this->path.toString(), &fileStatitics) == 0;
+    return stat(this->path.toString(), &this->fileStatitics) == 0;
 }
 
 boolean File::canExecute() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
-
-    stat(this->path.toString(), &fileStatitics);
 
     std::cout << "\n\n==== Can execute ====\n\n"
               << (access(this->path.toString(), X_OK) == 0);
@@ -205,12 +198,9 @@ boolean File::setExecutable(boolean executable) {
 }
 
 boolean File::setExecutable(boolean executable, boolean ownerOnly) {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
 
-    stat(this->path.toString(), &fileStatitics);
     StringBuffer permissionString = File::permissionStringFormat(this->path);
     int mode;
 
@@ -238,16 +228,14 @@ boolean File::setExecutable(boolean executable, boolean ownerOnly) {
 
     mode = File::stringFormatToPermission(permissionString);
 
-    return (boolean) !chmod(this->path.toString(),
-                            mode);
+    return (chmod(this->path.toString(), mode) == 0);
 }
 
 StringBuffer File::permissionStringFormat(String path) {
-    struct stat fileStatitics;
     StringBuffer result;
 
-    if (stat(path.toString(), &fileStatitics) == 0) {
-        mode_t permission = fileStatitics.st_mode;
+    if (this->canGetStatitics) {
+        mode_t permission = this->fileStatitics.st_mode;
         (permission & S_IRUSR) ? result.append('r') : result.append('-');
         (permission & S_IWUSR) ? result.append('w') : result.append('-');
         (permission & S_IXUSR) ? result.append('x') : result.append('-');
@@ -280,12 +268,8 @@ int File::stringFormatToPermission(StringBuffer permissionStringFormat) {
 }
 
 boolean File::canRead() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
-
-    stat(this->path.toString(), &fileStatitics);
 
     std::cout << "\n\n==== Can read ====\n\n"
               << (access(this->path.toString(), R_OK) == 0);
@@ -294,12 +278,8 @@ boolean File::canRead() {
 }
 
 boolean File::canWrite() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
-
-    stat(this->path.toString(), &fileStatitics);
 
     std::cout << "\n\n==== Can write ====\n\n"
               << (access(this->path.toString(), W_OK) == 0);
@@ -317,12 +297,9 @@ boolean File::setReadOnly() {
 }
 
 boolean File::setReadable(boolean readable, boolean ownerOnly) {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
 
-    stat(this->path.toString(), &fileStatitics);
     StringBuffer permissionString = File::permissionStringFormat(this->path);
     int mode;
 
@@ -350,8 +327,7 @@ boolean File::setReadable(boolean readable, boolean ownerOnly) {
 
     mode = File::stringFormatToPermission(permissionString);
 
-    return (boolean) !chmod(this->path.toString(),
-                            mode);
+    return (chmod(this->path.toString(), mode) == 0);
 }
 
 boolean File::setReadable(boolean readable) {
@@ -364,12 +340,9 @@ boolean File::setWritable(boolean writable) {
 
 
 boolean File::setWritable(boolean writable, boolean ownerOnly) {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return false;
 
-    stat(this->path.toString(), &fileStatitics);
     StringBuffer permissionString = File::permissionStringFormat(this->path);
     int mode;
 
@@ -397,8 +370,7 @@ boolean File::setWritable(boolean writable, boolean ownerOnly) {
 
     mode = File::stringFormatToPermission(permissionString);
 
-    return (boolean) !chmod(this->path.toString(),
-                            mode);
+    return (chmod(this->path.toString(), mode) == 0);
 }
 
 int File::compareTo(const File &pathname) const {
@@ -467,14 +439,10 @@ File File::getCanonicalFile() {
 }
 
 long File::lastModified() {
-    struct stat fileStatitics;
-
     if (!File::exists())
         return 0;
 
-    stat(this->path.toString(), &fileStatitics);
-
-    return fileStatitics.st_mtim.tv_sec;
+    return this->fileStatitics.st_mtim.tv_sec;
 }
 
 long File::length() {

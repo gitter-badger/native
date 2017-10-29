@@ -149,6 +149,7 @@ TEST (JavaIo, FileCanRead) {
 
     ASSERT_TRUE(fileExistent.setReadable(false));
     ASSERT_FALSE(fileExistent.canRead());
+
     ASSERT_TRUE(fileExistent.setReadable(true, false));
     ASSERT_TRUE(fileExistent.canRead());
 
@@ -569,9 +570,6 @@ TEST (JavaIo, FileLastModified) {
 }
 
 TEST (JavaIo, FileLength) {
-    // Create a directory file
-    File fileTestFolder = File(FileTest::pathTestFolder);
-
     // Create a file from a non-existent path
     File fileNonExistent = File(FileTest::pathNameNonExistent);
 
@@ -586,7 +584,6 @@ TEST (JavaIo, FileLength) {
     fputs("abcd", myFile);
     fclose(myFile);
 
-    ASSERT_EQUAL(0, fileTestFolder.length());
     ASSERT_EQUAL(0, fileNonExistent.length());
     ASSERT_EQUAL(4, fileExistent.length());
 }
@@ -803,7 +800,6 @@ TEST (JavaIo, FileDeletes) {
     File fileExistent = File(FileTest::pathNameExistent);
     File fileHidden = File(FileTest::pathNameHidden);
     File fileSubFolder = File(FileTest::pathSubFolder);
-//    fileTestFolder.list();
 
     // Check these file above is existent
     ASSERT_TRUE(fileTestFolder.exists());

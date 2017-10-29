@@ -882,6 +882,16 @@ namespace Java {
              */
             int prefixLength; // transient
 
+            /**
+             * The statitics of this File.
+             */
+            struct stat fileStatitics;
+
+            /**
+             * Tests whether the application can get statitics of this File
+             */
+            boolean canGetStatitics;
+
         private:
             /**
              * Check that the given pathname is normal.
@@ -926,6 +936,11 @@ namespace Java {
              * @return
              */
             int stringFormatToPermission(StringBuffer permissionStringFormat);
+
+            /**
+             * Update the statitics of this file
+             */
+            void updateFileStatitics();
         };
     }  // namespace Io
 } // namspace Java
