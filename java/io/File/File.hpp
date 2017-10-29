@@ -51,6 +51,9 @@
 // Get group
 #include <grp.h>
 
+// Get free space
+#include <sys/statvfs.h>
+
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
 #include "../../../kernel/type.h"
@@ -900,6 +903,34 @@ namespace Java {
              * @since 1.2
              */
              boolean setLastModified(long time);
+
+            /**
+             * Returns the number of unallocated bytes in the partition <a
+             * href="#partName">named</a> by this abstract path name.
+             *
+             * <p> The returned number of unallocated bytes is a hint, but not
+             * a guarantee, that it is possible to use most or any of these
+             * bytes.  The number of unallocated bytes is most likely to be
+             * accurate immediately after this call.  It is likely to be made
+             * inaccurate by any external I/O operations including those made
+             * on the system outside of this virtual machine.  This method
+             * makes no guarantee that write operations to this file system
+             * will succeed.
+             *
+             * @return  The number of unallocated bytes on the partition or <tt>0L</tt>
+             *          if the abstract pathname does not name a partition.  This
+             *          value will be less than or equal to the total file system size
+             *          returned by {@link #getTotalSpace}.
+             *
+             * @throws  SecurityException
+             *          If a security manager has been installed and it denies
+             *          {@link RuntimePermission}<tt>("getFileSystemAttributes")</tt>
+             *          or its {@link SecurityManager#checkRead(String)} method denies
+             *          read access to the file named by this abstract pathname
+             *
+             * @since  1.6
+             */
+             long getFreeSpace();
 
         private:
             /**

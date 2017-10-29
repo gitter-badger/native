@@ -636,4 +636,18 @@ boolean File::setLastModified(long time) {
     return (this->lastModifiedTime == time);
 }
 
+long File::getFreeSpace() {
+//    if (isInvalid()) {
+//        return 0L;
+//    }
+
+    struct statvfs systemStatitics;
+    boolean canGetSystemStatitics
+            = (statvfs(this->path.toString(), &systemStatitics) == 0);
+    if (!canGetSystemStatitics)
+        return 0L;
+
+    return systemStatitics.f_bsize * systemStatitics.f_bfree;
+}
+
 #endif

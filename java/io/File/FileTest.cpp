@@ -332,20 +332,6 @@ TEST (JavaIo, FileExists) {
             = File(FileTest::pathNameNonExistentFolder);
     ASSERT_FALSE(fileNonExistentFolder.exists());
 }
-//////
-//////TEST (JavaIo, FileGetFreeSpace) {
-//////    File fileNonExistent = File(FileTest::pathNameNonExistent);
-//////
-//////    // Create an existent file
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////
-//////    // getFreeSpace return 0 if the file is non existent
-//////    ASSERT_TRUE(0 == fileNonExistent.getFreeSpace());
-//////
-//////    // getFreeSpace return != 0 if the file is existent
-//////    ASSERT_TRUE(0 != fileExistent.getFreeSpace());
-//////}
-//////
 //////TEST (JavaIo, FileGetName) {
 //////    // Create a file has file name
 //////    File fileNonExistent = File(FileTest::pathNameNonExistent);
@@ -552,8 +538,8 @@ TEST (JavaIo, FileIsFile) {
 TEST (JavaIo, FileLastModified) {
     // Create a directory file
     File fileTestFolder = File(FileTest::pathTestFolder);
-    fileTestFolder.setLastModified(1302l);
-    long expected = 1302l;
+    fileTestFolder.setLastModified(1302L);
+    long expected = 1302L;
     long actual = fileTestFolder.lastModified();
     ASSERT_EQUAL(expected, actual);
 
@@ -566,8 +552,8 @@ TEST (JavaIo, FileLastModified) {
 
     // Create a file from an existent path
     File fileExistent = File(FileTest::pathNameExistent);
-    fileExistent.setLastModified(1302l);
-    expected = 1302l;
+    fileExistent.setLastModified(1302L);
+    expected = 1302L;
     actual = fileTestFolder.lastModified();
     ASSERT_EQUAL(expected, actual);
 
@@ -799,6 +785,23 @@ TEST (JavaIo, FileRenameTo) {
 //    // Delete file after testing
 //    fileNewTest.deletes();
     fileNonExistentFoler.deletes();
+}
+
+TEST (JavaIo, FileGetFreeSpace) {
+    // Check a non-existent file
+    File fileNonExistent = File(FileTest::pathNameNonExistent);
+    struct statvfs systemStatitics;
+    statvfs(fileNonExistent.getPath().toString(), &systemStatitics);
+    long expected = systemStatitics.f_bsize * systemStatitics.f_bfree;
+    long actual = fileNonExistent.getFreeSpace();
+    ASSERT_EQUAL(expected, actual);
+
+    // Check an existent file
+    File fileExistent = File(FileTest::pathNameExistent);
+    statvfs(fileExistent.getPath().toString(), &systemStatitics);
+    expected = systemStatitics.f_bsize * systemStatitics.f_bfree;
+    actual = fileExistent.getFreeSpace();
+    ASSERT_EQUAL(expected, actual);
 }
 
 TEST (JavaIo, FileDeletes) {
