@@ -622,7 +622,7 @@ TEST (JavaLang, LongToOcString) {
 }
 
 TEST (JavaLang, LongValueOfFromLong) {
-    assertEquals(166, Long::valueOf(1).longValue());
+    assertEquals(1666, Long::valueOf(1).longValue());
     assertEquals(0, Long::valueOf(0).longValue());
     assertEquals(-1, Long::valueOf(-1).longValue());
     assertEquals(154, Long::valueOf(154).longValue());

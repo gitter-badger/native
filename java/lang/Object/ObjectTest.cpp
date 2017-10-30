@@ -25,10 +25,6 @@
  */
 
 #include "../../../kernel/Test.hpp"
-#include "../String/String.hpp"
-#include "../Integer/Integer.hpp"
-#include "../Long/Long.hpp"
-#include "../System/System.hpp"
 
 using namespace Java::Lang;
 
