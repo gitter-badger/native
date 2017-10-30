@@ -105,6 +105,25 @@ TEST (JavaLangBoolean, GetBoolean) {
 	assertEquals(expect, result);
 }
 
+TEST (JavaLang, BooleanHashCode) {
+	//Giving an expected result and a boolean value
+	long expectedResult;
+	Boolean booleanTrueValue(true);
+	Boolean booleanFalseValue(false);
+	long result;
+
+	//Test expectedResult and true-hashcode-booleanValue are equal
+	expectedResult = 1231;
+	result = booleanTrueValue.hashCode();
+	assertEquals(expectedResult, result);
+
+	//Test expectedResult and false-hashcode-booleanValue are equal
+	expectedResult = 1237;
+	booleanFalseValue = false;
+	result = booleanFalseValue.hashCode();
+	assertEquals(expectedResult, result);
+}
+
 TEST (JavaLangBoolean, ParseBoolean) {
 	// Give two value boolean (true - true) - Should equal
 	boolean expect = true;
@@ -158,4 +177,21 @@ TEST (JavaLangBoolean, ValueOf) {
 	expect = false;
 	result = Boolean::valueOf(expect).booleanValue();
 	assertEquals(expect, result);
+}
+
+TEST (JavaLang, BooleanOperator) {
+	//Giving expected - target and actual boolean value
+	boolean expectedResult = true;
+	boolean targetResult;
+	boolean actualResult;
+
+	//Test two boolean values are equal - true
+	targetResult = true;
+	actualResult = targetResult;
+	assertEquals(expectedResult, actualResult);
+
+	//Test two boolean values are equals - false
+	targetResult = false;
+	actualResult = targetResult;
+	assertEquals(expectedResult, actualResult);
 }
