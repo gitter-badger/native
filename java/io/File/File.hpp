@@ -57,9 +57,6 @@
 // strmode: convert numeric file mode to string representation
 #include <string.h>
 
-// GetFileAttributes
-//#include <windows.h>
-
 // WEXITSTATUS
 #include <sys/wait.h>
 
@@ -70,7 +67,6 @@
 #include "../../lang/SecurityException/SecurityException.hpp"
 #include "../../lang/Exception/Exception.hpp"
 #include "../../lang/IllegalArgumentException/IllegalArgumentException.hpp"
-#include "../../util/ArrayList/ArrayList.hpp"
 #include "../../util/Arrays/Arrays.hpp"
 
 using namespace Java::Lang;
@@ -1076,6 +1072,106 @@ namespace Java {
              */
              boolean isHidden();
 
+            // TODO(thoangminh): we will support it later
+            /**
+             * Computes a hash code for this abstract pathname.  Because equality of
+             * abstract pathnames is inherently system-dependent, so is the computation
+             * of their hash codes.  On UNIX systems, the hash code of an abstract
+             * pathname is equal to the exclusive <em>or</em> of the hash code
+             * of its pathname string and the decimal value
+             * <code>1234321</code>.  On Microsoft Windows systems, the hash
+             * code is equal to the exclusive <em>or</em> of the hash code of
+             * its pathname string converted to lower case and the decimal
+             * value <code>1234321</code>.  Locale is not taken into account on
+             * lowercasing the pathname string.
+             *
+             * @return  A hash code for this abstract pathname
+             */
+//             int hashCode();
+
+            /**
+             * Returns an array of abstract pathnames denoting the files in the
+             * directory denoted by this abstract pathname.
+             *
+             * <p> If this abstract pathname does not denote a directory, then this
+             * method returns {@code null}.  Otherwise an array of {@code File} objects
+             * is returned, one for each file or directory in the directory.  Pathnames
+             * denoting the directory itself and the directory's parent directory are
+             * not included in the result.  Each resulting abstract pathname is
+             * constructed from this abstract pathname using the {@link #File(File,
+             * String) File(File,&nbsp;String)} constructor.  Therefore if this
+             * pathname is absolute then each resulting pathname is absolute; if this
+             * pathname is relative then each resulting pathname will be relative to
+             * the same directory.
+             *
+             * <p> There is no guarantee that the name strings in the resulting array
+             * will appear in any specific order; they are not, in particular,
+             * guaranteed to appear in alphabetical order.
+             *
+             * <p> Note that the {@link java.nio.file.Files} class defines the {@link
+             * java.nio.file.Files#newDirectoryStream(Path) newDirectoryStream} method
+             * to open a directory and iterate over the names of the files in the
+             * directory. This may use less resources when working with very large
+             * directories.
+             *
+             * @return  An array of abstract pathnames denoting the files and
+             *          directories in the directory denoted by this abstract pathname.
+             *          The array will be empty if the directory is empty.  Returns
+             *          {@code null} if this abstract pathname does not denote a
+             *          directory, or if an I/O error occurs.
+             *
+             * @throws  SecurityException
+             *          If a security manager exists and its {@link
+             *          SecurityManager#checkRead(String)} method denies read access to
+             *          the directory
+             *
+             * @since  1.2
+             */
+            Array<File> listFiles();
+
+            /**
+             * List the available filesystem roots.
+             *
+             * <p> A particular Java platform may support zero or more
+             * hierarchically-organized file systems.  Each file system has a
+             * {@code root} directory from which all other files in that file system
+             * can be reached.  Windows platforms, for example, have a root directory
+             * for each active drive; UNIX platforms have a single root directory,
+             * namely {@code "/"}.  The set of available filesystem roots is affected
+             * by various system-level operations such as the insertion or ejection of
+             * removable media and the disconnecting or unmounting of physical or
+             * virtual disk drives.
+             *
+             * <p> This method returns an array of {@code File} objects that denote the
+             * root directories of the available filesystem roots.  It is guaranteed
+             * that the canonical pathname of any file physically present on the local
+             * machine will begin with one of the roots returned by this method.
+             *
+             * <p> The canonical pathname of a file that resides on some other machine
+             * and is accessed via a remote-filesystem protocol such as SMB or NFS may
+             * or may not begin with one of the roots returned by this method.  If the
+             * pathname of a remote file is syntactically indistinguishable from the
+             * pathname of a local file then it will begin with one of the roots
+             * returned by this method.  Thus, for example, {@code File} objects
+             * denoting the root directories of the mapped network drives of a Windows
+             * platform will be returned by this method, while {@code File} objects
+             * containing UNC pathnames will not be returned by this method.
+             *
+             * <p> Unlike most methods in this class, this method does not throw
+             * security exceptions.  If a security manager exists and its {@link
+             * SecurityManager#checkRead(String)} method denies read access to a
+             * particular root directory, then that directory will not appear in the
+             * result.
+             *
+             * @return  An array of {@code File} objects denoting the available
+             *          filesystem roots, or {@code null} if the set of roots could not
+             *          be determined.  The array will be empty if there are no
+             *          filesystem roots.
+             *
+             * @since  1.2
+             * @see java.nio.file.FileStore
+             */
+            static Array<File> listRoots();
 
         private:
             /**
@@ -1180,6 +1276,13 @@ namespace Java {
              * @return String
              */
             static String getCurrentGroup();
+
+            /**
+             * Return an array of String
+             * contain a list of file system
+             * @return Array<String>
+             */
+            static Array<String> listRootString();
         };
     }  // namespace Io
 } // namspace Java

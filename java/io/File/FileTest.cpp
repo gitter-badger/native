@@ -468,41 +468,6 @@ TEST (JavaIo, FileLength) {
     ASSERT_EQUAL(4, fileExistent.length());
 }
 
-//////TEST (JavaIo, FileListFiles) {
-//////    // Test a not empty directory
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////    File fileExistent = File(FileTest::pathNameExistent);
-//////    File fileHidden = File(FileTest::pathNameHidden);
-//////    File fileSubFolder = File(FileTest::pathTestFolder + "SubFolder");
-//////    File[] expected = {fileExistent, fileHidden, fileSubFolder};
-//////    File[] actual = fileTestFolder.listFiles();
-//////    assertEquals(expected[0].toString(), actual[0].toString());
-//////    assertEquals(expected[1].toString(), actual[1].toString());
-//////    assertEquals(expected[2].toString(), actual[2].toString());
-//////    assertEquals(3, actual.length);
-//////
-//////    // Test an empty directory
-//////    ASSERT_TRUE(fileSubFolder.exists());
-//////    actual = fileSubFolder.listFiles();
-//////    assertEquals(0, actual.length);
-//////}
-//////
-//////TEST (JavaIo, FileListRoots) {
-//////
-//////    if (FileTest::isWindows) {
-//////        // Test a not empty directory
-//////        File fileCDrive = File("C:\\");
-//////        File fileDDrive = File("D:\\");
-//////        File fileEDrive = File("E:\\");
-//////        File[] expected = {fileCDrive, fileDDrive, fileEDrive};
-//////        File[] actual = File.listRoots();
-//////        assertEquals(expected[0].toString(), actual[0].toString());
-//////        assertEquals(expected[1].toString(), actual[1].toString());
-//////        assertEquals(expected[2].toString(), actual[2].toString());
-//////        assertEquals(3, actual.length);
-//////    }
-//////}
-//////
 TEST (JavaIo, FileMkdir) {
     // Create an existent directory file
     File fileTestFolder = File(FileTest::pathTestFolder);
@@ -623,6 +588,22 @@ TEST (JavaIo, FileList) {
     ASSERT_TRUE(fileSubFolder.exists());
     actual = fileSubFolder.list();
     ASSERT_EQUAL(0, actual.length);
+
+    // Test non-exist file
+    try {
+        File fileNonExistent = File("NonExistentFile");
+        fileNonExistent.list();
+    } catch (Exception exception) {
+        ASSERT_STR("file is not a directory or not exist", exception.toString());
+    }
+
+    // Test not directory file
+    try {
+        File fileNotDirectory = File("NotDirectoryFile.txt");
+        fileNotDirectory.list();
+    } catch (Exception exception) {
+        ASSERT_STR("file is not a directory or not exist", exception.toString());
+    }
 }
 
 TEST (JavaIo, FileRenameTo) {
@@ -811,6 +792,76 @@ TEST (JavaIo, FileIsHidden) {
 //#endif
 //    ASSERT_TRUE(testFile.isHidden());
 //    testFile.deletes();
+}
+
+TEST (JavaIo, FileListFiles) {
+
+    {
+        // Test a not empty directory
+        File fileTestFolder = File("java/io/File/TestFolder");
+        fileTestFolder.listFiles();
+
+        Array<File> actualArray = fileTestFolder.listFiles();
+        ArrayList<File> expectedArray = {File("ExistentFile.txt"),
+                                         File("HiddenFile.txt"),
+                                         File("SubFolder")};
+
+        for (int index = 0; index < 2; index++) {
+            String expected = expectedArray.get(index).toString();
+            String actual = actualArray.get(index).toString();
+            ASSERT_STR(expected.toString(), actual.toString());
+        }
+    }
+
+    {
+        // Test an empty directory
+        File fileSubFolder = File("java/io/File/TestFolder/SubFolder");
+        ASSERT_TRUE(fileSubFolder.exists());
+        Array<File> actual = fileSubFolder.listFiles();
+        ASSERT_EQUAL(0, actual.length);
+    }
+
+    // Test non-exist file
+    try {
+        File fileNonExistent = File("NonExistentFile");
+        fileNonExistent.listFiles();
+    } catch (Exception exception) {
+        ASSERT_STR("file is not a directory or not exist", exception.toString());
+    }
+
+    // Test not directory file
+    try {
+        File fileNotDirectory = File("NotDirectoryFile.txt");
+        fileNotDirectory.listFiles();
+    } catch (Exception exception) {
+        ASSERT_STR("file is not a directory or not exist", exception.toString());
+    }
+}
+
+TEST (JavaIo, FileListRoots) {
+#ifdef WINDOWS
+    ArrayList<File> expected;
+    long int index = 0;
+
+    std::ifstream streamMountInfo("/proc/mounts");
+    std::string holdStream;
+
+    while (!streamMountInfo.eof()) {
+        streamMountInfo >> holdStream;
+
+        index++;
+        if (index % 6 == 1) {
+            expected.add(File(holdStream));
+        }
+    }
+    ArrayList<File> actual = File::listRoots();
+
+    ASSERT_EQUAL(6, actual.size());
+    for (int index = 0; index < expected.size(); index++) {
+        ASSERT_STR(expected[index].toString().toString(),
+                   actual[index].toString().toString());
+    }
+#endif
 }
 
 TEST (JavaIo, FileDeletes) {

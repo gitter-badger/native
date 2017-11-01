@@ -34,3 +34,8 @@ main.o
 /example/HelloWorld/Makefile
 /example/HelloWorld/CMakeCache.txt
 native_test.exe
+native_test_c.exe
+native_test.exe.stackdump
+libnative.dll.a
+cygnative.dll
+build

@@ -103,7 +103,7 @@ String File::getPath() {
 
 boolean File::mkdir() {
     return (::mkdir(this->path.toString(),
-                              S_IRWXU | S_IRWXG) == 0);
+                    S_IRWXU | S_IRWXG) == 0);
 }
 
 boolean File::mkdirs() {
@@ -169,9 +169,9 @@ boolean File::deletes() {
         return false;
 
     return (nftw(this->path.toString(),
-                           deleteEntry,
-                           64,
-                           FTW_DEPTH | FTW_PHYS) == 0);
+                 deleteEntry,
+                 64,
+                 FTW_DEPTH | FTW_PHYS) == 0);
 }
 
 boolean File::exists() {
@@ -442,22 +442,27 @@ File File::getAbsoluteFile() {
 }
 
 Array<String> File::list() {
+    if (!File::isDirectory()
+        || !File::exists()) {
+        throw Exception("file is not a directory or not exist");
+    }
+
     Array<String> result;
     String holdString;
 
     DIR *directory;
     struct dirent *directoryEntity;
 
-    if ((directory = opendir (File::getAbsolutePath().toString())) != NULL) {
+    if ((directory = opendir(File::getAbsolutePath().toString())) != NULL) {
         /* Skip . and .. directory */
-        readdir (directory);
-        readdir (directory);
+        readdir(directory);
+        readdir(directory);
 
         /* Get the files and directories name */
-        while ((directoryEntity = readdir (directory)) != NULL) {
+        while ((directoryEntity = readdir(directory)) != NULL) {
             result.push(directoryEntity->d_name);
         }
-        closedir (directory);
+        closedir(directory);
     } else {
         throw Exception("could not open directory");
     }
@@ -587,7 +592,7 @@ boolean File::canExecute() {
 
     // Owner permission
     if (File::getUser() == currentUser
-            && permissionString.charAt(2) == 'x')
+        && permissionString.charAt(2) == 'x')
         return true;
 
     // Group permission
@@ -608,7 +613,7 @@ String File::getUser() {
 }
 
 String File::getGroup() {
-    struct group  *groupInfo = getgrgid(this->fileStatitics.st_gid);
+    struct group *groupInfo = getgrgid(this->fileStatitics.st_gid);
     return groupInfo->gr_name;
 }
 
@@ -619,7 +624,7 @@ String File::getCurrentUser() {
 
 String File::getCurrentGroup() {
     struct passwd *userInfo = getpwuid(getuid());
-    struct group  *groupInfo = getgrgid(userInfo->pw_gid);
+    struct group *groupInfo = getgrgid(userInfo->pw_gid);
     return groupInfo->gr_name;
 }
 
@@ -732,6 +737,67 @@ boolean File::isHidden() {
 //    if (attributes & FILE_ATTRIBUTE_HIDDEN)
 //        return (boolean) true;
 //    return (boolean) false;
+}
+
+Array<File> File::listFiles() {
+    Array<String> arrayString;
+
+    try {
+        arrayString = File::list();
+    } catch (Exception exception) {
+        throw Exception(exception);
+    }
+
+    Array<File> arrayFile;
+
+    if (arrayString.length == 0) {
+        return arrayFile;
+    }
+
+    int arrayStringLength = arrayString.length;
+
+    for (int index = 0; index < arrayStringLength; index++) {
+        File file = File(arrayString.get(index));
+        arrayFile.push(file);
+    }
+
+    return arrayFile;
+}
+
+Array<String> File::listRootString() {
+    ArrayList<String> result;
+    long int index = 0;
+
+    std::ifstream streamMountInfo("/proc/mounts");
+    std::string holdStream;
+
+    while (!streamMountInfo.eof()) {
+        streamMountInfo >> holdStream;
+
+        index++;
+        if (index % 6 == 1) {
+            String holdString = String(holdStream);
+            result.add(holdString);
+        }
+    }
+
+    return result.toArray();
+}
+
+Array<File> File::listRoots() {
+    ArrayList<File> arrayFile;
+    ArrayList<String> arrayString = File::listRootString();
+
+    for (int index = 0; index < arrayString.size(); index++) {
+        std::cout << arrayString[index].toString()<< "\n";
+    }
+
+    for (int index = 0; index < arrayString.size(); index++) {
+        File file = File(arrayString[index]);
+        arrayFile.add(file);
+    }
+
+    return arrayFile.toArray();
 }
 
 #endif
