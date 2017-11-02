@@ -282,18 +282,6 @@ TEST (JavaIo, FileCreateNewFile) {
 //////    ASSERT_TRUE(file.delete ());
 //////}
 //////
-//////
-//////TEST (JavaIo, FileDeleteOnExit) {
-//////    if (isLinux) {
-//////        // Create a temp file.
-//////        String pathTestFolder = "/home/thoangminh/java/io/File/TestFolder/";
-//////        File fileTestFolder = File(pathTestFolder);
-//////        File fileTemp = File.createTempFile("temp", ".txt", fileTestFolder);
-//////
-//////        // Deletes file when the virtual machine terminate
-//////        fileTemp.deleteOnExit();
-//////    }
-//////}
 
 TEST (JavaIo, FileEquals) {
     /* Create variable to test */
@@ -862,6 +850,19 @@ TEST (JavaIo, FileListRoots) {
                    actual[index].toString().toString());
     }
 #endif
+}
+
+struct stat fileStatitics;
+void checkExist() {
+    ASSERT_FALSE(stat("java/io/File/FileDeleteOnExit.txt", &fileStatitics) == 0);
+}
+TEST (JavaIo, FileDeleteOnExit) {
+    // Make sure the file will be deleted after the program termination
+    std::atexit(checkExist);
+    File fileDeleteOnExit = File("java/io/File/FileDeleteOnExit.txt");
+    ASSERT_TRUE(fileDeleteOnExit.createNewFile());
+    fileDeleteOnExit.deleteOnExit();
+    ASSERT_TRUE(fileDeleteOnExit.exists());
 }
 
 TEST (JavaIo, FileDeletes) {
