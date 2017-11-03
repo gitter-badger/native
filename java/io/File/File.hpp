@@ -73,9 +73,9 @@
 //#undef  boolean
 //#define boolean ambiguous use aaa_boolean or bbb_boolean
 
-//#define boolean abcdef
-//#include <windows.h>
-//#undef boolean
+#define boolean abcdef
+#include <windows.h>
+#undef boolean
 //
 //#undef boolean
 

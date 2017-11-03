@@ -849,29 +849,29 @@ TEST (JavaIo, FileDeleteOnExit) {
 }
 
 TEST (JavaIo, FileIsHidden) {
-//    File testFile = File("java/io/File/FileIsHidden.txt");
-////    ASSERT_TRUE(testFile.createNewFile());
-//    testFile.deleteOnExit();
-//    ASSERT_FALSE(testFile.isHidden());
-//
-//    // Set hidden
-//#ifdef WINDOWS
-//    String command = "attrib +H " + testFile.getCanonicalPath();
-//    string buffer;
-//    StringBuffer result;
-//
-//    FILE* pipe = popen(command.toString(), "r");
-//
-//    if (!pipe)
-//        throw Exception("popen() failed!");
-//
-//    while (!feof(pipe)) {
-//        if (fgets(buffer, 128, pipe) != NULL)
-//            result.append(buffer);
-//    }
-//    ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
-//#endif
-//    ASSERT_TRUE(testFile.isHidden());
+    File testFile = File("java/io/File/FileIsHidden.txt");
+    ASSERT_TRUE(testFile.createNewFile());
+    testFile.deleteOnExit();
+    ASSERT_FALSE(testFile.isHidden());
+
+    // Set hidden
+#ifdef WINDOWS
+    String command = "attrib +H " + testFile.getPath();
+    string buffer;
+    StringBuffer result;
+
+    FILE* pipe = popen(command.toString(), "r");
+
+    if (!pipe)
+        throw Exception("popen() failed!");
+
+    while (!feof(pipe)) {
+        if (fgets(buffer, 128, pipe) != NULL)
+            result.append(buffer);
+    }
+    ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
+#endif
+    ASSERT_TRUE(testFile.isHidden());
 }
 
 TEST (JavaIo, FileDeletes) {

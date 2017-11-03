@@ -817,9 +817,12 @@ boolean File::isHidden() {
 //        return false;
 //    }
 
-//    DWORD attributes = GetFileAttributes(this->path.toString());
-//    if (attributes & FILE_ATTRIBUTE_HIDDEN)
-//        return (boolean) true;
+    if (!File::exists())
+        return false;
+
+    DWORD attributes = GetFileAttributes(this->path.toString());
+    if (attributes & FILE_ATTRIBUTE_HIDDEN)
+        return true;
 
     return false;
 }
