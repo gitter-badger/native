@@ -27,25 +27,25 @@
 #ifndef NATIVE_GENERAL_H
 #define NATIVE_GENERAL_H
 
-#define _BOOL                   1
-#define CHAR                    2
-#define SHORT_INT               3
-#define INT                     4
-#define LONG_INT                5
-#define LONG_LONG_INT           6
-#define FLOAT                   7
-#define LONG_DOUBLE             8
-#define VOID_POINTER            9
-#define UNSIGNED_CHAR           10
-#define SIGNED_CHAR             11
-#define UNSIGNED_SHORT_INT      12
-#define UNSIGNED_INT            13
-#define UNSIGNED_LONG_INT       14
-#define UNSIGNED_LONG_LONG_INT  15
-#define DOUBLE                  16
-#define CHAR_POINTER            17
-#define INT_POINTER             18
-#define OTHER                   19
+//#define _BOOL                   1
+//#define CHAR                    2
+//#define SHORT_INT               3
+//#define INT                     4
+//#define LONG_INT                5
+//#define LONG_LONG_INT           6
+//#define FLOAT                   7
+//#define LONG_DOUBLE             8
+//#define VOID_POINTER            9
+//#define UNSIGNED_CHAR           10
+//#define SIGNED_CHAR             11
+//#define UNSIGNED_SHORT_INT      12
+//#define UNSIGNED_INT            13
+//#define UNSIGNED_LONG_INT       14
+//#define UNSIGNED_LONG_LONG_INT  15
+//#define DOUBLE                  16
+//#define CHAR_POINTER            17
+//#define INT_POINTER             18
+//#define OTHER                   19
 
 #define typename(x)  _Generic((x),                                            \
         _Bool: _BOOL,                  unsigned char: UNSIGNED_CHAR,          \

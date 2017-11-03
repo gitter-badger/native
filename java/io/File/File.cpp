@@ -728,17 +728,6 @@ boolean File::isAbsolute() {
     return false;
 }
 
-boolean File::isHidden() {
-//    if (isInvalid()) {
-//        return false;
-//    }
-//
-//    DWORD attributes = GetFileAttributes(this->path.toString());
-//    if (attributes & FILE_ATTRIBUTE_HIDDEN)
-//        return (boolean) true;
-//    return (boolean) false;
-}
-
 Array<File> File::listFiles() {
     Array<String> arrayString;
 
@@ -821,6 +810,18 @@ void File::deleteOnExit() {
 //    }
     arrayPath.add(File::getPath());
     std::atexit(deleteThisFile);
+}
+
+boolean File::isHidden() {
+//    if (isInvalid()) {
+//        return false;
+//    }
+
+//    DWORD attributes = GetFileAttributes(this->path.toString());
+//    if (attributes & FILE_ATTRIBUTE_HIDDEN)
+//        return (boolean) true;
+
+    return false;
 }
 
 #endif

@@ -60,6 +60,25 @@
 // WEXITSTATUS
 #include <sys/wait.h>
 
+// isHidden
+//#include <windows.h>
+
+//#undef boolean
+
+//#define boolean aaa_boolean
+//#include "../../lang/Object/Object.hpp"
+//#undef  boolean
+//#define boolean bbb_boolean
+//#include <windows.h>
+//#undef  boolean
+//#define boolean ambiguous use aaa_boolean or bbb_boolean
+
+//#define boolean abcdef
+//#include <windows.h>
+//#undef boolean
+//
+//#undef boolean
+
 #include "../../lang/String/String.hpp"
 #include "../../lang/StringBuffer/StringBuffer.hpp"
 #include "../../../kernel/type.h"

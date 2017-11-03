@@ -756,32 +756,6 @@ TEST (JavaIo, FileIsAbsolute) {
 #endif
 }
 
-TEST (JavaIo, FileIsHidden) {
-//    File testFile = File("java/io/File/TestFile.txt");
-//    ASSERT_TRUE(testFile.createNewFile());
-//    ASSERT_FALSE(testFile.isHidden());
-//
-//    // Set hidden
-//#ifdef WINDOWS
-//    String command = "attrib +H " + testFile.getCanonicalPath();
-//    string buffer;
-//    StringBuffer result;
-//
-//    FILE* pipe = popen(command.toString(), "r");
-//
-//    if (!pipe)
-//        throw Exception("popen() failed!");
-//
-//    while (!feof(pipe)) {
-//        if (fgets(buffer, 128, pipe) != NULL)
-//            result.append(buffer);
-//    }
-//    ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
-//#endif
-//    ASSERT_TRUE(testFile.isHidden());
-//    testFile.deletes();
-}
-
 TEST (JavaIo, FileListFiles) {
 
     {
@@ -834,17 +808,19 @@ TEST (JavaIo, FileListRoots) {
     std::ifstream streamMountInfo("/proc/mounts");
     std::string holdStream;
 
+    long int countFileSystem = 0;
     while (!streamMountInfo.eof()) {
         streamMountInfo >> holdStream;
 
         index++;
         if (index % 6 == 1) {
             expected.add(File(holdStream));
+            countFileSystem++;
         }
     }
     ArrayList<File> actual = File::listRoots();
 
-    ASSERT_EQUAL(6, actual.size());
+    ASSERT_EQUAL(countFileSystem, actual.size());
     for (int index = 0; index < expected.size(); index++) {
         ASSERT_STR(expected[index].toString().toString(),
                    actual[index].toString().toString());
@@ -860,9 +836,42 @@ TEST (JavaIo, FileDeleteOnExit) {
     // Make sure the file will be deleted after the program termination
     std::atexit(checkExist);
     File fileDeleteOnExit = File("java/io/File/FileDeleteOnExit.txt");
+    File fileDeleteOnExit1 = File("java/io/File/FileDeleteOnExit1.txt");
+
     ASSERT_TRUE(fileDeleteOnExit.createNewFile());
+    ASSERT_TRUE(fileDeleteOnExit1.createNewFile());
+
     fileDeleteOnExit.deleteOnExit();
+    fileDeleteOnExit1.deleteOnExit();
+
     ASSERT_TRUE(fileDeleteOnExit.exists());
+    ASSERT_TRUE(fileDeleteOnExit1.exists());
+}
+
+TEST (JavaIo, FileIsHidden) {
+//    File testFile = File("java/io/File/FileIsHidden.txt");
+////    ASSERT_TRUE(testFile.createNewFile());
+//    testFile.deleteOnExit();
+//    ASSERT_FALSE(testFile.isHidden());
+//
+//    // Set hidden
+//#ifdef WINDOWS
+//    String command = "attrib +H " + testFile.getCanonicalPath();
+//    string buffer;
+//    StringBuffer result;
+//
+//    FILE* pipe = popen(command.toString(), "r");
+//
+//    if (!pipe)
+//        throw Exception("popen() failed!");
+//
+//    while (!feof(pipe)) {
+//        if (fgets(buffer, 128, pipe) != NULL)
+//            result.append(buffer);
+//    }
+//    ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
+//#endif
+//    ASSERT_TRUE(testFile.isHidden());
 }
 
 TEST (JavaIo, FileDeletes) {
