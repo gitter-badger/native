@@ -26,6 +26,13 @@
 
 #include "File.hpp"
 
+// isHidden
+#ifdef WINDOWS
+#define boolean SOMETHING_ELSE
+#include <windows.h>
+#undef boolean
+#endif
+
 using namespace Java::Io;
 
 #ifdef WINDOWS
@@ -470,20 +477,6 @@ Array<String> File::list() {
     return result;
 }
 
-boolean File::renameTo(File destinationFile) {
-    if (!destinationFile.canWrite()
-        || destinationFile.path.isEmpty()
-        || destinationFile.exists()
-        || !File::exists())
-        return false;
-
-    return rename(this->getCanonicalPath().toString(),
-                  destinationFile.getCanonicalPath().toString()) == 0;
-
-//    return (rename("java/io/File/a.txt",
-//                  "java/io/File/bbbb.txt") == 0);
-}
-
 void File::updateFileStatitics() {
     this->canGetStatitics
             = (stat(this->path.toString(), &this->fileStatitics) == 0);
@@ -819,12 +812,43 @@ boolean File::isHidden() {
 
     if (!File::exists())
         return false;
-
+#ifdef WINDOWS
     DWORD attributes = GetFileAttributes(this->path.toString());
     if (attributes & FILE_ATTRIBUTE_HIDDEN)
         return true;
-
+#endif
     return false;
+}
+
+boolean File::renameTo(File destinationFile) {
+//    if (security != null) {
+//        security.checkWrite(path);
+//        security.checkWrite(dest.path);
+//    }
+
+    if (destinationFile.toString().isEmpty()) {
+        return false;
+    }
+
+//    if (File::isInvalid() || dest.isInvalid()) {
+//        return false;
+//    }
+
+    std::cout << "\n\n renameTo: \n\n";
+    std::cout << "original: " << File::getPath().toString() << "\n";
+    std::cout << "destination: " << destinationFile.getPath().toString() << "\n";
+
+    boolean result = rename(this->getPath().toString(),
+           destinationFile.getPath().toString()) == 0;
+
+    if (!result)
+    {
+        String errorName = "renaming error: ";
+        String error = strerror(errno);
+        throw Exception(errorName + error);
+    }
+
+    return  result;
 }
 
 #endif

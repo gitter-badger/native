@@ -594,55 +594,6 @@ TEST (JavaIo, FileList) {
     }
 }
 
-TEST (JavaIo, FileRenameTo) {
-    // Create a file from a non-existent file path
-    File fileNonExistentFile = File(FileTest::pathNameNonExistent);
-
-    // Create a file form a non-existent folder path
-    File fileNonExistentFoler = File(FileTest::pathNameNonExistentFolder);
-
-    // Create a file from an existent path
-    File fileExistent = File(FileTest::pathNameExistent);
-
-    // Create a file from an existent folder path
-    File fileExistentFolder = File(FileTest::pathTestFolder);
-
-    // Create a file to test
-    File fileTest = File("Test/");
-
-    // return FALSE if fileTest is non-existent
-    ASSERT_FALSE(fileTest.renameTo(fileExistent));
-//    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
-//    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
-
-//    /* Create a File object for fileTest variable */
-//    // After that: renameTo() will return TRUE with the non-existent destination
-//    ASSERT_TRUE(fileTest.createNewFile());
-//    ASSERT_TRUE(fileTest.exists());
-//    ASSERT_FALSE(fileTest.renameTo(fileExistentFolder));
-//
-//    // Return FALSE with fileNonExistentFoler,
-//    // and create a file for fileNonExistentFoler
-//    ASSERT_FALSE(fileTest.renameTo(fileNonExistentFoler));
-//    ASSERT_STR("Test", fileTest.toString().toString());
-//
-//    // Create a destination fileNewTest
-//    File fileNewTest = File("NewTest");
-//
-//    // Make sure the fileTest is Existent, fileNewTest is non-existent
-//    ASSERT_TRUE(fileTest.exists());
-//    ASSERT_FALSE(fileNewTest.exists());
-//
-//    // Return TRUE. The fileTest was moved into fileNewTest
-//    ASSERT_TRUE(fileTest.renameTo(fileNewTest));
-//    ASSERT_FALSE(fileTest.exists());
-//    ASSERT_TRUE(fileNewTest.exists());
-//
-//    // Delete file after testing
-//    fileNewTest.deletes();
-    fileNonExistentFoler.deletes();
-}
-
 TEST (JavaIo, FileGetFreeSpace) {
     // Check a non-existent file
     File fileNonExistent = File(FileTest::pathNameNonExistent);
@@ -851,7 +802,6 @@ TEST (JavaIo, FileDeleteOnExit) {
 TEST (JavaIo, FileIsHidden) {
     File testFile = File("java/io/File/FileIsHidden.txt");
     ASSERT_TRUE(testFile.createNewFile());
-    testFile.deleteOnExit();
     ASSERT_FALSE(testFile.isHidden());
 
     // Set hidden
@@ -872,6 +822,76 @@ TEST (JavaIo, FileIsHidden) {
     ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
 #endif
     ASSERT_TRUE(testFile.isHidden());
+    ASSERT_TRUE(testFile.deletes());
+}
+
+TEST (JavaIo, FileRenameTo) {
+    {
+        // Valid case
+        File fileOrigin = File("java/io/File/origin.txt");
+        File fileDestination = File("java/io/File/TestFolder/destination.txt");
+
+        ASSERT_TRUE(fileOrigin.createNewFile());
+        ASSERT_FALSE(fileDestination.exists());
+
+        ASSERT_TRUE(fileOrigin.renameTo(fileDestination));
+        ASSERT_TRUE(fileDestination.exists());
+
+        ASSERT_TRUE(fileDestination.deletes());
+    }
+
+    {
+        // Destination path must not be empty
+        File fileOrigin = File("java/io/File/origin.txt");
+        File fileDestination = File("");
+
+        ASSERT_TRUE(fileOrigin.createNewFile());
+        ASSERT_FALSE(fileDestination.exists());
+
+        ASSERT_FALSE(fileOrigin.renameTo(fileDestination));
+        ASSERT_FALSE(fileDestination.exists());
+
+        ASSERT_TRUE(fileOrigin.deletes());
+    }
+
+    {
+        // Can not move file to another file system
+        try {
+            File fileOrigin = File("java/io/File/origin.txt");
+
+            ASSERT_TRUE(fileOrigin.createNewFile());
+
+            String originCannonicalPath = fileOrigin.getCanonicalPath();
+
+            ArrayList<File> arrayRootFile = File::listRoots();
+            long int indexRoot = -1;
+            for (File file : arrayRootFile) {
+                long int findResult = originCannonicalPath.indexOf(file.toString());
+                if (findResult != -1)
+                    indexRoot = findResult;
+            }
+
+            String originRoot;
+            if (indexRoot != -1)
+                originRoot = originCannonicalPath.subString(0, indexRoot);
+            else
+                originRoot = arrayRootFile[0].toString();
+
+            std::cout << "\n\nRenameTo: originRoot  "
+                      << originRoot.toString()
+                      << "\n\n";
+
+            fileOrigin.deleteOnExit();
+
+            File fileDestination = File(originRoot + (string) "/destination.txt");
+            ASSERT_FALSE(fileDestination.exists());
+
+            fileOrigin.renameTo(fileDestination);
+        } catch (Exception exception) {
+            String stringException = exception.toString();
+            ASSERT_TRUE(stringException.indexOf("renaming error") != -1);
+        }
+    }
 }
 
 TEST (JavaIo, FileDeletes) {
