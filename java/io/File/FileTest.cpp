@@ -242,47 +242,6 @@ TEST (JavaIo, FileCreateNewFile) {
     ASSERT_FALSE(fileTestFolder.createNewFile());
 }
 
-//TEST (JavaIo, FileCreateTempFileParamStringString) {
-//    File tempFile("");
-//    File fileTestFolder = File(FileTest::pathTestFolder);
-//
-//    // Make sure the file is existent after creating a temp file.
-//    tempFile = File::createTempFile("temp", ".txt");
-//    ASSERT_TRUE(tempFile.exists());
-//
-//    // Delete file after testing
-//    ASSERT_TRUE(tempFile.deletes());
-//
-//    tempFile = File::createTempFile("temp", ".txt", fileTestFolder);
-//    ASSERT_TRUE(tempFile.exists());
-//
-//    // Delete file after testing
-//    ASSERT_TRUE(tempFile.deletes());
-//}
-//////
-//////TEST (JavaIo, FileCreateTempFileParamStringStringFile) {
-//////    File file = File("");
-//////
-//////    if (isLinux) {
-//////        // Create a non-existent file
-//////        file = File(FileTest::pathNameNonExistent);
-//////        ASSERT_FALSE(file.exists());
-//////    }
-//////
-//////    // Create a temp file.
-//////    File fileTestFolder = File(FileTest::pathTestFolder);
-//////    file = File.createTempFile("temp", ".txt", fileTestFolder);
-//////    String pathParentFile = file.getParentFile().toString() + "/";
-//////
-//////    // Make sure the file is existent and the directory is right
-//////    ASSERT_TRUE(file.exists());
-//////    assertEquals(pathTestFolder.toString(), pathParentFile.toString());
-//////
-//////    // Delete file after testing
-//////    ASSERT_TRUE(file.delete ());
-//////}
-//////
-
 TEST (JavaIo, FileEquals) {
     /* Create variable to test */
     String pathName = "aaBaa";
@@ -421,7 +380,7 @@ TEST (JavaIo, FileLastModified) {
     // Time < 0
     try {
         fileTestFolder.setLastModified(-1);
-    } catch(IllegalArgumentException exception) {
+    } catch (IllegalArgumentException exception) {
         ASSERT_STR("Negative time", exception.toString());
     }
 
@@ -564,7 +523,8 @@ TEST (JavaIo, FileGetAbsoluteFile) {
 TEST (JavaIo, FileList) {
     // Test a not empty directory
     File fileTestFolder = File(FileTest::pathTestFolder);
-    Array<String> expected = {"ExistentFile.txt", "HiddenFile.txt", "SubFolder"};
+    Array<String> expected = {"ExistentFile.txt", "HiddenFile.txt",
+                              "SubFolder"};
     Array<String> actual = fileTestFolder.list();
     ASSERT_STR(expected[0].toString(), actual[0].toString());
     ASSERT_STR(expected[1].toString(), actual[1].toString());
@@ -582,7 +542,8 @@ TEST (JavaIo, FileList) {
         File fileNonExistent = File("NonExistentFile");
         fileNonExistent.list();
     } catch (Exception exception) {
-        ASSERT_STR("file is not a directory or not exist", exception.toString());
+        ASSERT_STR("file is not a directory or not exist",
+                   exception.toString());
     }
 
     // Test not directory file
@@ -590,7 +551,8 @@ TEST (JavaIo, FileList) {
         File fileNotDirectory = File("NotDirectoryFile.txt");
         fileNotDirectory.list();
     } catch (Exception exception) {
-        ASSERT_STR("file is not a directory or not exist", exception.toString());
+        ASSERT_STR("file is not a directory or not exist",
+                   exception.toString());
     }
 }
 
@@ -715,9 +677,10 @@ TEST (JavaIo, FileListFiles) {
         fileTestFolder.listFiles();
 
         Array<File> actualArray = fileTestFolder.listFiles();
-        ArrayList<File> expectedArray = {File("ExistentFile.txt"),
-                                         File("HiddenFile.txt"),
-                                         File("SubFolder")};
+        ArrayList<File> expectedArray
+                = {File(fileTestFolder.getPath() + "/ExistentFile.txt"),
+                    File(fileTestFolder.getPath() + "/HiddenFile.txt"),
+                    File(fileTestFolder.getPath() + "/SubFolder")};
 
         for (int index = 0; index < 2; index++) {
             String expected = expectedArray.get(index).toString();
@@ -739,7 +702,8 @@ TEST (JavaIo, FileListFiles) {
         File fileNonExistent = File("NonExistentFile");
         fileNonExistent.listFiles();
     } catch (Exception exception) {
-        ASSERT_STR("file is not a directory or not exist", exception.toString());
+        ASSERT_STR("file is not a directory or not exist",
+                   exception.toString());
     }
 
     // Test not directory file
@@ -747,7 +711,8 @@ TEST (JavaIo, FileListFiles) {
         File fileNotDirectory = File("NotDirectoryFile.txt");
         fileNotDirectory.listFiles();
     } catch (Exception exception) {
-        ASSERT_STR("file is not a directory or not exist", exception.toString());
+        ASSERT_STR("file is not a directory or not exist",
+                   exception.toString());
     }
 }
 
@@ -780,9 +745,12 @@ TEST (JavaIo, FileListRoots) {
 }
 
 struct stat fileStatitics;
+
 void checkExist() {
-    ASSERT_FALSE(stat("java/io/File/FileDeleteOnExit.txt", &fileStatitics) == 0);
+    ASSERT_FALSE(
+            stat("java/io/File/FileDeleteOnExit.txt", &fileStatitics) == 0);
 }
+
 TEST (JavaIo, FileDeleteOnExit) {
     // Make sure the file will be deleted after the program termination
     std::atexit(checkExist);
@@ -810,7 +778,7 @@ TEST (JavaIo, FileIsHidden) {
     string buffer;
     StringBuffer result;
 
-    FILE* pipe = popen(command.toString(), "r");
+    FILE *pipe = popen(command.toString(), "r");
 
     if (!pipe)
         throw Exception("popen() failed!");
@@ -866,7 +834,8 @@ TEST (JavaIo, FileRenameTo) {
             ArrayList<File> arrayRootFile = File::listRoots();
             long int indexRoot = -1;
             for (File file : arrayRootFile) {
-                long int findResult = originCannonicalPath.indexOf(file.toString());
+                long int findResult = originCannonicalPath.indexOf(
+                        file.toString());
                 if (findResult != -1)
                     indexRoot = findResult;
             }
@@ -883,7 +852,8 @@ TEST (JavaIo, FileRenameTo) {
 
             fileOrigin.deleteOnExit();
 
-            File fileDestination = File(originRoot + (string) "/destination.txt");
+            File fileDestination = File(
+                    originRoot + (string) "/destination.txt");
             ASSERT_FALSE(fileDestination.exists());
 
             fileOrigin.renameTo(fileDestination);
@@ -892,6 +862,39 @@ TEST (JavaIo, FileRenameTo) {
             ASSERT_TRUE(stringException.indexOf("renaming error") != -1);
         }
     }
+}
+
+TEST (JavaIo, FileCreateTempFile) {
+    File tempFile("");
+    File fileTestFolder = File(FileTest::pathTestFolder);
+
+    try {
+        tempFile = File::createTempFile("temp", ".txt");
+    } catch (Exception exception) {
+        ASSERT_TRUE(exception != Exception());
+    }
+    ASSERT_TRUE(tempFile.exists());
+    ASSERT_TRUE(tempFile.getPath().indexOf("temp") != -1);
+    ASSERT_TRUE(tempFile.getPath().indexOf(".txt") != -1);
+
+    try {
+        tempFile = File::createTempFile("temp", ".txt", fileTestFolder);
+    } catch (Exception exception) {
+        ASSERT_TRUE(exception != Exception());
+    }
+    ASSERT_TRUE(tempFile.exists());
+    ASSERT_TRUE(tempFile.getPath().indexOf("temp") != -1);
+    ASSERT_TRUE(tempFile.getPath().indexOf(".txt") != -1);
+
+    ArrayList<File> listTestFoler = fileTestFolder.listFiles();
+    boolean findResult = false;
+
+    for (File file : listTestFoler) {
+        if (file.getAbsolutePath() == tempFile.getAbsolutePath())
+            findResult = true;
+    }
+
+    ASSERT_TRUE(findResult);
 }
 
 TEST (JavaIo, FileDeletes) {

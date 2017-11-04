@@ -350,46 +350,6 @@ int File::compareTo(const File &pathname) const {
                                          : (this->path == pathname.path) ? 0 : -1);
 }
 
-//File File::createTempFile(String prefix, String suffix) {
-//    return createTempFile(prefix, suffix, (String) "");
-//}
-
-// TODO(thoangminh): check it
-//File File::createTempFile(String prefix,
-//                          String suffix,
-//                          File directory) {
-//    if (prefix.length() < 3)
-//        throw IllegalArgumentException("Prefix string too short");
-//    if (suffix.isEmpty())
-//        suffix = ".tmp";
-//
-//    String directoryStringFormat
-//            = (directory.toString() == "")
-//              ? getenv("TEMP")
-//              : directory.toString();
-//
-//    FILE *temporaryFile = std::tmpfile();
-//    String nameTempFile = std::to_string(fileno(temporaryFile));
-//
-//    String oldName = directoryStringFormat + (string) "/" + nameTempFile;
-//    String newTempName = directoryStringFormat
-//                         + (string) "/"
-//                         + prefix
-//                         + nameTempFile
-//                         + suffix;
-//
-//    std::cout << "\n\ndirectoryStringFormat: " << directoryStringFormat.toString();
-//    std::cout << "\n\ndirectory: " << directory.toString().toString();
-//    std::cout << "\n\noldName: " << oldName.toString();
-//    std::cout << "\n\nnewTempName: " << newTempName.toString();
-//
-//    File result = File(newTempName);
-//    if (!result.createNewFile())
-//        throw Exception("Cannot create temp file !");
-//
-//    return result;
-//}
-
 boolean File::equals(File inputFile) {
     return this->path == inputFile.path;
 }
@@ -739,7 +699,7 @@ Array<File> File::listFiles() {
     int arrayStringLength = arrayString.length;
 
     for (int index = 0; index < arrayStringLength; index++) {
-        File file = File(arrayString.get(index));
+        File file = File(this->path + (string) "/" + arrayString.get(index));
         arrayFile.push(file);
     }
 
@@ -849,6 +809,44 @@ boolean File::renameTo(File destinationFile) {
     }
 
     return  result;
+}
+
+File File::createTempFile(String prefix, String suffix) {
+    return createTempFile(prefix, suffix, (String) "");
+}
+
+File File::createTempFile(String prefix,
+                          String suffix,
+                          File directory) {
+    if (prefix.length() < 3)
+        throw IllegalArgumentException("Prefix string too short");
+    if (suffix.isEmpty())
+        suffix = ".tmp";
+
+    String directoryName
+            = (directory.toString() == "")
+              ? getenv("TEMP")
+              : directory.toString();
+
+    // Get temp name
+    String tempName = tmpnam(NULL);
+    tempName = tempName.subString(tempName.lastIndexOf('/') + 1,
+                                  tempName.lastIndexOf('.'));
+    String fullTempName = directoryName
+                     + (string) "/"
+                     + prefix
+                     + tempName
+                     + suffix;
+    std::cout << "\n\ndirectoryName: " << directoryName.toString();
+    std::cout << "\n\ndirectory: " << directory.toString().toString();
+    std::cout << "\n\ntempName: " << tempName.toString();
+    std::cout << "\n\nfullTempName: " << fullTempName.toString();
+
+    File fileTemporary = File(fullTempName);
+    fileTemporary.createNewFile();
+    fileTemporary.deleteOnExit();
+
+    return fileTemporary;
 }
 
 #endif
