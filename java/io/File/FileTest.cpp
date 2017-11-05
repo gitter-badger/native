@@ -678,9 +678,9 @@ TEST (JavaIo, FileListFiles) {
 
         Array<File> actualArray = fileTestFolder.listFiles();
         ArrayList<File> expectedArray
-                = {File(fileTestFolder.getPath() + "/ExistentFile.txt"),
-                    File(fileTestFolder.getPath() + "/HiddenFile.txt"),
-                    File(fileTestFolder.getPath() + "/SubFolder")};
+                = {File(fileTestFolder.getPath() + (string)"/ExistentFile.txt"),
+                   File(fileTestFolder.getPath() + (string)"/HiddenFile.txt"),
+                   File(fileTestFolder.getPath() + (string)"/SubFolder")};
 
         for (int index = 0; index < 2; index++) {
             String expected = expectedArray.get(index).toString();
@@ -895,6 +895,11 @@ TEST (JavaIo, FileCreateTempFile) {
     }
 
     ASSERT_TRUE(findResult);
+}
+
+TEST (JavaIo, FileIsInvalid) {
+    File file = File("TestFolder");
+    ASSERT_TRUE(file.isInvalid());
 }
 
 TEST (JavaIo, FileDeletes) {

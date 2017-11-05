@@ -849,4 +849,8 @@ File File::createTempFile(String prefix,
     return fileTemporary;
 }
 
+boolean File::isInvalid() {
+    return this->path.indexOf('\u0000') < 0;
+}
+
 #endif
