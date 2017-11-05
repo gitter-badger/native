@@ -35,8 +35,6 @@
 
 using namespace Java::Io;
 
-#ifdef WINDOWS
-
 File::File(String pathName) {
     this->path = File::normalize(pathName);
     this->prefixLength = File::getPrefixLength(this->path);
@@ -60,7 +58,7 @@ String File::normalize(String pathName) {
     return pathName;
 }
 
-String File::normalize(String pathName, int length, int off) {
+String File::normalize(String pathName, int length, int offset) {
     if (length == 0)
         return pathName;
 
@@ -75,12 +73,12 @@ String File::normalize(String pathName, int length, int off) {
 
     StringBuffer stringBuffer = StringBuffer(pathName.length());
 
-    if (off > 0)
-        stringBuffer.append(pathName.subString(0, off));
+    if (offset > 0)
+        stringBuffer.append(pathName.subString(0, offset));
 
     char prevChar = 0;
 
-    for (int index = off; index < lengthPathName; index++) {
+    for (int index = offset; index < lengthPathName; index++) {
         char currentChar = pathName.charAt(index);
 
         if ((prevChar == '/') && (currentChar == '/'))
@@ -310,7 +308,6 @@ boolean File::setWritable(boolean writable) {
     return setWritable(writable, true);
 }
 
-
 boolean File::setWritable(boolean writable, boolean ownerOnly) {
     if (!File::exists())
         return false;
@@ -414,27 +411,28 @@ Array<String> File::list() {
         throw Exception("file is not a directory or not exist");
     }
 
-    Array<String> result;
+    ArrayList<String> result;
     String holdString;
 
     DIR *directory;
     struct dirent *directoryEntity;
 
     if ((directory = opendir(File::getAbsolutePath().toString())) != NULL) {
-        /* Skip . and .. directory */
-        readdir(directory);
-        readdir(directory);
 
         /* Get the files and directories name */
         while ((directoryEntity = readdir(directory)) != NULL) {
-            result.push(directoryEntity->d_name);
+            String name = directoryEntity->d_name;
+
+            if (name != "." &&  name != "..")
+            result.add(name);
         }
+
         closedir(directory);
     } else {
         throw Exception("could not open directory");
     }
 
-    return result;
+    return result.toArray();
 }
 
 void File::updateFileStatitics() {
@@ -776,6 +774,12 @@ boolean File::isHidden() {
     DWORD attributes = GetFileAttributes(this->path.toString());
     if (attributes & FILE_ATTRIBUTE_HIDDEN)
         return true;
+#else
+    std::cout << "\n\n this->path " << this->path.toString() << "\n\n";
+    if (this->getName().charAt(0) == '.') {
+        std::cout << "\n\n this->path.charAt(0) == '.' \n\n";
+        return true;
+    }
 #endif
     return false;
 }
@@ -808,6 +812,7 @@ boolean File::renameTo(File destinationFile) {
         throw Exception(errorName + error);
     }
 
+    this->path = destinationFile.getPath();
     return  result;
 }
 
@@ -823,10 +828,17 @@ File File::createTempFile(String prefix,
     if (suffix.isEmpty())
         suffix = ".tmp";
 
-    String directoryName
-            = (directory.toString() == "")
-              ? getenv("TEMP")
-              : directory.toString();
+    String directoryName;
+
+#ifdef WINDOWS
+    directoryName = (directory.toString() == "")
+                      ? getenv("TEMP")
+                      : directory.toString();
+#else
+    directoryName = (directory.toString() == "")
+                    ? "/tmp"
+                    : directory.toString();
+#endif
 
     // Get temp name
     String tempName = tmpnam(NULL);
@@ -852,5 +864,3 @@ File File::createTempFile(String prefix,
 boolean File::isInvalid() {
     return this->path.indexOf('\u0000') < 0;
 }
-
-#endif

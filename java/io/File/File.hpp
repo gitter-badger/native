@@ -1191,7 +1191,7 @@ namespace Java {
              * starting at the given offset; everything before
              * this offset is already normal.
              */
-            String normalize(String pathName, int len, int off);
+            String normalize(String pathName, int len, int offset);
 
             /**
              * Return Prefix Length

@@ -37,8 +37,6 @@ extern "C" {
 using namespace Java::Lang;
 using namespace Java::Io;
 
-#ifdef WINDOWS
-
 namespace FileTest {
     String pathNameNonExistent = "java/io/File/TestFolder/NonExistentFile.txt";
     String stringPathNameNonExistent = "java/io/File/TestFolder/NonExistentFile.txt";
@@ -63,18 +61,11 @@ namespace FileTest {
     String pathNameNonExistentFolder = "java/io/File/NonExistentFolder";
 }
 
-TEST (JavaIo, FileBeforeTesting) {
-    // Create variables for testing
-    File fileTestFolder = File(FileTest::pathTestFolder);
-    File fileExistent = File(FileTest::pathNameExistent);
-    File fileHidden = File(FileTest::pathNameHidden);
-    File fileSubFolder = File(FileTest::pathSubFolder);
-
-//    ASSERT_TRUE(fileTestFolder.mkdir());
-    ASSERT_TRUE(fileSubFolder.mkdirs());
-    ASSERT_TRUE(fileTestFolder.isDirectory());
-    ASSERT_TRUE(fileExistent.createNewFile());
-    ASSERT_TRUE(fileHidden.createNewFile());
+TEST (JavaIo, FileBeforeTest) {
+    ASSERT_TRUE(File(FileTest::pathTestFolder).mkdir());
+    ASSERT_TRUE(File(FileTest::pathNameExistent).createNewFile());
+    ASSERT_TRUE(File(FileTest::pathNameHidden).createNewFile());
+    ASSERT_TRUE(File(FileTest::pathSubFolder).mkdir());
 }
 
 TEST (JavaIo, FileConstructor) {
@@ -201,7 +192,6 @@ TEST (JavaIo, FileSetReadOnly) {
     ASSERT_FALSE(fileExistent.canWrite());
     ASSERT_FALSE(fileExistent.canExecute());
 }
-
 
 TEST (JavaIo, FileCompareTo) {
     /* Create variable to test */
@@ -407,7 +397,12 @@ TEST (JavaIo, FileLength) {
     // Write string "abc" to fileExistent
     FILE *myFile;
 
-    myFile = fopen("java\\io\\File\\TestFolder\\ExistentFile.txt", "a");
+#ifdef WINDOWS
+    FileTest::pathNameExistent.replace('/', '\\');
+    myFile = fopen(FileTest::pathNameExistent.toString(), "a");
+#else
+    myFile = fopen(FileTest::pathNameExistent.toString(), "a");
+#endif
     fputs("abcd", myFile);
     fclose(myFile);
 
@@ -481,21 +476,6 @@ TEST (JavaIo, FileToString) {
     ASSERT_STR(FileTest::stringPathTestFolder.toString(),
                fileTestFolder.toString().toString());
 }
-//////
-//////TEST (JavaIo, FileToUri) {
-//////    URI uri = URI(FileTest::pathUri);
-//////    File fileUri = File(uri);
-//////    assertEquals(FileTest::stringUriPath.toString(), fileUri.toString());
-//////    assertEquals("file:/E:/Users/admin/test.txt", fileUri.toURI().toString());
-//////}
-//////
-//////TEST (JavaIo, FileToUrl) {
-//////    URI uri = URI(FileTest::pathUri);
-//////    File fileUri = File(uri);
-//////    assertEquals(FileTest::stringUriPath.toString(), fileUri.toString());
-//////    assertEquals("file:/E:/Users/admin/test.txt", fileUri.toURL().toString());
-//////}
-//////
 
 TEST (JavaIo, FileGetAbsolutePath) {
     File fileRoot("java/io/File");
@@ -526,10 +506,26 @@ TEST (JavaIo, FileList) {
     Array<String> expected = {"ExistentFile.txt", "HiddenFile.txt",
                               "SubFolder"};
     Array<String> actual = fileTestFolder.list();
-    ASSERT_STR(expected[0].toString(), actual[0].toString());
-    ASSERT_STR(expected[1].toString(), actual[1].toString());
-    ASSERT_STR(expected[2].toString(), actual[2].toString());
-    ASSERT_EQUAL(3, actual.getLength());
+    boolean isSame;
+
+    for (String elementExpected : expected) {
+        isSame = false;
+
+        for (String elementActual: actual) {
+            if (elementExpected == elementActual) {
+                isSame = true;
+            }
+
+            std::cout << "\n\n"
+                      << elementExpected.toString()
+                      << "  " << elementActual.toString()
+                      << "\n\n";
+        }
+
+        ASSERT_TRUE(isSame);
+    }
+
+    ASSERT_EQUAL(expected.getLength(), actual.getLength());
 
     // Test an empty directory
     File fileSubFolder = File(FileTest::pathTestFolder + (string) "SubFolder");
@@ -654,7 +650,6 @@ TEST (JavaIo, FileGetUsableSpace) {
     expected = systemStatitics.f_bsize * systemStatitics.f_bavail;
     actual = fileExistent.getUsableSpace();
     ASSERT_EQUAL(expected, actual);
-    ASSERT_EQUAL(fileExistent.getFreeSpace(), actual);
 }
 
 TEST (JavaIo, FileIsAbsolute) {
@@ -664,8 +659,10 @@ TEST (JavaIo, FileIsAbsolute) {
     ASSERT_TRUE(File("\\\\TestFolder").isAbsolute());
     ASSERT_TRUE(File("C:").isAbsolute());
     ASSERT_TRUE(File("C:\\TestFolder").isAbsolute());
+    ASSERT_FALSE(File("TestFolder").isAbsolute());
 #else
     ASSERT_TRUE(File("/TestFolder").isAbsolute());
+    ASSERT_FALSE(File("TestFolder").isAbsolute());
 #endif
 }
 
@@ -676,17 +673,32 @@ TEST (JavaIo, FileListFiles) {
         File fileTestFolder = File("java/io/File/TestFolder");
         fileTestFolder.listFiles();
 
-        Array<File> actualArray = fileTestFolder.listFiles();
+        ArrayList<File> actualArray = fileTestFolder.listFiles();
         ArrayList<File> expectedArray
                 = {File(fileTestFolder.getPath() + (string)"/ExistentFile.txt"),
                    File(fileTestFolder.getPath() + (string)"/HiddenFile.txt"),
                    File(fileTestFolder.getPath() + (string)"/SubFolder")};
 
-        for (int index = 0; index < 2; index++) {
-            String expected = expectedArray.get(index).toString();
-            String actual = actualArray.get(index).toString();
-            ASSERT_STR(expected.toString(), actual.toString());
+        boolean isSame;
+
+        for (File elementExpected : expectedArray) {
+            isSame = false;
+
+            for (File elementActual: actualArray) {
+                if (elementExpected.equals(elementActual)) {
+                    isSame = true;
+                }
+
+                std::cout << "\n\n"
+                          << elementExpected.toString()
+                          << "  " << elementActual.toString()
+                          << "\n\n";
+            }
+
+            ASSERT_TRUE(isSame);
         }
+
+        ASSERT_EQUAL(expectedArray.size(), actualArray.size());
     }
 
     {
@@ -717,7 +729,6 @@ TEST (JavaIo, FileListFiles) {
 }
 
 TEST (JavaIo, FileListRoots) {
-#ifdef WINDOWS
     ArrayList<File> expected;
     long int index = 0;
 
@@ -741,7 +752,6 @@ TEST (JavaIo, FileListRoots) {
         ASSERT_STR(expected[index].toString().toString(),
                    actual[index].toString().toString());
     }
-#endif
 }
 
 struct stat fileStatitics;
@@ -788,6 +798,8 @@ TEST (JavaIo, FileIsHidden) {
             result.append(buffer);
     }
     ASSERT_TRUE(WEXITSTATUS(pclose(pipe)) == 0);
+#else
+    ASSERT_TRUE(testFile.renameTo(File("java/io/File/.FileIsHidden.txt")));
 #endif
     ASSERT_TRUE(testFile.isHidden());
     ASSERT_TRUE(testFile.deletes());
@@ -927,5 +939,3 @@ TEST (JavaIo, FileDeletes) {
     // Return FALSE and do nothing when trying to delete a non-existent file
     ASSERT_FALSE(fileTestFolder.deletes());
 }
-
-#endif
