@@ -24,27 +24,27 @@
 * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#include "WebApplicationException.hpp"
+#include "HttpMethod.hpp"
 #include "../../../../kernel/Test.hpp"
 
 using namespace Javax::Ws::Rs;
 
 TEST(JavaxWsRsWebApplicationException,  Constructor) {
     // Default constructor, expected empty message
-    HttpMethod webApplicationException;
+    WebApplicationException webApplicationException;
     assertEquals("", webApplicationException.getMessage().toString());
 
     // Constructs a new WebApplicationException with the specified detail message.
-    auto webApplicationExceptionWithMessage = HttpMethod("Illegal param");
+    auto webApplicationExceptionWithMessage = WebApplicationException("Illegal param");
     assertEquals("Illegal param", webApplicationExceptionWithMessage.getMessage().toString());
 
     // Constructs a new WebApplicationException with the specified detail message and cause.
-    auto webApplicationExceptionWithMessageAndCause = HttpMethod("Illegal param", &webApplicationExceptionWithMessage);
+    auto webApplicationExceptionWithMessageAndCause = WebApplicationException("Illegal param", &webApplicationExceptionWithMessage);
     assertEquals("Illegal param", webApplicationExceptionWithMessageAndCause.getMessage().toString());
     assertEquals("Illegal param", webApplicationExceptionWithMessageAndCause.getCause()->getMessage().toString());
 
     // Constructs a new WebApplicationException with the specified cause.
-    auto webApplicationExceptionWithCause = HttpMethod(&webApplicationExceptionWithMessageAndCause);
+    auto webApplicationExceptionWithCause = WebApplicationException(&webApplicationExceptionWithMessageAndCause);
     assertEquals("Illegal param", webApplicationExceptionWithCause.getCause()->getMessage().toString());
     assertEquals("Illegal param", webApplicationExceptionWithCause.getCause()->getCause()->getMessage().toString());
 }
@@ -52,10 +52,10 @@ TEST(JavaxWsRsWebApplicationException,  Constructor) {
 TEST(JavaxWsRsWebApplicationException,  TryCatch) {
     // Throw WebApplicationException with message "throw WebApplicationException"
     // expected message "throw WebApplicationException"
-    HttpMethod webApplicationException;
+    WebApplicationException webApplicationException;
     try {
-        throw HttpMethod("throw WebApplicationException");
-    } catch (HttpMethod &exception) {
+        throw WebApplicationException("throw WebApplicationException");
+    } catch (WebApplicationException &exception) {
         webApplicationException = exception;
     }
     assertEquals("throw WebApplicationException", webApplicationException.getMessage().toString());

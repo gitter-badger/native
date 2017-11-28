@@ -28,14 +28,14 @@
 
 using namespace Javax::Ws::Rs;
 
-ClientErrorException::ClientErrorException() : WebApplicationException() {
+ClientErrorException::ClientErrorException() : HttpMethod() {
 }
 
-ClientErrorException::ClientErrorException(String message) : WebApplicationException(message) {
+ClientErrorException::ClientErrorException(String message) : HttpMethod(message) {
 }
 
-ClientErrorException::ClientErrorException(String message, Throwable *cause) : WebApplicationException(message, cause) {
+ClientErrorException::ClientErrorException(String message, Throwable *cause) : HttpMethod(message, cause) {
 }
 
-ClientErrorException::ClientErrorException(Throwable *cause) : WebApplicationException(cause) {
+ClientErrorException::ClientErrorException(Throwable *cause) : HttpMethod(cause) {
 }

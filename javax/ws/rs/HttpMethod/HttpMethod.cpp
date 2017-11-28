@@ -24,26 +24,18 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef JAVAX_WS_RS_WEB_APPLICATION_EXCEPTION_WEB_APPLICATION_EXCEPTION_HPP
-#define JAVAX_WS_RS_WEB_APPLICATION_EXCEPTION_WEB_APPLICATION_EXCEPTION_HPP
+#include "HttpMethod.hpp"
 
-#include "../../../../java/lang/RuntimeException/RuntimeException.hpp"
+using namespace Javax::Ws::Rs;
 
-using namespace Java::Lang;
+WebApplicationException::WebApplicationException() : RuntimeException() {
+}
 
-namespace Javax {
-		namespace Ws {
-				namespace Rs {
-						class HttpMethod : public RuntimeException {
-						public:
-								HttpMethod();
-								HttpMethod(String message);
-								HttpMethod(String message, Throwable *cause);
-								HttpMethod(Throwable *cause);
-						};  // class WebApplicationException
-				} // namespace Rs
-		}  // namespace Ws
-}  // namespace Javax
+WebApplicationException::WebApplicationException(String message) : RuntimeException(message) {
+}
 
+WebApplicationException::WebApplicationException(String message, Throwable *cause) : RuntimeException(message, cause) {
+}
 
-#endif // JAVAX_WS_RS_WEB_APPLICATION_EXCEPTION_WEB_APPLICATION_EXCEPTION_HPP
+WebApplicationException::WebApplicationException(Throwable *cause) : RuntimeException(cause) {
+}

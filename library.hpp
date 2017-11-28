@@ -38,7 +38,7 @@
 #include "javax/Cql.hpp"
 #include "javax/Json.hpp"
 #include "javax/Net.hpp"
-#include "javax/Sql.hpp"
+#include "javax/Ws.hpp"
 
 // Java::Lang is imported by default
 using namespace Java::Lang;

@@ -34,7 +34,7 @@ using namespace Java::Lang;
 namespace Javax {
     namespace Ws  {
         namespace Rs {
-            class ClientErrorException : public WebApplicationException {
+            class ClientErrorException : public HttpMethod {
             public:
                 ClientErrorException();
                 ClientErrorException(String message);
